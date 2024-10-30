@@ -1,0 +1,117 @@
+auth:
+  further: Далее
+  user_name: user name
+  email_address: email address
+  password: Password
+
+  first_text_one: "i forgot "
+  first_text_two: "i have "
+  first_text_three: "i agree "
+
+  second_text_one: "account "
+  second_text_two: "account "
+  second_text_three: "with "
+
+  third_text_one: to Contact
+  third_text_two: to Contact
+  third_text_three: Contact
+
+  become_a_friend: Стать другом
+
+  publication: Публикация
+  favourites: Избранное
+
+  comments: Комментарии
+  my_message: Моё сообщение
+
+  hide_photo: Скрыть фото
+  share_your_dating_goals: Поделись своими целями\nзнакомства
+  add_photos: Добавить фотоснимки
+
+  apply: Применить
+  date_of_birth: Дата рождения
+  thaks: Благодарю!
+
+  delete_from_everyone: Удалить у всех
+  delete_only_from_me: Удалить только у меня
+  cancel: Отмена
+
+home:
+  category: '🔥 Категория'
+
+dating_feed:
+  hide_photo: Скрыть фото
+
+category_short:
+  passion: '🔥 Страсть'
+  party: '🍹 Вечеринка'
+  family: '👼🏻 Семья'
+  games: '🎮  Игры'
+  creation: '🎨 Творчество'
+  growth: '🦋 Развитие'
+  business: '💵 Бизнес'
+  technology: '🔋️ Технологии'
+  freedom: '💛  Свобода'
+
+category:
+  gladness: 'Радость 😊'
+  friendship: 'Дружба 🤝'
+  love: 'Любовь ❤️'
+  creation: 'Творчество 🎨'
+  calm: 'Спокойствие 🌿'
+  health: 'Здоровье 💪'
+  journey: 'Путешествие 🌍'
+  dreams: 'Мечты ✨'
+  comfort: 'Уют 🛋️'
+  kindness: 'Доброта 💖'
+  subcategory:
+    smile: 'Улыбка 🙂'
+    happiness: 'Счастье 😁'
+    laugh: 'Смех 😂'
+    dance: 'Танец 💃'
+    support: 'Поддержка 💬'
+    walk_man: 'Прогулка 🚶‍♂️'
+    embrace: 'Объятие 🤗'
+    fun: 'Веселье 🎉'
+    flirt: 'Флирт 😉'
+    embraces: 'Объятия 🤗'
+    kiss: 'Поцелуй 😘'
+    confession: 'Признание 💌'
+    drawing: 'Рисование ✏️'
+    music: 'Музыка 🎶'
+    singing: 'Пение 🎤'
+    meditation: 'Медитация 🧘‍♀️'
+    walk_tree: 'Прогулка 🌳'
+    reading: 'Чтение 📖'
+    inspiration_sunrise: 'Вдохновение 🌅'
+    yoga: 'Йога 🧘‍♂️'
+    running: 'Бег 🏃‍♂️'
+    sport: 'Спорт 🏋️‍♀️'
+    forces: 'Силы 🔋'
+    opening: 'Открытие 🗺️'
+    sea: 'Море 🌊 '
+    mountains: 'Горы 🏔️'
+    nature: 'Природа 🍃'
+    flight: 'Полет 🚀'
+    dream: 'Мечта 💭'
+    hope: 'Надежда 🌟'
+    inspiration_rainbow: 'Вдохновение 🌈'
+    home: 'Дом 🏡'
+    fireplace: 'Камин 🔥'
+    tea: 'Чай 🍵'
+    warm: 'Тепло 🧸'
+    help: 'Помощь 🤲'
+    gift: 'Подарок 🎁'
+    care: 'Забота 🕊️'
+    words: 'Слова 🌻'
+action:
+  write: 'Написать 💌'
+  call: 'Позвонить 📞'
+  give: 'Подарить 🎁'
+  invite: 'Пригласить ✉️'
+  smile: 'Улыбнуться 😊'
+  hug: 'Обнять 🤗'
+  to_please: 'Порадовать 🎉'
+  talk: 'Поговорить 💬'
+  take_a_walk: 'Прогуляться 🚶‍♂️'
+  show: 'Показать 👀'

@@ -1,0 +1,59 @@
+import 'dart:ui';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:social_network/data.dart';
+
+part 'auth_state.dart';
+
+class AuthCubit extends Cubit<AuthState> {
+  AuthCubit() : super(AuthInitial());
+
+  String textButton = t.strings.auth.user_name;
+
+  void definitionTextButton(int pageIndex) {
+    if (pageIndex == 0) {
+      textButton = t.strings.auth.user_name;
+    } else if (pageIndex == 1) {
+      textButton = t.strings.auth.email_address;
+    } else if (pageIndex == 2) {
+      textButton = t.strings.auth.password;
+    }
+    emit(AuthInitial());
+  }
+
+  Color firstGradientColorForGradientIconButton = AppColors.kGreyColor1;
+  Color secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
+
+  void definitionColorsGradientIconButton(String value) {
+    if (value != '') {
+      firstGradientColorForGradientIconButton = AppColors.kBlueColor1;
+      secondGradientColorForGradientIconButton = AppColors.kGreenColor1;
+    } else {
+      firstGradientColorForGradientIconButton = AppColors.kGreyColor1;
+      secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
+    }
+    emit(AuthInitial());
+  }
+
+  String firstText = t.strings.auth.first_text_one;
+  String secondText = t.strings.auth.second_text_one;
+  String thirdText = t.strings.auth.third_text_one;
+
+  void definitionUserAgreementText(int pageIndex) {
+    if (pageIndex == 0) {
+      firstText = t.strings.auth.first_text_one;
+      secondText = t.strings.auth.second_text_one;
+      thirdText = t.strings.auth.third_text_one;
+    } else if (pageIndex == 1) {
+      firstText = t.strings.auth.first_text_two;
+      secondText = t.strings.auth.second_text_two;
+      thirdText = t.strings.auth.third_text_two;
+    } else if (pageIndex == 2) {
+      firstText = t.strings.auth.first_text_three;
+      secondText = t.strings.auth.second_text_three;
+      thirdText = t.strings.auth.third_text_three;
+    }
+    emit(AuthInitial());
+  }
+}
