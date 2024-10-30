@@ -1,0 +1,11 @@
+class AppRouterNames {
+  static const home = "home";
+  static const datingFeedScreen = "datingFeedScreen";
+  static const centerTab = 'centerTab';
+  static const chats = 'chats';
+  static const userProfile = 'userProfile';
+  static const interestsPage = 'interestsPage';
+  static const commentsPage = 'commentsPage';
+  static const otherProfile = 'otherProfile';
+  static const authPage = 'authPage';
+}

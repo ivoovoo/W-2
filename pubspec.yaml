@@ -41,6 +41,32 @@ dependencies:
   path_provider: ^2.1.4
   image_picker: ^1.1.2
   video_player: ^2.9.2
+  hexcolor: ^3.0.1
+  flutter_svg: ^2.0.10+1
+  flutter_keyboard_visibility: ^6.0.0
+  gradient_borders: ^1.0.1
+  carousel_slider: ^5.0.0
+  flutter_screenutil: ^5.9.3
+  lottie: ^3.1.2
+  blur: ^4.0.0
+  dots_indicator: ^3.0.0
+  scrollable_positioned_list: ^0.3.8
+  animate_gradient: ^0.0.3
+  story_view: ^0.16.5
+  dio: ^5.7.0
+
+#state
+  provider: ^6.1.2
+  flutter_bloc: ^8.1.6
+
+# build
+  build_runner: ^2.4.11
+  flutter_gen_runner: ^5.6.0
+  slang: ^3.31.1
+  slang_flutter: ^3.31.0
+  freezed: ^2.5.7
+  freezed_annotation: ^2.4.4
+  go_router: ^14.3.0
 
 dev_dependencies:
   flutter_test:
@@ -66,9 +92,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - assets/icons/
+    - assets/
     - assets/fonts/
+    - assets/icons/
+    - assets/images/
+    - assets/json/
+    - assets/videos/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -83,9 +112,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Inter
-       fonts:
-         - asset: assets/fonts/Inter-Medium.otf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_font.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
@@ -94,3 +123,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_gen:
+  output: lib/core/constants/gen
+  line_length: 80

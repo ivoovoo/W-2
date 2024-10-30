@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:social_network/src/features/chats/widget/page/chats_page.dart';
-import 'package:social_network/src/features/comments/widget/page/comments_page.dart';
-import 'package:social_network/src/features/info/widget/page/info_page.dart';
-import 'package:social_network/src/features/interests/widget/page/interests_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_network/core/router/app_router.dart';
+import 'package:social_network/features/home_page/data_provider/home_data_provider.dart';
+import 'package:social_network/features/home_page/logic/home_bloc.dart';
+import 'package:social_network/features/home_page/repository/home_repository.dart';
+import 'data.dart';
 
 void main() {
-  runApp(const MyApp());
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor:
-        Colors.white, // Устанавливаем белый фон для строки состояния
-    statusBarIconBrightness:
-        Brightness.dark, // Устанавливаем цвет иконок на темный
-    systemNavigationBarColor: Colors.white,
+  return runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (BuildContext context) => HomeBloc(
+          HomeRepository(homeDataProvider: HomeDataProvider()),
+        )..add(const HomeEventInit()),
+      ),
+      BlocProvider<HomeScreenAndProfileScreenCubit>(
+          create: (BuildContext context) => HomeScreenAndProfileScreenCubit()),
+      BlocProvider<HomeScreenCubit>(
+          create: (BuildContext context) => HomeScreenCubit()),
+      BlocProvider<ProfileCubit>(
+          create: (BuildContext context) => ProfileCubit())
+    ],
+    child: TranslationProvider(child: const MyApp()),
   ));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: InterestsPage(),
+    return ScreenUtilInit(
+      child: MaterialApp.router(
+        routerConfig: router,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue),
+        locale: TranslationProvider.of(context).flutterLocale,
+      ),
     );
   }
 }
