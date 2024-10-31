@@ -32,6 +32,10 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
   String useravatar = '';
   List inlist = [];
   String userid = '';
+  List<String> photos = [
+    Assets.images.image1.path,
+    Assets.images.backImage01.path,
+  ];
 
   @override
   void initState() {
@@ -52,9 +56,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                     allowImplicitScrolling: true,
                     scrollDirection: Axis.vertical,
                     controller: pageController,
-                    itemCount: BlocProvider.of<ProfileCubit>(context)
-                        .datingFeedProfiles
-                        .length,
+                    itemCount: photos.length,
                     onPageChanged: (indexPageUser) {
                       setState(() {
                         /*print(currentPage);
@@ -75,40 +77,41 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.fill,
                           ), duration: _storyDuration)*/
-                        StoryItem.pageImage(
-                          url: Assets.images.image1.path,
-                          controller: _storyController,
+                        StoryItem.pageProviderImage(
+                          AssetImage(photos[index]),
                         )
                       ];
                       return StoryView(
                         storyItems: _storyItems,
                         controller: _storyController,
+                        indicatorColor: Colors.transparent,
+                        indicatorForegroundColor: Colors.transparent,
                         // indicatorOuterPadding: EdgeInsets.zero,
                       );
                     }),
-                Positioned(
-                  right: 18.w,
-                  top: 30.h,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InterestsPage()));
-                      /*Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const CategoriesScreen()));*/
-                    },
-                    child: SvgPicture.asset(
-                      Assets.icons.menu,
-                      width: 30.w,
-                      height: 25.h,
-                      // width: 20.w,
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   right: 18.w,
+                //   top: 30.h,
+                //   child: InkWell(
+                //     onTap: () {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => InterestsPage()));
+                //       /*Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) =>
+                //       const CategoriesScreen()));*/
+                //     },
+                //     child: SvgPicture.asset(
+                //       Assets.icons.menu,
+                //       width: 30.w,
+                //       height: 25.h,
+                //       // width: 20.w,
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   bottom: 80.0,
                   child: Column(
