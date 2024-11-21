@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:social_network/core/models/account.dart';
+import 'package:social_network/core/models/video_model.dart';
 import 'package:social_network/features/home_page/repository/home_repository.dart';
 
 part 'home_event.dart';
@@ -23,7 +23,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onInit(Emitter<HomeState> emit) async {
     emit(const HomeState.loadInProgress());
     try {
-      final responseModel = await homeRepository.getAccounts();
+      final responseModel = await homeRepository.getVideos();
+      print('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
       emit(HomeState.loadSuccess(responseModel));
     } catch (e) {
       emit(

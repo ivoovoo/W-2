@@ -131,13 +131,13 @@ class _VideoContentState extends State<VideoContent>
           pathToImage: widget.pathToImage,
           isLeft: true,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ChatScreen(chatModel: ChatsRepository.chats.first),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) =>
+            //         ChatScreen(chatModel: ChatsRepository.chats.first),
+            //   ),
+            // );
           },
         ),
         AnimatedBuilder(
@@ -173,13 +173,13 @@ class _VideoContentState extends State<VideoContent>
           pathToImage: widget.pathToImage,
           isLeft: false,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ChatScreen(chatModel: ChatsRepository.chats.first),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) =>
+            //         ChatScreen(chatModel: ChatsRepository.chats.first),
+            //   ),
+            // );
           },
         ),
       ],

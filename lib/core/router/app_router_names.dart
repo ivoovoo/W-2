@@ -8,4 +8,6 @@ class AppRouterNames {
   static const commentsPage = 'commentsPage';
   static const otherProfile = 'otherProfile';
   static const authPage = 'authPage';
+  static const registrationPage = 'registrationPage';
+  static const chatsDetail = 'chatsDetail';
 }

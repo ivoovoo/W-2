@@ -8,20 +8,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/features/auth_screen/data_provider/auth_data_provider.dart';
 import 'package:social_network/features/auth_screen/logic/auth_bloc.dart';
 import 'package:social_network/features/auth_screen/repository/auth_repository.dart';
-import 'state/auth_cubit.dart';
-import 'widgets/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+import '../../state/auth_cubit.dart';
+import '../text_field_and_button.dart';
+import '../user_agreement.dart';
+
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   late AuthBloc authBloc;
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
@@ -37,6 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
     passController.dispose();
     pageController.dispose();
@@ -48,15 +52,17 @@ class _AuthScreenState extends State<AuthScreen> {
     TextEditingController controller = TextEditingController();
 
     if (pageIndex == 0) {
-      controller = emailController;
+      controller = nameController;
     } else if (pageIndex == 1) {
+      controller = emailController;
+    } else if (pageIndex == 2) {
       controller = passController;
     }
     return controller;
   }
 
   void pushNext(BuildContext context) {
-    if (pageIndex == 0 && emailController.text.isNotEmpty) {
+    if (pageIndex == 0 && nameController.text.isNotEmpty) {
       pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
@@ -67,8 +73,18 @@ class _AuthScreenState extends State<AuthScreen> {
         BlocProvider.of<AuthCubit>(context)
             .secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
       });
-    } else if (pageIndex == 1 && passController.text.isNotEmpty) {
-      print('PPPPPPPPPPPPPPPPPPPPPPPP $pageIndex');
+    } else if (pageIndex == 1 && emailController.text.isNotEmpty) {
+      pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
+      setState(() {
+        BlocProvider.of<AuthCubit>(context)
+            .firstGradientColorForGradientIconButton = AppColors.kGreyColor1;
+        BlocProvider.of<AuthCubit>(context)
+            .secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
+      });
+    } else if (pageIndex == 2 && passController.text.isNotEmpty) {
       if (isAuth) {
         context.goNamed(AppRouterNames.home);
       }
@@ -81,8 +97,6 @@ class _AuthScreenState extends State<AuthScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
-    } else {
-      context.pop();
     }
   }
 
@@ -105,7 +119,7 @@ class _AuthScreenState extends State<AuthScreen> {
               setState(() => isAuth = true);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("Вы успешно авторизовались"),
+                  content: Text("Вы успешно зарегистрировались"),
                   duration: Duration(seconds: 3),
                   backgroundColor: Colors.green,
                 ),
@@ -113,10 +127,9 @@ class _AuthScreenState extends State<AuthScreen> {
               context.goNamed(AppRouterNames.home);
             },
             loadFailure: (message) {
-              print(message);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Ошибка авторизации: $message"),
+                  content: Text("Ошибка регистрации: $message"),
                   duration: const Duration(seconds: 3),
                   backgroundColor: Colors.red,
                 ),
@@ -158,10 +171,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         TextFieldAndButton(
                             controller: definitionTextController(),
-                            hintText: BlocProvider.of<AuthCubit>(context)
-                                .buttonTextAuth,
+                            hintText:
+                                BlocProvider.of<AuthCubit>(context).buttonText,
                             buttonOnTap: () {
-                              if (pageIndex >= 1) {
+                              if (pageIndex >= 2) {
                                 // NetServ().getMessages();
                                 /*registerUser(
                                       nameController.text,
@@ -170,9 +183,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                 // loginUser(emailController.text,
                                 //     passController.text);
                                 // updateRec();
+                                print(nameController.text);
                                 print(emailController.text);
                                 print(passController.text);
-                                authBloc.add(AuthEvent.signIn(
+                                authBloc.add(AuthEvent.signUp(
+                                  userName: nameController.text,
                                   email: emailController.text,
                                   password: passController.text,
                                 ));
@@ -194,15 +209,14 @@ class _AuthScreenState extends State<AuthScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           controller: pageController,
                           onPageChanged: (index) {
-                            setState(() {
-                              pageIndex = index;
-                            });
+                            pageIndex = index;
                             BlocProvider.of<AuthCubit>(context)
                                 .definitionTextButton(index);
                             BlocProvider.of<AuthCubit>(context)
-                                .definitionUserAgreementText(index + 1);
+                                .definitionUserAgreementText(index);
                           },
                           children: [
+                            Lottie.asset(Assets.json.onboardingAnimation1),
                             Lottie.asset(Assets.json.onboardingAnimation2),
                             Lottie.asset(Assets.json.onboardingAnimation3),
                           ],
@@ -212,10 +226,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           children: [
                             InkWell(
                               onTap: () {
-                                context.pop();
+                                context.goNamed(AppRouterNames.authPage);
                               },
                               child: const UserAgreement(
-                                firstText: "I haven't ",
+                                firstText: "I have ",
                                 secondText: 'account ',
                                 thirdText: 'to Connect',
                                 // firstText:

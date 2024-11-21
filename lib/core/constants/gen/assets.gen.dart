@@ -301,13 +301,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/image_9.png
   AssetGenImage get image9 => const AssetGenImage('assets/images/image_9.png');
 
-  /// File path: assets/images/image_of_video2.jpg
-  AssetGenImage get imageOfVideo1 =>
-      const AssetGenImage('assets/images/image_of_video2.jpg');
-
   /// File path: assets/images/image_of_video1.jpg
-  AssetGenImage get imageOfVideo2 =>
+  AssetGenImage get imageOfVideo1 =>
       const AssetGenImage('assets/images/image_of_video1.jpg');
+
+  /// File path: assets/images/image_of_video2.jpg
+  AssetGenImage get imageOfVideo2 =>
+      const AssetGenImage('assets/images/image_of_video2.jpg');
 
   /// File path: assets/images/keep_file_icon.png
   AssetGenImage get keepFileIcon =>

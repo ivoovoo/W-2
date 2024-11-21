@@ -2,27 +2,27 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
-import 'package:social_network/core/models/video_model.dart';
+import 'package:social_network/features/chats/model/chat_response_model.dart';
 
 import '../../../core/helpers/catch_exception.dart';
 
-abstract class IHomeDataProvider {
-  Future<VideoResponse> getVideos();
+abstract interface class IChatsDataProvider {
+  Future<ChatResponse> getChats();
 }
 
-class HomeDataProvider implements IHomeDataProvider {
+class ChatsDataProvider implements IChatsDataProvider {
   ApiRequester apiRequester = ApiRequester();
   @override
-  Future<VideoResponse> getVideos() async {
+  Future<ChatResponse> getChats() async {
     try {
-      Response response = await apiRequester.toGet('videos/');
       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+      Response response = await apiRequester.toGet('chat/api/chats/');
 
       if (response.statusCode == 200) {
         log("${response.statusCode}");
-        log("VIDEOS result== ${response.data}");
+        log("CHATSSSSSS result== ${response.data}");
         if (response.data != null && response.data is Map<String, dynamic>) {
-          return VideoResponse.fromJson(response.data);
+          return ChatResponse.fromJson(response.data);
         } else {
           throw Exception('Invalid response data');
         }
@@ -30,7 +30,7 @@ class HomeDataProvider implements IHomeDataProvider {
 
       throw response;
     } catch (e) {
-      print('ERROR GET VIDEOSSSSSSSSSSSSSSSSSSS $e');
+      print('ERROR GET CHATSSSSSSSSSSSSSSSSSSSSSS $e');
 
       throw CatchException.convertException(e);
     }

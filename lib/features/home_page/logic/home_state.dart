@@ -6,7 +6,7 @@ class HomeState with _$HomeState {
 
   const factory HomeState.loadInProgress() = HomeLoadInProgressState;
 
-  const factory HomeState.loadSuccess(List<Account> listOfAccounts) =
+  const factory HomeState.loadSuccess(VideoResponse listOfAccounts) =
       HomeLoadSuccessState;
 
   const factory HomeState.loadFailure(String error) = HomeLoadFailureState;

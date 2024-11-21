@@ -23,7 +23,8 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videoPath)
+    _controller = VideoPlayerController.networkUrl(
+        Uri.parse('http://45.153.191.237:8000${widget.videoPath}'))
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -57,6 +58,7 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
             ? VideoPlayer(_controller)
             : Image.asset(
                 widget.thumbnail,
+                fit: BoxFit.cover,
               ),
       ),
     );

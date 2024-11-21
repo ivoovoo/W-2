@@ -175,7 +175,7 @@ mixin _$HomeState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Account> listOfAccounts) loadSuccess,
+    required TResult Function(VideoResponse listOfAccounts) loadSuccess,
     required TResult Function(String error) loadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -183,7 +183,7 @@ mixin _$HomeState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult? Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult? Function(String error)? loadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -191,7 +191,7 @@ mixin _$HomeState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult Function(String error)? loadFailure,
     required TResult orElse(),
   }) =>
@@ -286,7 +286,7 @@ class _$HomeInitialStateImpl implements HomeInitialState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Account> listOfAccounts) loadSuccess,
+    required TResult Function(VideoResponse listOfAccounts) loadSuccess,
     required TResult Function(String error) loadFailure,
   }) {
     return initial();
@@ -297,7 +297,7 @@ class _$HomeInitialStateImpl implements HomeInitialState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult? Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult? Function(String error)? loadFailure,
   }) {
     return initial?.call();
@@ -308,7 +308,7 @@ class _$HomeInitialStateImpl implements HomeInitialState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult Function(String error)? loadFailure,
     required TResult orElse(),
   }) {
@@ -406,7 +406,7 @@ class _$HomeLoadInProgressStateImpl implements HomeLoadInProgressState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Account> listOfAccounts) loadSuccess,
+    required TResult Function(VideoResponse listOfAccounts) loadSuccess,
     required TResult Function(String error) loadFailure,
   }) {
     return loadInProgress();
@@ -417,7 +417,7 @@ class _$HomeLoadInProgressStateImpl implements HomeLoadInProgressState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult? Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult? Function(String error)? loadFailure,
   }) {
     return loadInProgress?.call();
@@ -428,7 +428,7 @@ class _$HomeLoadInProgressStateImpl implements HomeLoadInProgressState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult Function(String error)? loadFailure,
     required TResult orElse(),
   }) {
@@ -486,7 +486,9 @@ abstract class _$$HomeLoadSuccessStateImplCopyWith<$Res> {
           $Res Function(_$HomeLoadSuccessStateImpl) then) =
       __$$HomeLoadSuccessStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Account> listOfAccounts});
+  $Res call({VideoResponse listOfAccounts});
+
+  $VideoResponseCopyWith<$Res> get listOfAccounts;
 }
 
 /// @nodoc
@@ -506,26 +508,30 @@ class __$$HomeLoadSuccessStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$HomeLoadSuccessStateImpl(
       null == listOfAccounts
-          ? _value._listOfAccounts
+          ? _value.listOfAccounts
           : listOfAccounts // ignore: cast_nullable_to_non_nullable
-              as List<Account>,
+              as VideoResponse,
     ));
+  }
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VideoResponseCopyWith<$Res> get listOfAccounts {
+    return $VideoResponseCopyWith<$Res>(_value.listOfAccounts, (value) {
+      return _then(_value.copyWith(listOfAccounts: value));
+    });
   }
 }
 
 /// @nodoc
 
 class _$HomeLoadSuccessStateImpl implements HomeLoadSuccessState {
-  const _$HomeLoadSuccessStateImpl(final List<Account> listOfAccounts)
-      : _listOfAccounts = listOfAccounts;
+  const _$HomeLoadSuccessStateImpl(this.listOfAccounts);
 
-  final List<Account> _listOfAccounts;
   @override
-  List<Account> get listOfAccounts {
-    if (_listOfAccounts is EqualUnmodifiableListView) return _listOfAccounts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_listOfAccounts);
-  }
+  final VideoResponse listOfAccounts;
 
   @override
   String toString() {
@@ -537,13 +543,12 @@ class _$HomeLoadSuccessStateImpl implements HomeLoadSuccessState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HomeLoadSuccessStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._listOfAccounts, _listOfAccounts));
+            (identical(other.listOfAccounts, listOfAccounts) ||
+                other.listOfAccounts == listOfAccounts));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_listOfAccounts));
+  int get hashCode => Object.hash(runtimeType, listOfAccounts);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -560,7 +565,7 @@ class _$HomeLoadSuccessStateImpl implements HomeLoadSuccessState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Account> listOfAccounts) loadSuccess,
+    required TResult Function(VideoResponse listOfAccounts) loadSuccess,
     required TResult Function(String error) loadFailure,
   }) {
     return loadSuccess(listOfAccounts);
@@ -571,7 +576,7 @@ class _$HomeLoadSuccessStateImpl implements HomeLoadSuccessState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult? Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult? Function(String error)? loadFailure,
   }) {
     return loadSuccess?.call(listOfAccounts);
@@ -582,7 +587,7 @@ class _$HomeLoadSuccessStateImpl implements HomeLoadSuccessState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult Function(String error)? loadFailure,
     required TResult orElse(),
   }) {
@@ -631,10 +636,10 @@ class _$HomeLoadSuccessStateImpl implements HomeLoadSuccessState {
 }
 
 abstract class HomeLoadSuccessState implements HomeState {
-  const factory HomeLoadSuccessState(final List<Account> listOfAccounts) =
+  const factory HomeLoadSuccessState(final VideoResponse listOfAccounts) =
       _$HomeLoadSuccessStateImpl;
 
-  List<Account> get listOfAccounts;
+  VideoResponse get listOfAccounts;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -715,7 +720,7 @@ class _$HomeLoadFailureStateImpl implements HomeLoadFailureState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loadInProgress,
-    required TResult Function(List<Account> listOfAccounts) loadSuccess,
+    required TResult Function(VideoResponse listOfAccounts) loadSuccess,
     required TResult Function(String error) loadFailure,
   }) {
     return loadFailure(error);
@@ -726,7 +731,7 @@ class _$HomeLoadFailureStateImpl implements HomeLoadFailureState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loadInProgress,
-    TResult? Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult? Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult? Function(String error)? loadFailure,
   }) {
     return loadFailure?.call(error);
@@ -737,7 +742,7 @@ class _$HomeLoadFailureStateImpl implements HomeLoadFailureState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loadInProgress,
-    TResult Function(List<Account> listOfAccounts)? loadSuccess,
+    TResult Function(VideoResponse listOfAccounts)? loadSuccess,
     TResult Function(String error)? loadFailure,
     required TResult orElse(),
   }) {

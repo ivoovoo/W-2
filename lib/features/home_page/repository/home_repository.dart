@@ -1,4 +1,4 @@
-import 'package:social_network/core/core.dart';
+import 'package:social_network/core/models/video_model.dart';
 import 'package:social_network/features/home_page/data_provider/home_data_provider.dart';
 
 class HomeRepository {
@@ -6,7 +6,7 @@ class HomeRepository {
 
   HomeRepository({required this.homeDataProvider});
 
-  List<Account> getAccounts() {
-    return homeDataProvider.getAccounts();
+  Future<VideoResponse> getVideos() {
+    return homeDataProvider.getVideos();
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/core.dart';
+import 'package:social_network/core/utils/token_funcs.dart';
 import 'package:social_network/features/auth_screen/auth_screen.dart';
+import 'package:social_network/features/auth_screen/widgets/page/registration_screen.dart';
+import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:social_network/features/chats/widget/page/chats_page.dart';
 import 'package:social_network/features/comments/widget/page/comments_page.dart';
 import 'package:social_network/features/dating_feed_screen/dating_feed_screen.dart';
@@ -16,7 +19,23 @@ final GlobalKey<NavigatorState> _rootNavigatorKey =
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/authScreen',
+  initialLocation: '/registrationPage/authPage',
+  redirect: (BuildContext context, GoRouterState state) async {
+    // Проверяем авторизацию при каждом навигационном запросе
+    final bool isAuthenticated = await AuthCache.isAuthenticated();
+
+    final isGoingToAuthPage = state.path == '/registrationPage/authPage';
+    if (!isAuthenticated && !isGoingToAuthPage) {
+      // Если не авторизован и идет не на страницу авторизации, перенаправляем на неё
+      return '/registrationPage/authPage';
+    } else if (isAuthenticated && isGoingToAuthPage) {
+      // Если авторизован и пытается попасть на страницу авторизации, перенаправляем на главную
+      return '/home';
+    }
+
+    // Если ничего менять не нужно, возвращаем null
+    return null;
+  },
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       builder: (BuildContext context, GoRouterState state,
@@ -98,14 +117,30 @@ final GoRouter router = GoRouter(
           const InterestsPage(),
     ),
     GoRoute(
+      path: '/chatsDetail',
+      name: AppRouterNames.chatsDetail,
+      builder: (BuildContext context, GoRouterState state) {
+        int chatId = state.extra as int;
+        return ChatScreen(chatId: chatId);
+      },
+    ),
+    GoRoute(
       path: '/commentsPage',
       name: AppRouterNames.commentsPage,
       builder: (BuildContext context, GoRouterState state) => CommentsPage(),
     ),
     GoRoute(
-      path: '/authScreen',
-      name: AppRouterNames.authPage,
-      builder: (BuildContext context, GoRouterState state) => AuthScreen(),
+      path: '/registrationPage',
+      name: AppRouterNames.registrationPage,
+      builder: (BuildContext context, GoRouterState state) =>
+          RegistrationScreen(),
+      routes: [
+        GoRoute(
+          path: 'authPage',
+          name: AppRouterNames.authPage,
+          builder: (BuildContext context, GoRouterState state) => AuthScreen(),
+        ),
+      ],
     ),
   ],
 );

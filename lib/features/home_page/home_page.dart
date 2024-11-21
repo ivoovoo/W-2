@@ -1,5 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_network/core/models/video_model.dart';
 import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/data.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String videoPath;
-
-  List<Account> listOfAccounts = [];
+  VideoResponse videoResponse = VideoResponse(videos: []);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class _HomePageState extends State<HomePage> {
           initial: () {},
           loadInProgress: () {},
           loadSuccess: (accounts) {
-            listOfAccounts = accounts;
+            videoResponse = accounts;
           },
           loadFailure: (error) {},
         );
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             color: AppColors.kBlackColor,
             child: PageView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: listOfAccounts.length,
+              itemCount: videoResponse.videos.length,
               itemBuilder: (context, index) {
                 return Stack(
                   children: [
@@ -53,9 +52,8 @@ class _HomePageState extends State<HomePage> {
                       height: double.infinity,
                       width: double.infinity,
                       child: CustomVideoPlayerWidget(
-                        videoPath: listOfAccounts[index].mediaList[0].mediaPath,
-                        thumbnail: listOfAccounts[index].mediaList[0].thumbnail,
-                      ),
+                          videoPath: videoResponse.videos[index].videoFile,
+                          thumbnail: 'assets/images/image_of_video1.jpg'),
                     ),
                     Positioned(
                       bottom: 100.0,
@@ -83,16 +81,13 @@ class _HomePageState extends State<HomePage> {
                                       //         context)
                                       //     .notMyProfile();
                                     },
-                                    name: listOfAccounts[index].nickname,
+                                    name: 'kkotovva',
                                     // isVisible: BlocProvider.of<HomeScreenCubit>(context).isInterfaceVisible,
                                   ),
                                   ActivityTapeHorizontal(
-                                    likesCount: listOfAccounts[index]
-                                        .mediaList[0]
-                                        .likes,
-                                    viewsCount: listOfAccounts[index]
-                                        .mediaList[0]
-                                        .views,
+                                    likesCount: 2,
+                                    viewsCount:
+                                        videoResponse.videos[index].viewsCount,
                                     onPressMessagesFunc: () {
                                       context.pushNamed(
                                           AppRouterNames.commentsPage);

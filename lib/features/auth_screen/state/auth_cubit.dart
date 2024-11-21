@@ -6,18 +6,22 @@ import 'package:social_network/data.dart';
 
 part 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends Cubit<AuthhState> {
   AuthCubit() : super(AuthInitial());
 
-  String textButton = t.strings.auth.user_name;
+  String buttonText = t.strings.auth.user_name;
+
+  String buttonTextAuth = t.strings.auth.email_address;
 
   void definitionTextButton(int pageIndex) {
     if (pageIndex == 0) {
-      textButton = t.strings.auth.user_name;
+      buttonText = t.strings.auth.user_name;
+      buttonTextAuth = t.strings.auth.email_address;
     } else if (pageIndex == 1) {
-      textButton = t.strings.auth.email_address;
-    } else if (pageIndex == 2) {
-      textButton = t.strings.auth.password;
+      buttonText = t.strings.auth.email_address;
+      buttonTextAuth = t.strings.auth.password;
+    } else {
+      buttonText = t.strings.auth.password;
     }
     emit(AuthInitial());
   }

@@ -36,13 +36,13 @@ class TextContent extends StatelessWidget {
           pathToImage: pathToImage,
           isLeft: true,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ChatScreen(chatModel: ChatsRepository.chats.first),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) =>
+            //         ChatScreen(chatModel: ChatsRepository.chats.first),
+            //   ),
+            // );
           },
         ),
         Container(
@@ -86,13 +86,13 @@ class TextContent extends StatelessWidget {
           pathToImage: pathToImage,
           isLeft: false,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ChatScreen(chatModel: ChatsRepository.chats.first),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) =>
+            //         ChatScreen(chatModel: ChatsRepository.chats.first),
+            //   ),
+            // );
           },
         ),
       ],
