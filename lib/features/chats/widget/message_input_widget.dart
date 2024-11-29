@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -49,9 +50,16 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
     final pickedFile = await picker.pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
       final videoFile = File(pickedFile.path);
-      // Ты можешь сохранить файл в кэш, как с аудио, и отправить его
-      widget.onSend(videoFile.path, ContentType.Video);
-      print('Recorded video saved in cache: ${videoFile.path}');
+
+      // Преобразование в Base64
+      final videoBytes =
+          await videoFile.readAsBytes(); // Читаем файл как массив байтов
+      final videoBase64 = base64Encode(videoBytes); // Преобразуем в Base64
+
+      // Вызываем метод onSend с Base64 строкой
+      widget.onSend(videoBase64, ContentType.Video);
+
+      print('Видео в Base64: $videoBase64'); // Для отладки
     }
   }
 

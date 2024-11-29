@@ -26,6 +26,7 @@ class ApiRequester {
         url,
         options: Options(
           headers: {
+            "Content-Type": "application/json",
             'Authorization': 'Bearer $token',
           },
         ),
@@ -39,7 +40,37 @@ class ApiRequester {
     Dio dio = await initDio();
 
     try {
-      return dio.post(url, data: data);
+      return dio.post(
+        url,
+        data: data,
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+          },
+        ),
+      );
+    } catch (e) {
+      throw CatchException.convertException(e);
+    }
+  }
+
+  Future<Response> toPostForLogout(String url, [Object? data]) async {
+    Dio dio = await initDio();
+    String? csrfToken = await getTokenCSRF();
+    String? token = await getToken();
+
+    try {
+      return dio.post(
+        url,
+        data: data,
+        options: Options(
+          headers: {
+            "X-Csrftoken": "$csrfToken",
+            "Authorization": "Bearer $token",
+            "Cookie": "csrftoken=$csrfToken",
+          },
+        ),
+      );
     } catch (e) {
       throw CatchException.convertException(e);
     }

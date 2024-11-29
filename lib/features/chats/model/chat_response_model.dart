@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'chat_response_model.freezed.dart';
+
 part 'chat_response_model.g.dart';
 
 @freezed
@@ -34,6 +35,10 @@ class User with _$User {
     required int id,
     required String username,
     required String email,
+    required String last_online,
+    required bool is_online,
+    required int subscribers_count,
+    required int subscriptions_count,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

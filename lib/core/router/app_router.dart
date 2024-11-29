@@ -17,25 +17,25 @@ import 'app_router_names.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
+late AuthNotifier authNotifier;
+
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/registrationPage/authPage',
-  redirect: (BuildContext context, GoRouterState state) async {
-    // Проверяем авторизацию при каждом навигационном запросе
-    final bool isAuthenticated = await AuthCache.isAuthenticated();
+  redirect: (BuildContext context, GoRouterState state) {
+    final isAuthenticated = authNotifier.isAuthenticated;
 
-    final isGoingToAuthPage = state.path == '/registrationPage/authPage';
-    if (!isAuthenticated && !isGoingToAuthPage) {
-      // Если не авторизован и идет не на страницу авторизации, перенаправляем на неё
+    if (!isAuthenticated && state.fullPath != '/registrationPage/authPage') {
       return '/registrationPage/authPage';
-    } else if (isAuthenticated && isGoingToAuthPage) {
-      // Если авторизован и пытается попасть на страницу авторизации, перенаправляем на главную
+    }
+
+    if (isAuthenticated && state.fullPath == '/registrationPage/authPage') {
       return '/home';
     }
 
-    // Если ничего менять не нужно, возвращаем null
     return null;
   },
+  refreshListenable: authNotifier, // Подписка на изменения
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       builder: (BuildContext context, GoRouterState state,

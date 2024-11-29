@@ -5,8 +5,9 @@ part 'video_model.g.dart';
 
 @freezed
 class VideoResponse with _$VideoResponse {
-  const factory VideoResponse({
-    required List<Video> videos,
+  factory VideoResponse({
+    @JsonKey(name: 'all_videos') required List<Video> allVideos,
+    @JsonKey(name: 'subscribed_videos') required List<Video> subscribedVideos,
   }) = _VideoResponse;
 
   factory VideoResponse.fromJson(Map<String, dynamic> json) =>
@@ -15,12 +16,13 @@ class VideoResponse with _$VideoResponse {
 
 @freezed
 class Video with _$Video {
-  const factory Video({
+  factory Video({
     @JsonKey(name: 'category_video') required CategoryVideo categoryVideo,
     @JsonKey(name: 'video_file') required String videoFile,
-    @JsonKey(name: 'author') required int author,
+    required int author,
     @JsonKey(name: 'views_count') required int viewsCount,
     @JsonKey(name: 'created_at') required String createdAt,
+    @JsonKey(name: 'video_preview') required String videoPreview,
   }) = _Video;
 
   factory Video.fromJson(Map<String, dynamic> json) => _$VideoFromJson(json);
@@ -28,7 +30,7 @@ class Video with _$Video {
 
 @freezed
 class CategoryVideo with _$CategoryVideo {
-  const factory CategoryVideo({
+  factory CategoryVideo({
     required String name,
   }) = _CategoryVideo;
 

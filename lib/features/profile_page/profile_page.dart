@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_network/features/profile_page/widgets/floating_button.dart';
 import 'package:social_network/features/profile_page/widgets/header_widget.dart';
-import 'package:social_network/features/profile_page/widgets/id_row_widget.dart';
 import 'package:social_network/features/profile_page/widgets/photo_list_widget.dart';
 import 'package:social_network/features/profile_page/widgets/profile_main_widget.dart';
 import 'package:provider/provider.dart';

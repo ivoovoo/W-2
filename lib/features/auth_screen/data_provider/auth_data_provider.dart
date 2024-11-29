@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
+import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/core/utils/token_funcs.dart';
 
 abstract interface class IAuthDataProvider {
@@ -20,8 +21,26 @@ class AuthDataProvider implements IAuthDataProvider {
     if (response.statusCode == 200) {
       final token = response.data['access'];
       print(response.data);
+      print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+      print(response.headers);
+      print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
       await saveToken(token); // Сохранение токена
       print("Токен сохранен: $token");
+      var setCookieHeader = response.headers['set-cookie'];
+      String? csrfToken;
+      for (var cookie in setCookieHeader!) {
+        if (cookie.contains('csrftoken=')) {
+          // Извлекаем значение CSRF токена из строки
+          var cookieParts = cookie.split(';');
+          csrfToken = cookieParts
+              .firstWhere((part) => part.trim().startsWith('csrftoken='))
+              .split('=')[1];
+          break;
+        }
+      }
+      print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc $csrfToken");
+      await saveTokenCSRF(csrfToken ?? "");
+      print("SUCCESSSSSS");
       AuthCache.setAutShenticated(true);
       Response response2 = await apiRequester.toGet("user/api/check_auth/");
       if (response2.statusCode == 200) {
@@ -32,6 +51,7 @@ class AuthDataProvider implements IAuthDataProvider {
     } else {
       throw Exception();
     }
+    authNotifier.login();
   }
 
   @override

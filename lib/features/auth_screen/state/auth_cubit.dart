@@ -11,12 +11,12 @@ class AuthCubit extends Cubit<AuthhState> {
 
   String buttonText = t.strings.auth.user_name;
 
-  String buttonTextAuth = t.strings.auth.email_address;
+  String buttonTextAuth = t.strings.auth.user_name;
 
   void definitionTextButton(int pageIndex) {
     if (pageIndex == 0) {
       buttonText = t.strings.auth.user_name;
-      buttonTextAuth = t.strings.auth.email_address;
+      buttonTextAuth = t.strings.auth.user_name;
     } else if (pageIndex == 1) {
       buttonText = t.strings.auth.email_address;
       buttonTextAuth = t.strings.auth.password;

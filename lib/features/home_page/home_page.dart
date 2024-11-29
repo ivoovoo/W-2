@@ -16,7 +16,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  VideoResponse videoResponse = VideoResponse(videos: []);
+  VideoResponse videoResponse = VideoResponse(
+    allVideos: [],
+    subscribedVideos: [],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class _HomePageState extends State<HomePage> {
             color: AppColors.kBlackColor,
             child: PageView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: videoResponse.videos.length,
+              itemCount: videoResponse.allVideos.length,
               itemBuilder: (context, index) {
                 return Stack(
                   children: [
@@ -52,8 +55,9 @@ class _HomePageState extends State<HomePage> {
                       height: double.infinity,
                       width: double.infinity,
                       child: CustomVideoPlayerWidget(
-                          videoPath: videoResponse.videos[index].videoFile,
-                          thumbnail: 'assets/images/image_of_video1.jpg'),
+                          videoPath: videoResponse.allVideos[index].videoFile,
+                          thumbnail:
+                              videoResponse.allVideos[index].videoPreview),
                     ),
                     Positioned(
                       bottom: 100.0,
@@ -86,8 +90,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   ActivityTapeHorizontal(
                                     likesCount: 2,
-                                    viewsCount:
-                                        videoResponse.videos[index].viewsCount,
+                                    viewsCount: videoResponse
+                                        .allVideos[index].viewsCount,
                                     onPressMessagesFunc: () {
                                       context.pushNamed(
                                           AppRouterNames.commentsPage);

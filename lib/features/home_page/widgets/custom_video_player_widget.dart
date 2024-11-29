@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -24,7 +25,7 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
-        Uri.parse('http://45.153.191.237:8000${widget.videoPath}'))
+        Uri.parse('http://45.153.191.237${widget.videoPath}'))
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -56,8 +57,12 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
         aspectRatio: _controller.value.aspectRatio,
         child: _isInitialized
             ? VideoPlayer(_controller)
-            : Image.asset(
-                widget.thumbnail,
+            : CachedNetworkImage(
+                imageUrl: 'http://45.153.191.237${widget.thumbnail}',
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    const Center(child: Icon(Icons.error)),
                 fit: BoxFit.cover,
               ),
       ),

@@ -6,9 +6,15 @@ import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/features/home_page/data_provider/home_data_provider.dart';
 import 'package:social_network/features/home_page/logic/home_bloc.dart';
 import 'package:social_network/features/home_page/repository/home_repository.dart';
+import 'core/utils/token_funcs.dart';
 import 'data.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Проверяем авторизацию перед запуском приложения
+  final issAuthenticated = await AuthCache.isAuthenticated();
+  authNotifier = AuthNotifier(issAuthenticated);
   return runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -33,11 +39,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      child: MaterialApp.router(
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.blue),
-        locale: TranslationProvider.of(context).flutterLocale,
+      child: SafeArea(
+        top: false,
+        right: false,
+        left: false,
+        child: MaterialApp.router(
+          routerConfig: router,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primarySwatch: Colors.blue),
+          locale: TranslationProvider.of(context).flutterLocale,
+        ),
       ),
     );
   }

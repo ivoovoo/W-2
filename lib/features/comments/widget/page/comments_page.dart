@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +8,9 @@ import 'package:social_network/features/comments/model/comment_model.dart';
 import 'package:social_network/features/comments/model/comments_model.dart';
 import 'package:social_network/features/comments/repository/comments_repository.dart';
 
+import '../../../../core/utils/token_funcs.dart';
 import '../../../chats/model/content_model.dart';
+import '../../../chats/model/message_model.dart';
 import '../../../chats/widget/widget.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -22,6 +27,8 @@ class _CommentsPageState extends State<CommentsPage> {
   bool isPlaying = false;
   List<CommentModel> comments = [];
   CommentsModel commentsModel = CommentsRepository.commentsModel;
+  late WebSocket socket;
+  late int userId;
 
   @override
   void initState() {
@@ -44,6 +51,72 @@ class _CommentsPageState extends State<CommentsPage> {
     });
     super.initState();
   }
+
+  // void _connectToSocket() async {
+  //   try {
+  //     var token = await getToken();
+  //     var user = await getUserData();
+  //     userId = user['user_id'];
+  //     print('Токен: $token');
+  //
+  //     socket = await WebSocket.connect(
+  //       'ws://45.153.191.237:8000/ws/',
+  //       headers: {
+  //         'Cookie': 'access_token=$token',
+  //       },
+  //     );
+  //     print('Подключено к серверу WebSocket');
+  //
+  //     socket.listen((data) {
+  //       print('Получено сообщение: $data');
+  //       final parsedData = json.decode(data);
+  //
+  //       // Если это история чата
+  //       if (parsedData['history'] != null) {
+  //         final history = (parsedData['history'] as List)
+  //             .map((e) => Message.fromJson(e))
+  //             .toList();
+  //
+  //         // Добавляем историю только один раз
+  //         setState(() {
+  //           if (messages.isEmpty) {
+  //             messages.addAll(history);
+  //           } else {
+  //             messages.add(history.last);
+  //           }
+  //         });
+  //       }
+  //       if (parsedData['chat_partner'] != null) {
+  //         final chatPartnerr = ChatPartner.fromJson(parsedData['chat_partner']);
+  //         setState(() {
+  //           chatPartner = chatPartnerr;
+  //         });
+  //       }
+  //       // Если это отдельное сообщение
+  //       if (parsedData['message'] != null) {
+  //         final newMessage = Message(
+  //           room: widget.chatId,
+  //           sender: parsedData['sender_id'], // ID отправителя (или получателя)
+  //           messageText: parsedData['message'],
+  //           createdAt:
+  //           TimeOfDay.now().format(context), // или переданный createdAt
+  //         );
+  //
+  //         setState(() {
+  //           messages.add(newMessage);
+  //         });
+  //       }
+  //     }, onError: (error) {
+  //       print('Ошибка: $error');
+  //     });
+  //
+  //     socket.done.then((_) {
+  //       print('Соединение закрыто');
+  //     });
+  //   } catch (e) {
+  //     print('Ошибка при подключении: $e');
+  //   }
+  // }
 
   @override
   void dispose() {

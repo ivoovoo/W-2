@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           try {
             // Подготовка данных для авторизации
             final data = {
-              "email": signInEvent.email,
+              "username": signInEvent.username,
               "password": signInEvent.password,
             };
 

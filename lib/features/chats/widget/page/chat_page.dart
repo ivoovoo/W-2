@@ -93,20 +93,20 @@ class _ChatScreenState extends State<ChatScreen> {
             chatPartner = chatPartnerr;
           });
         }
-        // // Если это отдельное сообщение
-        // if (parsedData['message'] != null) {
-        //   final newMessage = Message(
-        //     room: widget.chatId,
-        //     sender: chatPartner.id, // ID отправителя (или получателя)
-        //     messageText: parsedData['message'],
-        //     createdAt:
-        //         TimeOfDay.now().format(context), // или переданный createdAt
-        //   );
-        //
-        //   setState(() {
-        //     messages.add(newMessage);
-        //   });
-        // }
+        // Если это отдельное сообщение
+        if (parsedData['message'] != null) {
+          final newMessage = Message(
+            room: widget.chatId,
+            sender: parsedData['sender_id'], // ID отправителя (или получателя)
+            messageText: parsedData['message'],
+            createdAt:
+                TimeOfDay.now().format(context), // или переданный createdAt
+          );
+
+          setState(() {
+            messages.add(newMessage);
+          });
+        }
       }, onError: (error) {
         print('Ошибка: $error');
       });
@@ -119,15 +119,25 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _sendMessage(String message) {
-    if (message.isNotEmpty) {
-      // Создаем JSON объект с сообщением
-      final jsonMessage = json.encode({
-        'message': message,
-        'image': '',
-      });
-      socket.add(jsonMessage); // Отправляем JSON сообщение
-      print('Отправлено сообщение: $jsonMessage');
+  void _sendMessage(dynamic content, ContentType contentType) {
+    if (contentType == ContentType.Text) {
+      if (content.isNotEmpty) {
+        final jsonMessage = json.encode({'message': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
+    } else if (contentType == ContentType.Video) {
+      if (content != null) {
+        final jsonMessage = json.encode({'video': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
+    } else if (contentType == ContentType.Video) {
+      if (content != null) {
+        final jsonMessage = json.encode({'image': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
     }
   }
 
@@ -297,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             MessageInputWidget(
               onSend: (String content, ContentType contentType) {
-                _sendMessage(content);
+                _sendMessage(content, contentType);
                 // setState(() {
                 //   messages.add(
                 //     ContentModel(

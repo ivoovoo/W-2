@@ -22,7 +22,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   late AuthBloc authBloc;
-  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
   PageController pageController = PageController();
@@ -37,7 +37,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   void dispose() {
-    emailController.dispose();
+    usernameController.dispose();
     passController.dispose();
     pageController.dispose();
     authBloc.close();
@@ -48,7 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
     TextEditingController controller = TextEditingController();
 
     if (pageIndex == 0) {
-      controller = emailController;
+      controller = usernameController;
     } else if (pageIndex == 1) {
       controller = passController;
     }
@@ -56,7 +56,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void pushNext(BuildContext context) {
-    if (pageIndex == 0 && emailController.text.isNotEmpty) {
+    if (pageIndex == 0 && usernameController.text.isNotEmpty) {
       pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
@@ -68,7 +68,6 @@ class _AuthScreenState extends State<AuthScreen> {
             .secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
       });
     } else if (pageIndex == 1 && passController.text.isNotEmpty) {
-      print('PPPPPPPPPPPPPPPPPPPPPPPP $pageIndex');
       if (isAuth) {
         context.goNamed(AppRouterNames.home);
       }
@@ -116,7 +115,8 @@ class _AuthScreenState extends State<AuthScreen> {
               print(message);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Ошибка авторизации: $message"),
+                  content: Text('Неверный логин или пароль!'),
+                  // content: Text("Ошибка авторизации: $message"),
                   duration: const Duration(seconds: 3),
                   backgroundColor: Colors.red,
                 ),
@@ -170,10 +170,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                 // loginUser(emailController.text,
                                 //     passController.text);
                                 // updateRec();
-                                print(emailController.text);
+                                print(usernameController.text);
                                 print(passController.text);
                                 authBloc.add(AuthEvent.signIn(
-                                  email: emailController.text,
+                                  username: usernameController.text,
                                   password: passController.text,
                                 ));
                               } else {
