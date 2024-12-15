@@ -5,12 +5,14 @@ import 'package:social_network/core/widgets/top_left_dots.dart';
 import 'package:social_network/data.dart';
 
 class StaggeredGridWidget extends StatelessWidget {
-  const StaggeredGridWidget(
-      {required this.leftCoef,
-      required this.rightCoef,
-      required this.items,
-      this.itemCount = 1,
-      super.key});
+  const StaggeredGridWidget({
+    required this.leftCoef,
+    required this.rightCoef,
+    required this.items,
+    this.itemCount = 1,
+    super.key,
+  });
+
   final double leftCoef;
   final double rightCoef;
 

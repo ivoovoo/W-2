@@ -4,11 +4,14 @@ import 'package:social_network/core/core.dart';
 import 'package:social_network/core/utils/token_funcs.dart';
 import 'package:social_network/features/auth_screen/auth_screen.dart';
 import 'package:social_network/features/auth_screen/widgets/page/registration_screen.dart';
+import 'package:social_network/features/center/widgets/page/center_page.dart';
 import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:social_network/features/chats/widget/page/chats_page.dart';
+import 'package:social_network/features/chats/widget/page/content_page.dart';
 import 'package:social_network/features/comments/widget/page/comments_page.dart';
 import 'package:social_network/features/dating_feed_screen/dating_feed_screen.dart';
 import 'package:social_network/features/interests/widget/page/interests_page.dart';
+import 'package:social_network/features/other_profile/other_profile.dart';
 import 'package:social_network/features/profile_page/profile_page.dart';
 
 import '../../features/home_page/home_page.dart';
@@ -35,7 +38,8 @@ final GoRouter router = GoRouter(
 
     return null;
   },
-  refreshListenable: authNotifier, // Подписка на изменения
+  refreshListenable: authNotifier,
+  // Подписка на изменения
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       builder: (BuildContext context, GoRouterState state,
@@ -57,8 +61,10 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   name: AppRouterNames.otherProfile,
                   path: 'otherProfile',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const ProfilePage(),
+                  builder: (BuildContext context, GoRouterState state) {
+                    int userId = state.extra as int;
+                    return OtherProfilePage(userId: userId);
+                  },
                 ),
               ],
             ),
@@ -79,12 +85,9 @@ final GoRouter router = GoRouter(
             GoRoute(
               name: AppRouterNames.centerTab,
               path: '/centerTab',
-              builder: (BuildContext context, GoRouterState state) => Container(
-                color: Colors.green,
-                child: const Center(
-                  child: Text('Main'),
-                ),
-              ),
+              builder: (BuildContext context, GoRouterState state) {
+                return const CenterPage();
+              },
             ),
           ],
         ),
@@ -117,17 +120,34 @@ final GoRouter router = GoRouter(
           const InterestsPage(),
     ),
     GoRoute(
-      path: '/chatsDetail',
+      path: '/chatsDetail/:type_of_chat/:user_name',
       name: AppRouterNames.chatsDetail,
       builder: (BuildContext context, GoRouterState state) {
         int chatId = state.extra as int;
-        return ChatScreen(chatId: chatId);
+        String typeOfChat = state.pathParameters['type_of_chat'] as String;
+        String userName = state.pathParameters['user_name'] as String;
+        return ChatScreen(
+          chatId: chatId,
+          typeOfChat: typeOfChat,
+          userName: userName,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/content',
+      name: AppRouterNames.content,
+      builder: (BuildContext context, GoRouterState state) {
+        String pathToImage = state.extra as String;
+        return ContentPage(pathToImage: pathToImage);
       },
     ),
     GoRoute(
       path: '/commentsPage',
       name: AppRouterNames.commentsPage,
-      builder: (BuildContext context, GoRouterState state) => CommentsPage(),
+      builder: (BuildContext context, GoRouterState state) {
+        int videoId = state.extra as int;
+        return CommentsPage(videoId: videoId);
+      },
     ),
     GoRoute(
       path: '/registrationPage',

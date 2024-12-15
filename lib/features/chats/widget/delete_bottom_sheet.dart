@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DeleteBottomSheet extends StatelessWidget {
   const DeleteBottomSheet({
@@ -73,7 +74,7 @@ class DeleteBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 35),
+          SizedBox(height: 60.h),
         ],
       ),
     );

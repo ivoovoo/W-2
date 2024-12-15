@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/ffprobe_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,7 +26,7 @@ class MessageInputWidget extends StatefulWidget {
 
 class _MessageInputWidgetState extends State<MessageInputWidget> {
   TextEditingController textEditingController = TextEditingController();
-  bool isAudio = true;
+  bool isAudio = false;
   bool isRecording = false;
   final recorder = FlutterSoundRecorder();
   final picker = ImagePicker();
@@ -46,10 +50,87 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
     super.dispose();
   }
 
+  Future<void> getVideoCodec(String videoPath) async {
+    // Формируем команду для ffprobe
+    final command =
+        '-v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 $videoPath';
+
+    // Выполняем команду
+    final session = await FFprobeKit.execute(command);
+
+    // Получаем результат выполнения
+    final output = await session.getOutput();
+
+    // Проверяем кодек
+    if (output != null && output.isNotEmpty) {
+      print('Video Codec: $output');
+      if (output.trim() == 'h264') {
+        // Если кодек уже h264, ничего не делаем
+        print('Video is already in H264 format, no conversion needed.');
+      } else {
+        // Если кодек не h264, выполняем конвертацию
+        print('Converting video to H264...');
+        String outputFilePath =
+            videoPath.replaceAll(RegExp(r'\.mp4$'), '_converted.mp4');
+        await convertHevcToH264(videoPath, outputFilePath);
+        // После конвертации, отправляем новый файл
+        sendVideoFile(outputFilePath);
+      }
+    } else {
+      print('Failed to get codec information');
+    }
+  }
+
+  Future<void> convertHevcToH264(
+      String inputFilePath, String outputFilePath) async {
+    // FFmpeg команда для конвертации HEVC в H264
+    String command = '-i $inputFilePath -c:v libx264 -c:a aac $outputFilePath';
+
+    final session = await FFmpegKit.execute(command);
+
+    // Получаем логи
+    final logs = await session.getLogs();
+
+    // Выводим логи для диагностики
+    for (var log in logs) {
+      print('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFmpeg log: ${log.getMessage()}');
+    }
+
+    // Получаем код возврата
+    final returnCode = await session.getReturnCode();
+
+    if (returnCode != null) {
+      if (returnCode.isValueSuccess()) {
+        print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+        print('Conversion successful: $outputFilePath');
+      } else {
+        // Получаем ошибку, если конвертация не удалась
+        print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+        final errorOutput = await session.getLogs();
+        print('Conversion failed with error: $errorOutput');
+      }
+    }
+  }
+
+  Future<void> sendVideoFile(String videoPath) async {
+    final videoFile = File(videoPath);
+
+    // Преобразование в Base64
+    final videoBytes =
+        await videoFile.readAsBytes(); // Читаем файл как массив байтов
+    final videoBase64 = base64Encode(videoBytes); // Преобразуем в Base64
+
+    // Вызываем метод onSend с Base64 строкой
+    widget.onSend(videoBase64, ContentType.Video);
+  }
+
   Future<void> pickVideo() async {
     final pickedFile = await picker.pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
       final videoFile = File(pickedFile.path);
+      // await getVideoCodec(pickedFile.path);
+      print(pickedFile.path);
+      print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
 
       // Преобразование в Base64
       final videoBytes =
@@ -58,8 +139,61 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
 
       // Вызываем метод onSend с Base64 строкой
       widget.onSend(videoBase64, ContentType.Video);
+    }
+  }
 
-      print('Видео в Base64: $videoBase64'); // Для отладки
+  // Future<void> getVideoCodec(String videoPath) async {
+  //   // Формируем команду для ffprobe
+  //   final command =
+  //       '-v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 $videoPath';
+  //
+  //   // Выполняем команду
+  //   final session = await FFprobeKit.execute(command);
+  //   print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
+  //
+  //   // Получаем результат выполнения
+  //   final output = await session.getOutput();
+  //
+  //   // Выводим результат
+  //   if (output != null && output.isNotEmpty) {
+  //     print('Video Codec: $output');
+  //     print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
+  //   } else {
+  //     print('Failed to get codec information');
+  //   }
+  // }
+  //
+  // Future<void> pickVideo() async {
+  //   final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     final videoFile = File(pickedFile.path);
+  //     getVideoCodec(pickedFile.path);
+  //     print(pickedFile.path);
+  //     print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
+  //
+  //     // Преобразование в Base64
+  //     final videoBytes =
+  //         await videoFile.readAsBytes(); // Читаем файл как массив байтов
+  //     final videoBase64 = base64Encode(videoBytes); // Преобразуем в Base64
+  //
+  //     // Вызываем метод onSend с Base64 строкой
+  //     widget.onSend(videoBase64, ContentType.Video);
+  //   }
+  // }
+
+  Future<void> pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final imageFile = File(pickedFile.path);
+      print(pickedFile.path);
+
+      // Преобразование в Base64
+      final imageBytes =
+          await imageFile.readAsBytes(); // Читаем файл как массив байтов
+      final imageBase64 = base64Encode(imageBytes); // Преобразуем в Base64
+
+      // Вызываем метод onSend с Base64 строкой
+      widget.onSend(imageBase64, ContentType.Image);
     }
   }
 
@@ -113,6 +247,23 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
     await recorder.startRecorder(toFile: 'audio');
   }
 
+  Future<void> funcc() async {
+    // Загружаем аудио файл из ассетов
+    final ByteData byteData = await rootBundle.load('assets/videos/audio2.mp3');
+
+    // Конвертируем данные в Uint8List
+    final List<int> audioBytes = byteData.buffer.asUint8List();
+
+    // Кодируем в base64
+    final audioBase64 = base64Encode(audioBytes);
+
+    print('AUDIO IN BASE64');
+    print(audioBase64);
+
+    // Передаем через метод onSend
+    widget.onSend(audioBase64, ContentType.Audio);
+  }
+
   Future stop() async {
     if (!isRecorderReady) {
       return;
@@ -122,12 +273,15 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
 
     if (path != null) {
       final audioFile = File(path);
-      final cachedPath =
-          await saveAudioToCache(audioFile); // Сохраняем файл в кеш
-      widget.onSend(
-        cachedPath,
-        ContentType.Audio,
-      );
+      final cachedPath = await saveAudioToCache(audioFile);
+      final audioFilee = File(cachedPath);
+      final audioBytes = await audioFilee.readAsBytes();
+      final audioBase64 = base64Encode(audioBytes);
+
+      print('AUDIO IN BASE64');
+      print(audioBase64);
+      // Передаем через метод onSend
+      widget.onSend(audioBase64, ContentType.Audio);
       print('Recorded audio saved in cache: $cachedPath');
     } else {
       print('Recording failed');
@@ -152,27 +306,30 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 10,
-          ),
-          width: 46,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: const Color(0xffffffff),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                offset: const Offset(0, 0),
-                blurRadius: 15,
-              ),
-            ],
-          ),
-          child: Image.asset(
-            'assets/icons/left_icon_of_message_input_widget.png',
-            fit: BoxFit.cover,
+        InkWell(
+          onTap: pickImage,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 10,
+            ),
+            width: 46,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xffffffff),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  offset: const Offset(0, 0),
+                  blurRadius: 15,
+                ),
+              ],
+            ),
+            child: Image.asset(
+              'assets/icons/left_icon_of_message_input_widget.png',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         const SizedBox(width: 7),

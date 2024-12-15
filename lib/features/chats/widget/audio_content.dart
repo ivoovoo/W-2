@@ -1,9 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:social_network/features/comments/widget/avatar_in_comments_page.dart';
-
-import '../repository/chats_repository.dart';
 
 class AudioContent extends StatefulWidget {
   final bool isSender;
@@ -62,9 +59,7 @@ class _AudioContentState extends State<AudioContent> {
 
   Future setAudio() async {
     audioPlayer.setReleaseMode(ReleaseMode.stop);
-    audioPlayer.setSourceUrl(widget.url);
-    // audioPlayer.setSourceUrl(
-    //     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    audioPlayer.setSourceUrl('http://45.153.191.237${widget.url}');
   }
 
   String formatTime(Duration duration) {

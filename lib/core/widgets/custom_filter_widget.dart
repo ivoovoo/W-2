@@ -361,7 +361,7 @@ class _CustomFilterWidgetState extends State<CustomFilterWidget>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocBuilder<ProfileCubit, ProfileeState>(
       builder: (context, state) {
         return SizedBox(
           height: 40.h,

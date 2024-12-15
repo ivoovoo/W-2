@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:social_network/features/chats/repository/chats_repository.dart';
-import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../comments/widget/avatar_in_comments_page.dart';
@@ -41,7 +39,8 @@ class _VideoContentState extends State<VideoContent>
     super.initState();
     print('Initializing video player with path: ${widget.videoPath}');
 
-    _controller = VideoPlayerController.file(File(widget.videoPath))
+    _controller = VideoPlayerController.network(
+        'http://45.153.191.237${widget.videoPath}')
       ..initialize().then((_) {
         setState(() {
           isLoading = false;

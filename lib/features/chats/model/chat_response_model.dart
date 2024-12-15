@@ -22,8 +22,8 @@ class Chat with _$Chat {
     required User sender,
     required User receiver,
     @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'last_message_text') required String lastMessageText,
-    @JsonKey(name: 'last_message_time') required String lastMessageTime,
+    @JsonKey(name: 'last_message_text') required String? lastMessageText,
+    @JsonKey(name: 'last_message_time') required String? lastMessageTime,
   }) = _Chat;
 
   factory Chat.fromJson(Map<String, dynamic> json) => _$ChatFromJson(json);
@@ -35,8 +35,8 @@ class User with _$User {
     required int id,
     required String username,
     required String email,
-    required String last_online,
-    required bool is_online,
+    required String? last_online,
+    required bool? is_online,
     required int subscribers_count,
     required int subscriptions_count,
   }) = _User;

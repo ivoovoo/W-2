@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -6,11 +7,9 @@ import 'package:social_network/features/chats/data_provider/chats_data_provider.
 import 'package:social_network/features/chats/logic/chats_bloc.dart';
 import 'package:social_network/features/chats/model/chat_response_model.dart';
 import 'package:social_network/features/chats/repository/chats_repository.dart';
-import 'package:social_network/features/chats/widget/page/temporary_file.dart';
 import 'package:social_network/features/chats/widget/widget.dart';
 
 import '../../../../core/router/app_router_names.dart';
-import 'chat_page.dart';
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
@@ -98,6 +97,16 @@ class _ChatsPageState extends State<ChatsPage>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+        overlays: [SystemUiOverlay.top]);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocBuilder<ChatsBloc, ChatsState>(
@@ -170,7 +179,7 @@ class _ChatsPageState extends State<ChatsPage>
                                     isScrollControlled: false,
                                     builder: (context) => DeleteBottomSheet(
                                       url:
-                                          'https://img.freepik.com/free-photo/smiley-man-relaxing-outdoors_23-2148739334.jpg',
+                                          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                                       delete: () {
                                         // ChatModel chat = chats[i];
                                         // int index = i;
@@ -192,6 +201,10 @@ class _ChatsPageState extends State<ChatsPage>
                                   context.pushNamed(
                                     AppRouterNames.chatsDetail,
                                     extra: chatResponse.currentUserChats[i].id,
+                                    pathParameters: {
+                                      'type_of_chat': 'chat',
+                                      'user_name': "unknown",
+                                    },
                                   );
                                 },
                                 child: SizedBox(
@@ -222,14 +235,14 @@ class _ChatsPageState extends State<ChatsPage>
                                           borderRadius:
                                               BorderRadius.circular(50),
                                           child: Image.network(
-                                            'https://img.freepik.com/free-photo/smiley-man-relaxing-outdoors_23-2148739334.jpg',
+                                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
                                       // (chats[i].unreadMessages != 0 &&
                                       //         chats[i].haveStories)
-                                      true
+                                      false
                                           ? Container(
                                               alignment: Alignment.center,
                                               width: double.infinity,
@@ -251,28 +264,35 @@ class _ChatsPageState extends State<ChatsPage>
                                               ),
                                             )
                                           : SizedBox(),
-                                      Positioned(
-                                        right: 85 / 2,
-                                        left: 85 / 2,
-                                        bottom: -7.5,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(3),
-                                          height: 15,
-                                          width: 15,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xff6cffb9),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      chatResponse.currentUserChats[i].sender
+                                                  .is_online ==
+                                              true
+                                          ? Positioned(
+                                              right: 85 / 2,
+                                              left: 85 / 2,
+                                              bottom: -7.5,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(3),
+                                                height: 15,
+                                                width: 15,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xff6cffb9),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox.shrink(),
                                     ],
                                   ),
                                 ),

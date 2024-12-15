@@ -5,16 +5,18 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/features/comments/model/comment_model.dart';
-import 'package:social_network/features/comments/model/comments_model.dart';
-import 'package:social_network/features/comments/repository/comments_repository.dart';
 
 import '../../../../core/utils/token_funcs.dart';
 import '../../../chats/model/content_model.dart';
-import '../../../chats/model/message_model.dart';
 import '../../../chats/widget/widget.dart';
 
 class CommentsPage extends StatefulWidget {
-  const CommentsPage({super.key});
+  const CommentsPage({
+    super.key,
+    required this.videoId,
+  });
+
+  final int videoId;
 
   @override
   State<CommentsPage> createState() => _CommentsPageState();
@@ -25,14 +27,15 @@ class _CommentsPageState extends State<CommentsPage> {
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   bool isPlaying = false;
-  List<CommentModel> comments = [];
-  CommentsModel commentsModel = CommentsRepository.commentsModel;
+  List<Comment> comments = [];
   late WebSocket socket;
   late int userId;
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    comments = commentsModel.listOfComments;
+    _connectToSocket();
+    _scrollToEnd();
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.playing;
@@ -52,75 +55,108 @@ class _CommentsPageState extends State<CommentsPage> {
     super.initState();
   }
 
-  // void _connectToSocket() async {
-  //   try {
-  //     var token = await getToken();
-  //     var user = await getUserData();
-  //     userId = user['user_id'];
-  //     print('Токен: $token');
-  //
-  //     socket = await WebSocket.connect(
-  //       'ws://45.153.191.237:8000/ws/',
-  //       headers: {
-  //         'Cookie': 'access_token=$token',
-  //       },
-  //     );
-  //     print('Подключено к серверу WebSocket');
-  //
-  //     socket.listen((data) {
-  //       print('Получено сообщение: $data');
-  //       final parsedData = json.decode(data);
-  //
-  //       // Если это история чата
-  //       if (parsedData['history'] != null) {
-  //         final history = (parsedData['history'] as List)
-  //             .map((e) => Message.fromJson(e))
-  //             .toList();
-  //
-  //         // Добавляем историю только один раз
-  //         setState(() {
-  //           if (messages.isEmpty) {
-  //             messages.addAll(history);
-  //           } else {
-  //             messages.add(history.last);
-  //           }
-  //         });
-  //       }
-  //       if (parsedData['chat_partner'] != null) {
-  //         final chatPartnerr = ChatPartner.fromJson(parsedData['chat_partner']);
-  //         setState(() {
-  //           chatPartner = chatPartnerr;
-  //         });
-  //       }
-  //       // Если это отдельное сообщение
-  //       if (parsedData['message'] != null) {
-  //         final newMessage = Message(
-  //           room: widget.chatId,
-  //           sender: parsedData['sender_id'], // ID отправителя (или получателя)
-  //           messageText: parsedData['message'],
-  //           createdAt:
-  //           TimeOfDay.now().format(context), // или переданный createdAt
-  //         );
-  //
-  //         setState(() {
-  //           messages.add(newMessage);
-  //         });
-  //       }
-  //     }, onError: (error) {
-  //       print('Ошибка: $error');
-  //     });
-  //
-  //     socket.done.then((_) {
-  //       print('Соединение закрыто');
-  //     });
-  //   } catch (e) {
-  //     print('Ошибка при подключении: $e');
-  //   }
-  // }
+  void _connectToSocket() async {
+    try {
+      var token = await getToken();
+      var user = await getUserData();
+      userId = user['user_id'];
+      print('Токен: $token');
+
+      socket = await WebSocket.connect(
+        'ws://45.153.191.237:8000/ws/video/${widget.videoId}/',
+        headers: {
+          'Cookie': 'access_token=$token',
+          "Content-Type": "application/json",
+        },
+      );
+      print('Подключено к серверу WebSocket');
+
+      socket.listen((data) {
+        print('Получено сообщение: $data');
+        final parsedData = json.decode(data);
+
+        // Если это история чата
+        if (parsedData['history'] != null) {
+          final history = (parsedData['history'] as List)
+              .map((e) => Comment.fromJson(e))
+              .toList();
+
+          // Добавляем историю только один раз
+          setState(() {
+            if (comments.isEmpty) {
+              comments.addAll(history);
+            }
+          });
+        }
+        if (parsedData['comment_type'] != null) {
+          final newComment = Comment(
+            commentType: parsedData['comment_type'],
+            content: parsedData['content'],
+            createdAt:
+                parsedData['created_at'] ?? DateTime.now().toIso8601String(),
+            author: parsedData['author_id'],
+          );
+
+          setState(() {
+            comments.add(newComment);
+            _scrollToEnd();
+          });
+        }
+      }, onError: (error) {
+        print('Ошибка: $error');
+      });
+
+      socket.done.then((_) {
+        print('Соединение закрыто');
+      });
+    } catch (e) {
+      print('Ошибка при подключении: $e');
+    }
+  }
+
+  void _sendMessage(dynamic content, ContentType contentType) {
+    if (contentType == ContentType.Text) {
+      if (content.isNotEmpty) {
+        final jsonMessage = json.encode({'comment_text': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
+    } else if (contentType == ContentType.Video) {
+      if (content != null) {
+        final jsonMessage = json.encode({'comment_video': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
+    } else if (contentType == ContentType.Image) {
+      if (content != null) {
+        final jsonMessage = json.encode({'comment_image': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
+    } else if (contentType == ContentType.Audio) {
+      if (content != null) {
+        final jsonMessage = json.encode({'comment_voice': content});
+        socket.add(jsonMessage); // Отправляем JSON сообщение
+        print('Отправлено сообщение: $jsonMessage');
+      }
+    }
+  }
+
+  void _scrollToEnd() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
 
   @override
   void dispose() {
+    socket.close(); // Закрытие соединения при уничтожении виджета
     audioPlayer.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -149,7 +185,7 @@ class _CommentsPageState extends State<CommentsPage> {
                   },
                 ),
                 Text(
-                  'Комментарии ${commentsModel.listOfComments.length}',
+                  'Комментарии ${comments.length}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Color(0xff000000),
@@ -160,7 +196,7 @@ class _CommentsPageState extends State<CommentsPage> {
                 CircleAvatar(
                   radius: 21,
                   backgroundImage: NetworkImage(
-                    commentsModel.pathToImage,
+                    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                   ),
                 ),
               ],
@@ -176,80 +212,91 @@ class _CommentsPageState extends State<CommentsPage> {
                       ),
                     )
                   : ListView.separated(
+                      controller: scrollController,
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       itemCount: comments.length,
                       itemBuilder: (context, index) {
                         final message = comments[index];
 
-                        if (message.contentType == ContentType.Text) {
+                        if (message.commentType == 'text' ||
+                            message.commentType == 'comment_text') {
                           return Align(
-                            alignment: message.isSender
+                            alignment: message.author == userId
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: TextContent(
                               text: message.content,
-                              isSender: message.isSender,
+                              isSender: message.author == userId,
                               isCommentsPage: true,
-                              haveStories: message.haveStories,
-                              pathToImage: message.pathToImage,
+                              haveStories: true,
+                              pathToImage:
+                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                             ),
                           );
-                        } else if (message.contentType == ContentType.Audio) {
+                        } else if (message.commentType == 'voice' ||
+                            message.commentType == 'comment_voice') {
                           return Align(
-                            alignment: message.isSender
+                            alignment: message.author == userId
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: AudioContent(
-                              isSender: message.isSender,
+                              isSender: message.author == userId,
                               url: message.content,
                               isCommentsPage: true,
-                              haveStories: message.haveStories,
+                              haveStories: true,
                               pathToImage:
-                                  'https://media.gettyimages.com/id/171165631/photo/new-york-ny-actor-andrew-garfield-enters-the-the-amazing-spiderman-2-movie-set-in-madison.jpg?s=612x612&w=gi&k=20&c=-_Bka-ZL0g3aI6Zz4TaU1EPDlGgNUEx_3HGOCmcy2-U=',
+                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                             ),
                           );
-                        } else if (message.contentType == ContentType.Image) {
+                        } else if (message.commentType == 'image' ||
+                            message.commentType == 'comment_image') {
                           return Align(
-                            alignment: message.isSender
+                            alignment: message.author == userId
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: ImageContent(
                               url: message.content,
                               isCommentsPage: true,
-                              pathToImage: message.pathToImage,
-                              isSender: message.isSender,
-                              haveStories: message.haveStories,
+                              pathToImage:
+                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
+                              isSender: message.author == userId,
+                              haveStories: true,
                             ),
                           );
-                        } else if (message.contentType == ContentType.Video) {
+                        } else if (message.commentType == 'video' ||
+                            message.commentType == 'comment_video') {
                           return Align(
-                            alignment: message.isSender
+                            alignment: message.author == userId
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: VideoContent(
                               videoPath: message.content,
                               isCommentsPage: true,
-                              isSender: message.isSender,
-                              haveStories: message.haveStories,
-                              pathToImage: message.pathToImage,
+                              isSender: message.author == userId,
+                              haveStories: true,
+                              pathToImage:
+                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                             ),
                           );
-                        } else if (message.contentType == ContentType.Sticker) {
+                        } else if (message.commentType == 'sticker' ||
+                            message.commentType == 'comment_sticker') {
                           return Align(
-                            alignment: message.isSender
+                            alignment: message.author == userId
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: StickerContent(
                               url: message.content,
                               // Предполагается, что это URL наклейки
                               isCommentsPage: true,
-                              pathToImage: message.pathToImage,
-                              isSender: message.isSender,
-                              haveStories: message.haveStories,
+                              pathToImage:
+                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
+                              isSender: message.author == userId,
+                              haveStories: true,
                             ),
                           );
                         } else {
-                          return SizedBox.shrink(); // Если тип не известен
+                          return const SizedBox
+                              .shrink(); // Если тип не известен
                         }
                       },
                       separatorBuilder: (context, index) {
@@ -258,21 +305,8 @@ class _CommentsPageState extends State<CommentsPage> {
                     ),
             ),
             MessageInputWidget(
-              onSend: (String content, ContentType contentType) {
-                setState(() {
-                  comments.add(
-                    CommentModel(
-                      id: DateTime.now().millisecondsSinceEpoch,
-                      contentType: contentType,
-                      content: content,
-                      pathToImage:
-                          'https://media.gettyimages.com/id/171165631/photo/new-york-ny-actor-andrew-garfield-enters-the-the-amazing-spiderman-2-movie-set-in-madison.jpg?s=612x612&w=gi&k=20&c=-_Bka-ZL0g3aI6Zz4TaU1EPDlGgNUEx_3HGOCmcy2-U=',
-                      isSender: true,
-                      haveStories: true,
-                    ),
-                  );
-                });
-                return;
+              onSend: (dynamic content, ContentType contentType) {
+                _sendMessage(content, contentType);
               },
             ),
           ],

@@ -17,12 +17,14 @@ class VideoResponse with _$VideoResponse {
 @freezed
 class Video with _$Video {
   factory Video({
+    required int id,
     @JsonKey(name: 'category_video') required CategoryVideo categoryVideo,
     @JsonKey(name: 'video_file') required String videoFile,
-    required int author,
+    required String author,
+    @JsonKey(name: 'author_id') required int authorId,
     @JsonKey(name: 'views_count') required int viewsCount,
     @JsonKey(name: 'created_at') required String createdAt,
-    @JsonKey(name: 'video_preview') required String videoPreview,
+    @JsonKey(name: 'video_preview') required String? videoPreview,
   }) = _Video;
 
   factory Video.fromJson(Map<String, dynamic> json) => _$VideoFromJson(json);

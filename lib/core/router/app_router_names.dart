@@ -10,4 +10,5 @@ class AppRouterNames {
   static const authPage = 'authPage';
   static const registrationPage = 'registrationPage';
   static const chatsDetail = 'chatsDetail';
+  static const content = 'content';
 }

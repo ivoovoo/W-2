@@ -1,19 +1,27 @@
-import 'package:social_network/features/chats/model/content_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class CommentModel {
-  final bool haveStories;
-  final String pathToImage;
-  final int id;
-  final ContentType contentType;
-  final String content;
-  final bool isSender;
+part 'comment_model.freezed.dart';
+part 'comment_model.g.dart';
 
-  CommentModel({
-    required this.pathToImage,
-    required this.id,
-    required this.contentType,
-    required this.content,
-    required this.isSender,
-    required this.haveStories,
-  });
+@freezed
+class CommentModel with _$CommentModel {
+  const factory CommentModel({
+    required List<Comment> history,
+  }) = _CommentModel;
+
+  factory CommentModel.fromJson(Map<String, dynamic> json) =>
+      _$CommentModelFromJson(json);
+}
+
+@freezed
+class Comment with _$Comment {
+  const factory Comment({
+    @JsonKey(name: 'comment_type') required String commentType,
+    required String content,
+    @JsonKey(name: 'created_at') required String createdAt,
+    required int author,
+  }) = _Comment;
+
+  factory Comment.fromJson(Map<String, dynamic> json) =>
+      _$CommentFromJson(json);
 }

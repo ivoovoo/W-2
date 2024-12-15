@@ -8,8 +8,10 @@ class Message with _$Message {
   const factory Message({
     required int room,
     required int sender,
-    @JsonKey(name: 'message_text') required String messageText,
     @JsonKey(name: 'created_at') required String createdAt,
+    @JsonKey(name: 'message_read') required String? messageRead,
+    @JsonKey(name: 'message_type') required String messageType,
+    required String content,
   }) = _Message;
 
   factory Message.fromJson(Map<String, dynamic> json) =>

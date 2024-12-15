@@ -17,13 +17,16 @@ class ApiRequester {
     );
   }
 
-  Future<Response> toGet(String url) async {
+  Future<Response> toGet(String url,
+      [Map<String, dynamic>? queryParameters]) async {
     Dio dio = await initDio();
     final token = await getToken(); // Получаем токен из локального хранилища
+    print(token);
 
     try {
       return dio.get(
         url,
+        queryParameters: queryParameters,
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -38,6 +41,8 @@ class ApiRequester {
 
   Future<Response> toPost(String url, [Object? data]) async {
     Dio dio = await initDio();
+    String? csrfToken = await getTokenCSRF();
+    String? token = await getToken();
 
     try {
       return dio.post(
@@ -46,6 +51,34 @@ class ApiRequester {
         options: Options(
           headers: {
             "Content-Type": "application/json",
+            // "Authorization": "Bearer $token",
+            // "X-Csrftoken": "$csrfToken",
+            // "Cookie": "csrftoken=$csrfToken",
+          },
+        ),
+      );
+    } catch (e) {
+      throw CatchException.convertException(e);
+    }
+  }
+
+  Future<Response> toPostFor(String url, [Object? data]) async {
+    Dio dio = await initDio();
+    String? csrfToken = await getTokenCSRF();
+    String? token = await getToken();
+    print(token);
+    print(csrfToken);
+
+    try {
+      return dio.post(
+        url,
+        data: data,
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+            "X-Csrftoken": "$csrfToken",
+            "Cookie": "csrftoken=$csrfToken",
           },
         ),
       );
@@ -88,9 +121,20 @@ class ApiRequester {
 
   Future<Response> toDelete(String url) async {
     Dio dio = await initDio();
+    String? csrfToken = await getTokenCSRF();
+    String? token = await getToken();
 
     try {
-      return dio.delete(url);
+      return dio.delete(
+        url,
+        options: Options(
+          headers: {
+            "X-Csrftoken": "$csrfToken",
+            "Authorization": "Bearer $token",
+            "Cookie": "csrftoken=$csrfToken",
+          },
+        ),
+      );
     } catch (e) {
       throw CatchException.convertException(e);
     }

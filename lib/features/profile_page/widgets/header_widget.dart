@@ -5,7 +5,12 @@ import 'package:social_network/features/profile_page/widgets/header_button.dart'
 import 'package:social_network/data.dart';
 
 class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({super.key});
+  const HeaderWidget({
+    super.key,
+    required this.username,
+  });
+
+  final String username;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +21,12 @@ class HeaderWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text(
-                '@kkotovaa',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Text(
+                '@$username',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(
                 width: 8 * rw(context),

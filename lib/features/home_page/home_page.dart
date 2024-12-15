@@ -21,6 +21,14 @@ class _HomePageState extends State<HomePage> {
     subscribedVideos: [],
   );
 
+  String extractUsername(String author) {
+    // Разбиваем строку на части, используя пробел
+    List<String> parts = author.split(' ');
+
+    // Возвращаем вторую часть (username)
+    return parts[1];
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
@@ -57,7 +65,8 @@ class _HomePageState extends State<HomePage> {
                       child: CustomVideoPlayerWidget(
                           videoPath: videoResponse.allVideos[index].videoFile,
                           thumbnail:
-                              videoResponse.allVideos[index].videoPreview),
+                              videoResponse.allVideos[index].videoPreview ??
+                                  ""),
                     ),
                     Positioned(
                       bottom: 100.0,
@@ -76,16 +85,15 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   ProfileButton(
                                     onTap: () {
-                                      context
-                                          .pushNamed(
-                                              AppRouterNames.otherProfile)
-                                          .then((_) {});
-
-                                      // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                                      //         context)
-                                      //     .notMyProfile();
+                                      context.pushNamed(
+                                        AppRouterNames.otherProfile,
+                                        extra: videoResponse
+                                            .allVideos[index].authorId,
+                                      );
                                     },
-                                    name: 'kkotovva',
+                                    name: extractUsername(
+                                      videoResponse.allVideos[index].author,
+                                    ),
                                     // isVisible: BlocProvider.of<HomeScreenCubit>(context).isInterfaceVisible,
                                   ),
                                   ActivityTapeHorizontal(
@@ -94,7 +102,10 @@ class _HomePageState extends State<HomePage> {
                                         .allVideos[index].viewsCount,
                                     onPressMessagesFunc: () {
                                       context.pushNamed(
-                                          AppRouterNames.commentsPage);
+                                        AppRouterNames.commentsPage,
+                                        extra:
+                                            videoResponse.allVideos[index].id,
+                                      );
                                     },
                                     onTap: () {
                                       context.pushNamed(

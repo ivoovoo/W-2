@@ -195,6 +195,10 @@ class $AssetsImagesGen {
   AssetGenImage get chatSelected =>
       const AssetGenImage('assets/images/chat_selected.png');
 
+  /// File path: assets/images/create_content_image.png
+  AssetGenImage get createContentImage =>
+      const AssetGenImage('assets/images/create_content_image.png');
+
   /// File path: assets/images/create_message1.png
   AssetGenImage get createMessage1 =>
       const AssetGenImage('assets/images/create_message1.png');
@@ -425,6 +429,7 @@ class $AssetsImagesGen {
         ball,
         chat,
         chatSelected,
+        createContentImage,
         createMessage1,
         emptyChat,
         emptyChatImage,
@@ -505,19 +510,6 @@ class $AssetsJsonGen {
       [onboardingAnimation1, onboardingAnimation2, onboardingAnimation3];
 }
 
-class $AssetsVideosGen {
-  const $AssetsVideosGen();
-
-  /// File path: assets/videos/1.mp4
-  String get a1 => 'assets/videos/1.mp4';
-
-  /// File path: assets/videos/2.mp4
-  String get a2 => 'assets/videos/2.mp4';
-
-  /// List of all assets
-  List<String> get values => [a1, a2];
-}
-
 class Assets {
   Assets._();
 
@@ -525,7 +517,6 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsJsonGen json = $AssetsJsonGen();
-  static const $AssetsVideosGen videos = $AssetsVideosGen();
 }
 
 class AssetGenImage {
