@@ -7,7 +7,7 @@ import 'likes_widget.dart';
 import 'views_widget.dart';
 import 'messages_widget.dart';
 
-class ActivityTapeHorizontal extends StatelessWidget {
+class ActivityTapeHorizontal extends StatefulWidget {
   final int likesCount;
   final int viewsCount;
   final void Function() onPressMessagesFunc;
@@ -25,16 +25,42 @@ class ActivityTapeHorizontal extends StatelessWidget {
   });
 
   @override
+  State<ActivityTapeHorizontal> createState() => _ActivityTapeHorizontalState();
+}
+
+class _ActivityTapeHorizontalState extends State<ActivityTapeHorizontal> {
+  int _viewsCount = 0;
+
+  @override
+  void initState() {
+    _viewsCount = widget.viewsCount;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ActivityTapeHorizontal oldWidget) {
+    print('ZASHELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
+    print(oldWidget.viewsCount);
+    print(widget.viewsCount);
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.viewsCount != widget.viewsCount) {
+      setState(() {
+        _viewsCount = widget.viewsCount;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         // LikesWidget(text: likesCount),
-        ViewsWidget(text: "$viewsCount"),
+        ViewsWidget(text: "$_viewsCount"),
         const SizedBox(width: 8),
-        MessagesWidget(onPress: onPressMessagesFunc),
+        MessagesWidget(onPress: widget.onPressMessagesFunc),
         const SizedBox(width: 8),
         InkWell(
-          onTap: onTap,
+          onTap: widget.onTap,
           child: SvgPicture.asset(Assets.icons.menu),
         ),
       ],

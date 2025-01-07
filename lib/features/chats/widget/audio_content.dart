@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:social_network/features/comments/widget/avatar_in_comments_page.dart';
 
 class AudioContent extends StatefulWidget {
-  final bool isSender;
+  final bool isSender; //если сендер я то true а если другой то false
   final String url;
   final bool isCommentsPage;
   final bool haveStories;
   final String? pathToImage;
+  final VoidCallback onTap;
 
   const AudioContent({
     super.key,
@@ -16,6 +17,7 @@ class AudioContent extends StatefulWidget {
     required this.isCommentsPage,
     required this.haveStories,
     this.pathToImage,
+    required this.onTap,
   });
 
   @override
@@ -90,15 +92,7 @@ class _AudioContentState extends State<AudioContent> {
           isCommentsPage: widget.isCommentsPage,
           pathToImage: widget.pathToImage,
           isLeft: true,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: widget.onTap,
         ),
         Container(
           constraints: BoxConstraints(
@@ -121,7 +115,7 @@ class _AudioContentState extends State<AudioContent> {
                   )
                 : null,
             color: widget.isSender ? null : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
             boxShadow: widget.isSender
                 ? null
                 : [
@@ -148,64 +142,93 @@ class _AudioContentState extends State<AudioContent> {
                       }
                     },
                     child: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
+                      isPlaying ? Icons.pause : Icons.play_arrow_rounded,
                       size: 35,
                       color: widget.isSender ? Colors.white : Colors.black,
                     ),
                   ),
+                  const SizedBox(height: 9),
+                  Text(
+                    formatTime(position),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: widget.isSender ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 9),
                   Expanded(
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                         thumbShape:
                             const RoundSliderThumbShape(enabledThumbRadius: 8),
                       ),
-                      child: Slider(
-                        min: 0,
-                        max: duration.inSeconds.toDouble(),
-                        value: position.inSeconds.toDouble(),
-                        onChanged: (value) async {
-                          final position = Duration(seconds: value.toInt());
-                          await audioPlayer.seek(position);
-                          await audioPlayer.resume();
-                        },
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          thumbColor:
+                              widget.isSender ? Colors.white : Colors.black,
+                          // Цвет "кружка"
+                          activeTrackColor:
+                              widget.isSender ? Colors.white : Colors.black,
+                          // Цвет активного трека (слева от "кружка")
+                          inactiveTrackColor: widget.isSender
+                              ? Colors.white.withOpacity(0.375)
+                              : Colors.black.withOpacity(0.375),
+                          // Цвет неактивного трека (справа от "кружка")
+                          overlayColor: Colors.blue.withOpacity(0.2),
+                          // Цвет "всплывающего" эффекта при касании
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 9),
+                          // Размер "кружка"
+                          trackHeight: 7.0, // Толщина трека
+                        ),
+                        child: Slider(
+                          min: 0,
+                          max: duration.inMilliseconds.toDouble(),
+                          value: position.inMilliseconds.toDouble(),
+                          onChanged: (value) async {
+                            final position = Duration(seconds: value.toInt());
+                            await audioPlayer.seek(position);
+                            await audioPlayer.resume();
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(width: 50),
-                      Text(
-                        formatTime(position),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: widget.isSender ? Colors.white : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        formatTime(duration),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: widget.isSender ? Colors.white : Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 25),
-                    ],
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         const SizedBox(width: 50),
+              //         Text(
+              //           formatTime(position),
+              //           style: TextStyle(
+              //             fontSize: 12,
+              //             color: widget.isSender ? Colors.white : Colors.black,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.end,
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         Text(
+              //           formatTime(duration),
+              //           style: TextStyle(
+              //             fontSize: 12,
+              //             color: widget.isSender ? Colors.white : Colors.black,
+              //           ),
+              //         ),
+              //         const SizedBox(width: 25),
+              //       ],
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -215,15 +238,7 @@ class _AudioContentState extends State<AudioContent> {
           isCommentsPage: widget.isCommentsPage,
           pathToImage: widget.pathToImage,
           isLeft: false,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: () {},
         ),
       ],
     );

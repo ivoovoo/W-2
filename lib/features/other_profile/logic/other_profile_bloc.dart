@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:social_network/features/other_profile/repository/other_profile_repository.dart';
-import 'package:social_network/features/profile_page/model/user_model.dart';
+import 'package:social_network/features/profile/model/user_model.dart';
 
 part 'other_profile_event.dart';
 

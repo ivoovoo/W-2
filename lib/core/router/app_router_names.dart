@@ -11,4 +11,9 @@ class AppRouterNames {
   static const registrationPage = 'registrationPage';
   static const chatsDetail = 'chatsDetail';
   static const content = 'content';
+  static const chatTab = 'chatTab';
+  static const birthdayCalculator = 'birthdayCalculator';
+  static const unauthorizedDialog = 'unauthorizedDialog';
+  static const createGroupChat = 'createGroupChat';
+  static const createApp = 'createApp';
 }

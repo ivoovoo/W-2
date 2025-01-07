@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/features/auth_screen/data_provider/auth_data_provider.dart';
-import 'package:social_network/features/auth_screen/logic/auth_bloc.dart';
-import 'package:social_network/features/auth_screen/repository/auth_repository.dart';
+import 'package:social_network/features/profile/logic/profile_bloc.dart';
+import '../../generated/l10n.dart';
 import 'state/auth_cubit.dart';
 import 'widgets/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +19,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  late AuthBloc authBloc;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
@@ -31,7 +28,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   void initState() {
-    authBloc = AuthBloc(AuthRepository(authDataProvider: AuthDataProvider()));
     super.initState();
   }
 
@@ -40,7 +36,6 @@ class _AuthScreenState extends State<AuthScreen> {
     usernameController.dispose();
     passController.dispose();
     pageController.dispose();
-    authBloc.close();
     super.dispose();
   }
 
@@ -67,11 +62,7 @@ class _AuthScreenState extends State<AuthScreen> {
         BlocProvider.of<AuthCubit>(context)
             .secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
       });
-    } else if (pageIndex == 1 && passController.text.isNotEmpty) {
-      if (isAuth) {
-        context.goNamed(AppRouterNames.home);
-      }
-    }
+    } else if (pageIndex == 1 && passController.text.isNotEmpty) {}
   }
 
   void backPressed() {
@@ -85,8 +76,6 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  bool isAuth = false;
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -96,26 +85,23 @@ class _AuthScreenState extends State<AuthScreen> {
         systemNavigationBarColor: Colors.transparent));
     return BlocProvider<AuthCubit>(
       create: (context) => AuthCubit(),
-      child: BlocListener<AuthBloc, AuthState>(
-        bloc: authBloc,
+      child: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           state.maybeWhen(
-            loadSuccess: () {
-              setState(() => isAuth = true);
+            loadSuccess: (user) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Вы успешно авторизовались"),
+                SnackBar(
+                  content: Text(S.of(context).login_successful),
                   duration: Duration(seconds: 3),
                   backgroundColor: Colors.green,
                 ),
               );
-              context.goNamed(AppRouterNames.home);
             },
             loadFailure: (message) {
               print(message);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Неверный логин или пароль!'),
+                  content: Text(S.of(context).invalid_login_or_password),
                   // content: Text("Ошибка авторизации: $message"),
                   duration: const Duration(seconds: 3),
                   backgroundColor: Colors.red,
@@ -149,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   });
                                 },
                                 icon: Assets.icons.leftArrow),
-                            SvgPicture.asset(Assets.icons.logo),
+                            SvgPicture.asset(Assets.icons.logo1),
                             const SizedBox.shrink(),
                           ],
                         ),
@@ -157,35 +143,40 @@ class _AuthScreenState extends State<AuthScreen> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
-                            controller: definitionTextController(),
-                            hintText: BlocProvider.of<AuthCubit>(context)
-                                .buttonTextAuth,
-                            buttonOnTap: () {
-                              if (pageIndex >= 1) {
-                                // NetServ().getMessages();
-                                /*registerUser(
+                          controller: definitionTextController(),
+                          hintText: BlocProvider.of<AuthCubit>(context)
+                              .buttonTextAuth,
+                          isActive: true,
+                          buttonOnTap: () {
+                            if (pageIndex >= 1) {
+                              // NetServ().getMessages();
+                              /*registerUser(
                                       nameController.text,
                                       emailController.text,
                                       passController.text);*/
-                                // loginUser(emailController.text,
-                                //     passController.text);
-                                // updateRec();
-                                print(usernameController.text);
-                                print(passController.text);
-                                authBloc.add(AuthEvent.signIn(
-                                  username: usernameController.text,
-                                  password: passController.text,
-                                ));
-                              } else {
-                                setState(() {
-                                  pushNext(context);
-                                });
-                              }
-                            },
-                            onChanged: (value) {
-                              BlocProvider.of<AuthCubit>(context)
-                                  .definitionColorsGradientIconButton(value);
-                            }),
+                              // loginUser(emailController.text,
+                              //     passController.text);
+                              // updateRec();
+                              print(usernameController.text);
+                              print(passController.text);
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(ProfileEvent.signIn(
+                                    username: usernameController.text,
+                                    password: passController.text,
+                                  ));
+                            } else {
+                              setState(() {
+                                pushNext(context);
+                              });
+                            }
+                          },
+                          onChanged: (value) {
+                            BlocProvider.of<AuthCubit>(context)
+                                .definitionColorsGradientIconButton(value);
+                          },
+                          selectedGroupImage: (groupImage, imageFilee) {},
+                        ),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -214,10 +205,10 @@ class _AuthScreenState extends State<AuthScreen> {
                               onTap: () {
                                 context.pop();
                               },
-                              child: const UserAgreement(
-                                firstText: "I haven't ",
-                                secondText: 'account ',
-                                thirdText: 'to Connect',
+                              child: UserAgreement(
+                                firstText: S.of(context).i_have_not,
+                                secondText: S.of(context).account,
+                                thirdText: '',
                                 // firstText:
                                 //     BlocProvider.of<AuthCubit>(context).firstText,
                                 // secondText: BlocProvider.of<AuthCubit>(context)

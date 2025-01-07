@@ -43,12 +43,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
         overlays: [SystemUiOverlay.top]);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.black,
         systemNavigationBarIconBrightness: Brightness.light));
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           widget.child,
@@ -57,25 +55,26 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             child: Container(
               height: 60.h,
               decoration: BoxDecoration(
-                color: _currentPage == 3 || _currentPage == 4
-                    ? Colors.white
-                    : _currentPage != 2
-                        ? Colors.grey.withOpacity(
-                            0.15,
-                          )
-                        : Colors.white.withOpacity(0.15),
+                color: Colors.transparent,
+                // color: _currentPage == 3 || _currentPage == 4
+                //     ? Colors.white
+                //     : _currentPage != 2
+                //         ? Colors.grey.withOpacity(
+                //             0.15,
+                //           )
+                //         : Colors.white.withOpacity(0.15),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.r),
                   topRight: Radius.circular(30.r),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05), // цвет тени
-                    spreadRadius: 0,
-                    blurRadius: 15,
-                    offset: Offset(0, 0), // смещение тени
-                  ),
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.black.withOpacity(0.05), // цвет тени
+                //     spreadRadius: 0,
+                //     blurRadius: 15,
+                //     offset: Offset(0, 0), // смещение тени
+                //   ),
+                // ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

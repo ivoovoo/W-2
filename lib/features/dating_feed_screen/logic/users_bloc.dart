@@ -27,6 +27,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         event.interest,
         event.age_min,
         event.age_max,
+        event.city,
       );
       print('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
       emit(UsersState.loadSuccess(responseModel));

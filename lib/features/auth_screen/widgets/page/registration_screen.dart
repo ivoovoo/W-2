@@ -5,12 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/features/auth_screen/data_provider/auth_data_provider.dart';
-import 'package:social_network/features/auth_screen/logic/auth_bloc.dart';
-import 'package:social_network/features/auth_screen/repository/auth_repository.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:social_network/features/profile/logic/profile_bloc.dart';
 
+import '../../../../generated/l10n.dart';
 import '../../state/auth_cubit.dart';
 import '../text_field_and_button.dart';
 import '../user_agreement.dart';
@@ -23,7 +22,6 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  late AuthBloc authBloc;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -34,7 +32,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   void initState() {
-    authBloc = AuthBloc(AuthRepository(authDataProvider: AuthDataProvider()));
     super.initState();
   }
 
@@ -44,7 +41,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     emailController.dispose();
     passController.dispose();
     pageController.dispose();
-    authBloc.close();
     super.dispose();
   }
 
@@ -84,11 +80,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         BlocProvider.of<AuthCubit>(context)
             .secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
       });
-    } else if (pageIndex == 2 && passController.text.isNotEmpty) {
-      if (isAuth) {
-        context.goNamed(AppRouterNames.home);
-      }
-    }
+    } else if (pageIndex == 2 && passController.text.isNotEmpty) {}
   }
 
   void backPressed() {
@@ -100,8 +92,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  bool isAuth = false;
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -111,25 +101,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         systemNavigationBarColor: Colors.transparent));
     return BlocProvider<AuthCubit>(
       create: (context) => AuthCubit(),
-      child: BlocListener<AuthBloc, AuthState>(
-        bloc: authBloc,
+      child: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           state.maybeWhen(
-            loadSuccess: () {
-              setState(() => isAuth = true);
+            loadSuccess: (user) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Вы успешно зарегистрировались"),
+                SnackBar(
+                  content: Text(S.of(context).registration_successful),
                   duration: Duration(seconds: 3),
                   backgroundColor: Colors.green,
                 ),
               );
-              context.goNamed(AppRouterNames.home);
             },
             loadFailure: (message) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Ошибка регистрации: $message"),
+                  content: Text(S.of(context).registration_failed),
+                  // content: Text("Ошибка регистрации: $message"),
                   duration: const Duration(seconds: 3),
                   backgroundColor: Colors.red,
                 ),
@@ -162,7 +150,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
                                 },
                                 icon: Assets.icons.leftArrow),
-                            SvgPicture.asset(Assets.icons.logo),
+                            SvgPicture.asset(Assets.icons.logo1),
                             const SizedBox.shrink(),
                           ],
                         ),
@@ -170,37 +158,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
-                            controller: definitionTextController(),
-                            hintText:
-                                BlocProvider.of<AuthCubit>(context).buttonText,
-                            buttonOnTap: () {
-                              if (pageIndex >= 2) {
-                                // NetServ().getMessages();
-                                /*registerUser(
+                          controller: definitionTextController(),
+                          hintText:
+                              BlocProvider.of<AuthCubit>(context).buttonText,
+                          isActive: true,
+                          buttonOnTap: () {
+                            if (pageIndex >= 2) {
+                              // NetServ().getMessages();
+                              /*registerUser(
                                       nameController.text,
                                       emailController.text,
                                       passController.text);*/
-                                // loginUser(emailController.text,
-                                //     passController.text);
-                                // updateRec();
-                                print(nameController.text);
-                                print(emailController.text);
-                                print(passController.text);
-                                authBloc.add(AuthEvent.signUp(
-                                  userName: nameController.text,
-                                  email: emailController.text,
-                                  password: passController.text,
-                                ));
-                              } else {
-                                setState(() {
-                                  pushNext(context);
-                                });
-                              }
-                            },
-                            onChanged: (value) {
-                              BlocProvider.of<AuthCubit>(context)
-                                  .definitionColorsGradientIconButton(value);
-                            }),
+                              // loginUser(emailController.text,
+                              //     passController.text);
+                              // updateRec();
+                              print(nameController.text);
+                              print(emailController.text);
+                              print(passController.text);
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(ProfileEvent.signUp(
+                                    userName: nameController.text,
+                                    email: emailController.text,
+                                    password: passController.text,
+                                  ));
+                            } else {
+                              setState(() {
+                                pushNext(context);
+                              });
+                            }
+                          },
+                          onChanged: (value) {
+                            BlocProvider.of<AuthCubit>(context)
+                                .definitionColorsGradientIconButton(value);
+                          },
+                          selectedGroupImage: (groupImage, imageFilee) {},
+                        ),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -228,10 +221,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               onTap: () {
                                 context.goNamed(AppRouterNames.authPage);
                               },
-                              child: const UserAgreement(
-                                firstText: "I have ",
-                                secondText: 'account ',
-                                thirdText: 'to Connect',
+                              child: UserAgreement(
+                                firstText: S.of(context).i_already_have_an,
+                                secondText: S.of(context).account,
+                                thirdText: '',
                                 // firstText:
                                 //     BlocProvider.of<AuthCubit>(context).firstText,
                                 // secondText: BlocProvider.of<AuthCubit>(context)

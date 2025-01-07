@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+
+import '../../../generated/l10n.dart';
 
 class DeleteBottomSheet extends StatelessWidget {
   const DeleteBottomSheet({
@@ -26,19 +29,48 @@ class DeleteBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 35),
-          CircleAvatar(
-            backgroundImage: NetworkImage(url),
-            radius: 39,
-          ),
+          url.isEmpty
+              ? Container(
+                  height: 100,
+                  width: 100,
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xff7fbbfb),
+                        Color(0xffff8bad),
+                      ],
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      height: 92,
+                      width: 92,
+                      color: Colors.white,
+                      child: Lottie.asset(
+                        'assets/json/avatar.json',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                )
+              : CircleAvatar(
+                  backgroundImage: NetworkImage(url),
+                  radius: 39,
+                ),
           const SizedBox(height: 25),
           InkWell(
             onTap: () {
               delete();
               Navigator.pop(context);
             },
-            child: const Text(
-              'Удалить у всех',
-              style: TextStyle(
+            child: Text(
+              S.of(context).delete_for_everyone,
+              style: const TextStyle(
                 color: Color(0xffff7575),
                 fontWeight: FontWeight.w500,
                 fontSize: 17,
@@ -51,9 +83,9 @@ class DeleteBottomSheet extends StatelessWidget {
               delete();
               Navigator.pop(context);
             },
-            child: const Text(
-              'Удалить только у меня',
-              style: TextStyle(
+            child: Text(
+              S.of(context).delete_for_me,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
                 fontSize: 17,
@@ -65,9 +97,9 @@ class DeleteBottomSheet extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Text(
-              'Отмена',
-              style: TextStyle(
+            child: Text(
+              S.of(context).cancel,
+              style: const TextStyle(
                 color: Color(0xffc4c4c4),
                 fontWeight: FontWeight.w700,
                 fontSize: 17,

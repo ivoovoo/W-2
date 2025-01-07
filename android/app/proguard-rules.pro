@@ -1,17 +1,15 @@
-# Flutter-specific rules
--keep class io.flutter.** { *; }
--keep class com.example.social_network.** { *; }
+# Keep SplitCompatApplication
+-keep class com.google.android.play.core.splitcompat.SplitCompatApplication { *; }
 
-# Для исключения ошибок R8
--dontwarn android.support.**
--dontwarn org.jetbrains.annotations.**
--dontwarn javax.annotation.**
-
-# Keep Play Core Split Install classes
+# Keep SplitInstallManager and related classes
 -keep class com.google.android.play.core.splitinstall.** { *; }
--keep class com.google.android.play.core.splitcompat.** { *; }
--keep class com.google.android.play.core.tasks.** { *; }
--keep class com.google.android.play.core.splitinstall.SplitInstallManager { *; }
+
+# Keep OnSuccessListener and OnFailureListener
+-keep class com.google.android.play.core.tasks.OnSuccessListener { *; }
+-keep class com.google.android.play.core.tasks.OnFailureListener { *; }
+
+# Keep Task class
+-keep class com.google.android.play.core.tasks.Task { *; }
+
+# Keep SplitInstallSessionState
 -keep class com.google.android.play.core.splitinstall.SplitInstallSessionState { *; }
--keep class com.google.android.play.core.splitinstall.SplitInstallRequest { *; }
--keep class com.google.android.play.core.splitinstall.SplitInstallException { *; }

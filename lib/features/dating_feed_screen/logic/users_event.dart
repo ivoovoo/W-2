@@ -6,5 +6,6 @@ class UsersEvent with _$UsersEvent {
     String? interest,
     int? age_min,
     int? age_max,
+    int? city,
   }) = UsersEventInit;
 }

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:social_network/features/profile_page/model/user_model.dart';
+import 'package:social_network/features/profile/model/user_model.dart';
 
 part 'users_model.freezed.dart';
 part 'users_model.g.dart';

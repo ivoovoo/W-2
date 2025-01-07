@@ -15,7 +15,7 @@ class HomeDataProvider implements IHomeDataProvider {
   @override
   Future<VideoResponse> getVideos() async {
     try {
-      Response response = await apiRequester.toGet('videos/');
+      Response response = await apiRequester.toGetUnAuthorized('videos/', {});
       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
 
       if (response.statusCode == 200) {

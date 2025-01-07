@@ -6,11 +6,13 @@ class InterestsItem extends StatefulWidget {
     required this.text,
     this.isSelected = false,
     this.onClicked,
+    required this.id,
   });
 
   final String text;
   final bool isSelected;
-  final ValueChanged<bool>? onClicked;
+  final ValueChanged<String>? onClicked;
+  final int id;
 
   @override
   State<InterestsItem> createState() => _InterestsItemState();
@@ -31,7 +33,7 @@ class _InterestsItemState extends State<InterestsItem> {
       onTap: () {
         setState(() {
           isClicked = !isClicked;
-          widget.onClicked?.call(isClicked);
+          widget.onClicked?.call(isClicked ? widget.id.toString() : "");
         });
       },
       child: IntrinsicWidth(

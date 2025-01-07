@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:social_network/features/comments/widget/avatar_in_comments_page.dart';
-
-import '../repository/chats_repository.dart';
 
 class TextContent extends StatelessWidget {
   final String text;
@@ -10,6 +7,7 @@ class TextContent extends StatelessWidget {
   final bool isCommentsPage;
   final bool haveStories;
   final String? pathToImage;
+  final VoidCallback onTap;
 
   const TextContent({
     super.key,
@@ -18,6 +16,7 @@ class TextContent extends StatelessWidget {
     required this.isCommentsPage,
     required this.haveStories,
     this.pathToImage,
+    required this.onTap,
   });
 
   @override
@@ -35,15 +34,7 @@ class TextContent extends StatelessWidget {
           isCommentsPage: isCommentsPage,
           pathToImage: pathToImage,
           isLeft: true,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: onTap,
         ),
         Container(
           constraints: BoxConstraints(maxWidth: width * 0.7),
@@ -85,15 +76,7 @@ class TextContent extends StatelessWidget {
           isCommentsPage: isCommentsPage,
           pathToImage: pathToImage,
           isLeft: false,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: () {},
         ),
       ],
     );

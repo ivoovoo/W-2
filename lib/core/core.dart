@@ -5,3 +5,4 @@ export 'domain/domain.dart';
 export 'models/models.dart';
 export 'state/state.dart';
 export 'utils/utils.dart';
+export 'data/local_storage_data_provider.dart';

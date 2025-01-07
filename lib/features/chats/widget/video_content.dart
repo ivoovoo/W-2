@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -13,6 +11,7 @@ class VideoContent extends StatefulWidget {
     required this.isSender,
     required this.haveStories,
     this.pathToImage,
+    required this.onTap,
   });
 
   final String videoPath;
@@ -20,6 +19,7 @@ class VideoContent extends StatefulWidget {
   final bool isSender;
   final bool haveStories;
   final String? pathToImage;
+  final VoidCallback onTap;
 
   @override
   State<VideoContent> createState() => _VideoContentState();
@@ -129,15 +129,7 @@ class _VideoContentState extends State<VideoContent>
           isCommentsPage: widget.isCommentsPage,
           pathToImage: widget.pathToImage,
           isLeft: true,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: widget.onTap,
         ),
         AnimatedBuilder(
           animation: _animationController,
@@ -151,13 +143,22 @@ class _VideoContentState extends State<VideoContent>
                   borderRadius: BorderRadius.circular(150),
                 ),
                 child: isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(
+                        color: Color(0xffa3eebe),
+                        backgroundColor: Color(
+                          0xff4c91ed,
+                        ),
+                      )
                     : _controller.value.isInitialized
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(150),
-                            child: Transform.rotate(
-                              angle: -90 * 3.1416 / 180,
-                              child: VideoPlayer(_controller),
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: _controller.value.size.width,
+                                height: _controller.value.size.height,
+                                child: VideoPlayer(_controller),
+                              ),
                             ),
                           )
                         : const Text('Ошибка при загрузке видео'),
@@ -171,15 +172,7 @@ class _VideoContentState extends State<VideoContent>
           isCommentsPage: widget.isCommentsPage,
           pathToImage: widget.pathToImage,
           isLeft: false,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: () {},
         ),
       ],
     );

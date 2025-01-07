@@ -3,13 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_network/features/chats/data_provider/chats_data_provider.dart';
-import 'package:social_network/features/chats/logic/chats_bloc.dart';
-import 'package:social_network/features/chats/model/chat_response_model.dart';
-import 'package:social_network/features/chats/repository/chats_repository.dart';
+import 'package:lottie/lottie.dart';
+import 'package:social_network/core/core.dart';
+import 'package:social_network/features/chats/repositories/chats_repository/chats_repository.dart';
 import 'package:social_network/features/chats/widget/widget.dart';
 
 import '../../../../core/router/app_router_names.dart';
+import '../../../../generated/l10n.dart';
+import '../../data_providers/chats_data_provider/chats_data_provider.dart';
+import '../../logics/chats_logic/chats_bloc.dart';
+import '../../models/chats_model/chat_response_model.dart';
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
@@ -20,7 +23,6 @@ class ChatsPage extends StatefulWidget {
 
 class _ChatsPageState extends State<ChatsPage>
     with SingleTickerProviderStateMixin {
-  // List<ChatModel> chats = ChatsRepository.chats;
   ChatResponse chatResponse = ChatResponse(
     currentUserChats: [],
     userId: 0,
@@ -32,9 +34,11 @@ class _ChatsPageState extends State<ChatsPage>
   @override
   void initState() {
     super.initState();
-    chatsBloc =
-        ChatsBloc(ChatsRepository(chatsDataProvider: ChatsDataProvider()))
-          ..add(const ChatsEvent.init());
+    chatsBloc = ChatsBloc(ChatsRepository(
+      chatsDataProvider: ChatsDataProvider(),
+      localStorageDataProvider: context.read<ILocalStorageDataProvider>(),
+    ))
+      ..add(const ChatsEvent.init());
     // Инициализируем контроллер анимации
     _controller = AnimationController(
       duration: Duration(seconds: 5),
@@ -46,6 +50,7 @@ class _ChatsPageState extends State<ChatsPage>
   void dispose() {
     // Освобождаем контроллер при удалении виджета
     _controller.dispose();
+    chatsBloc.close();
     super.dispose();
   }
 
@@ -79,7 +84,7 @@ class _ChatsPageState extends State<ChatsPage>
       ),
       action: SnackBarAction(
         textColor: Colors.black,
-        label: 'Отмена',
+        label: S.of(context).cancel,
         onPressed: () {
           onUndo(); // Выполнить действие при нажатии "Отмена"
         },
@@ -102,213 +107,205 @@ class _ChatsPageState extends State<ChatsPage>
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.white,
+        systemNavigationBarColor: Colors.black,
         statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: BlocBuilder<ChatsBloc, ChatsState>(
-        bloc: chatsBloc,
-        builder: (context, state) {
-          state.when(
-            initial: () {},
-            loadInProgress: () {},
-            loadSuccess: (chats) {
-              chatResponse = chats;
-            },
-            loadFailure: (error) {},
+    return BlocBuilder<ChatsBloc, ChatsState>(
+      bloc: chatsBloc,
+      builder: (context, state) {
+        state.when(
+          initial: () {},
+          loadInProgress: () {},
+          loadSuccess: (chats) {
+            chatResponse = chats;
+          },
+          loadFailure: (error) {},
+        );
+        if (state is ChatsLoadInProgressState) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
-          if (state is ChatsLoadInProgressState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is ChatsLoadFailureState) {
-            return Center(
-              child: Text(state.error),
-            );
-          } else {
-            return Column(
-              children: [
-                SizedBox(height: 60.h),
-                Expanded(
-                  child: ListView(
-                    clipBehavior: Clip.none,
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 18.0,
-                        // горизонтальные отступы между элементами
-                        runSpacing: 26.0,
-                        // вертикальные отступы между рядами
+        }
+        if (state is ChatsLoadFailureState) {
+          return Center(
+            child: Text(state.error),
+          );
+        } else {
+          return chatResponse.currentUserChats.isEmpty
+              ? Center(
+                  child: Lottie.asset(
+                    'assets/json/robot.json',
+                    fit: BoxFit.fitHeight,
+                    height: 300,
+                  ),
+                )
+              : Column(
+                  children: [
+                    SizedBox(height: 60.h),
+                    Expanded(
+                      child: ListView(
+                        clipBehavior: Clip.none,
+                        padding: const EdgeInsets.all(16),
                         children: [
-                          for (int i = 0;
-                              i < chatResponse.currentUserChats.length;
-                              i++)
-                            Transform.translate(
-                              offset: Offset(
-                                0,
-                                (i >
-                                        chatResponse.currentUserChats.length -
-                                            (chatResponse
-                                                    .currentUserChats.length %
-                                                3))
-                                    ? (chatResponse.currentUserChats.length %
-                                                3 ==
-                                            1
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 18.0,
+                            // горизонтальные отступы между элементами
+                            runSpacing: 26.0,
+                            // вертикальные отступы между рядами
+                            children: [
+                              for (int i = 0;
+                                  i < chatResponse.currentUserChats.length;
+                                  i++)
+                                Transform.translate(
+                                  offset: Offset(
+                                    0,
+                                    (i >
+                                            chatResponse
+                                                    .currentUserChats.length -
+                                                (chatResponse.currentUserChats
+                                                        .length %
+                                                    3))
                                         ? 0
-                                        : chatResponse
-                                                    .currentUserChats.length ==
-                                                2
+                                        : (i % 3 == 1)
                                             ? -50
-                                            : 0)
-                                    : (i % 3 == 1)
-                                        ? -50
-                                        : 0,
-                              ),
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                onLongPress: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    isScrollControlled: false,
-                                    builder: (context) => DeleteBottomSheet(
-                                      url:
-                                          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
-                                      delete: () {
-                                        // ChatModel chat = chats[i];
-                                        // int index = i;
-                                        // showChatDeletedSnackBar(
-                                        //   context,
-                                        //   () {
-                                        //     setState(() {});
-                                        //     chats.insert(index, chat);
-                                        //   },
-                                        // );
-                                        // setState(() {
-                                        //   chats.remove(chats[i]);
-                                        // });
-                                      },
-                                    ),
-                                  );
-                                },
-                                onTap: () {
-                                  context.pushNamed(
-                                    AppRouterNames.chatsDetail,
-                                    extra: chatResponse.currentUserChats[i].id,
-                                    pathParameters: {
-                                      'type_of_chat': 'chat',
-                                      'user_name': "unknown",
+                                            : 0,
+                                  ),
+                                  child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    onLongPress: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: false,
+                                        builder: (context) => DeleteBottomSheet(
+                                          url: '',
+                                          delete: () {},
+                                        ),
+                                      );
                                     },
-                                  );
-                                },
-                                child: SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Container(
-                                        height: 100,
-                                        width: 100,
-                                        padding: true
-                                            ? const EdgeInsets.all(3)
-                                            : null,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          gradient: const LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Color(0xff7fbbfb),
-                                              Color(0xffff8bad),
-                                            ],
-                                          ),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          child: Image.network(
-                                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      // (chats[i].unreadMessages != 0 &&
-                                      //         chats[i].haveStories)
-                                      false
-                                          ? Container(
-                                              alignment: Alignment.center,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xff7fbbfb)
-                                                    .withOpacity(0.25),
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
+                                    onTap: () {
+                                      context.pushNamed(
+                                        AppRouterNames.chatsDetail,
+                                        extra:
+                                            chatResponse.currentUserChats[i].id,
+                                        pathParameters: {
+                                          'type_of_chat': 'chat',
+                                          'user_name': "unknown",
+                                        },
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                            height: 100,
+                                            width: 100,
+                                            padding: const EdgeInsets.all(3),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Color(0xff7fbbfb),
+                                                  Color(0xffff8bad),
+                                                ],
                                               ),
-                                              child: Text(
-                                                // '${chats[i].unreadMessages}',
-                                                '4',
-                                                style: const TextStyle(
-                                                  fontSize: 29,
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.white,
-                                                ),
+                                            ),
+                                          ),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            child: Container(
+                                              height: 92,
+                                              width: 92,
+                                              color: Colors.white,
+                                              child: Lottie.asset(
+                                                'assets/json/avatar.json',
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                          : SizedBox(),
-                                      chatResponse.currentUserChats[i].sender
-                                                  .is_online ==
-                                              true
-                                          ? Positioned(
-                                              right: 85 / 2,
-                                              left: 85 / 2,
-                                              bottom: -7.5,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(3),
-                                                height: 15,
-                                                width: 15,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Container(
+                                            ),
+                                          ),
+                                          // (chats[i].unreadMessages != 0 &&
+                                          //         chats[i].haveStories)
+                                          false
+                                              ? Container(
+                                                  alignment: Alignment.center,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
                                                   decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xff6cffb9),
+                                                    color: Color(0xff7fbbfb)
+                                                        .withOpacity(0.25),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            10),
+                                                            50),
                                                   ),
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                    ],
+                                                  child: Text(
+                                                    // '${chats[i].unreadMessages}',
+                                                    '4',
+                                                    style: const TextStyle(
+                                                      fontSize: 29,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              : SizedBox(),
+                                          chatResponse.currentUserChats[i]
+                                                      .sender.is_online ==
+                                                  true
+                                              ? Positioned(
+                                                  right: 85 / 2,
+                                                  left: 85 / 2,
+                                                  bottom: -7.5,
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(3),
+                                                    height: 15,
+                                                    width: 15,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xff6cffb9),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : SizedBox.shrink(),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 60.h),
-              ],
-            );
-          }
-        },
-      ),
+                    ),
+                    SizedBox(height: 60.h),
+                  ],
+                );
+        }
+      },
     );
   }
 }

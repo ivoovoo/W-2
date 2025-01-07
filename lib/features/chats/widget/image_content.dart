@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/features/comments/widget/avatar_in_comments_page.dart';
 
@@ -10,6 +9,7 @@ class ImageContent extends StatelessWidget {
   final bool isSender;
   final bool haveStories;
   final String? pathToImage;
+  final VoidCallback onTap;
 
   const ImageContent({
     super.key,
@@ -18,6 +18,7 @@ class ImageContent extends StatelessWidget {
     required this.isSender,
     required this.haveStories,
     this.pathToImage,
+    required this.onTap,
   });
 
   @override
@@ -34,15 +35,7 @@ class ImageContent extends StatelessWidget {
           isCommentsPage: isCommentsPage,
           pathToImage: pathToImage,
           isLeft: true,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: onTap,
         ),
         InkWell(
           onTap: () {
@@ -67,15 +60,7 @@ class ImageContent extends StatelessWidget {
           isCommentsPage: isCommentsPage,
           pathToImage: pathToImage,
           isLeft: false,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: () {},
         ),
       ],
     );

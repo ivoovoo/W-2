@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
 
 class AgeSlider extends StatefulWidget {
+  const AgeSlider({
+    super.key,
+    required this.ageMax,
+    required this.ageMin,
+    required this.onChangedAgeMax,
+    required this.onChangedAgeMin,
+  });
+
+  final double ageMin;
+  final double ageMax;
+  final ValueChanged<double> onChangedAgeMin;
+  final ValueChanged<double> onChangedAgeMax;
+
   @override
   _AgeSliderState createState() => _AgeSliderState();
 }
 
 class _AgeSliderState extends State<AgeSlider> {
-  RangeValues _currentRangeValues = const RangeValues(21, 34);
+  late RangeValues _currentRangeValues;
+
+  @override
+  void initState() {
+    _currentRangeValues = RangeValues(widget.ageMin, widget.ageMax);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +74,9 @@ class _AgeSliderState extends State<AgeSlider> {
             onChanged: (RangeValues values) {
               setState(() {
                 _currentRangeValues = values;
+                // Передаем обновленные значения через соответствующие callbacks
+                widget.onChangedAgeMin(values.start);
+                widget.onChangedAgeMax(values.end);
               });
             },
           ),

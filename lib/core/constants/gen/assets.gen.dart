@@ -40,11 +40,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/active_search.svg
   String get activeSearch => 'assets/icons/active_search.svg';
 
+  /// File path: assets/icons/apps.json
+  String get apps => 'assets/icons/apps.json';
+
   /// File path: assets/icons/cancel.svg
   String get cancel => 'assets/icons/cancel.svg';
 
   /// File path: assets/icons/chat_square.svg
   String get chatSquare => 'assets/icons/chat_square.svg';
+
+  /// File path: assets/icons/chats.json
+  String get chats => 'assets/icons/chats.json';
 
   /// File path: assets/icons/eye.svg
   String get eye => 'assets/icons/eye.svg';
@@ -83,8 +89,11 @@ class $AssetsIconsGen {
   AssetGenImage get leftIconOfMessageInputWidget =>
       const AssetGenImage('assets/icons/left_icon_of_message_input_widget.png');
 
-  /// File path: assets/icons/logo.svg
-  String get logo => 'assets/icons/logo.svg';
+  /// File path: assets/icons/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/icons/logo.png');
+
+  /// File path: assets/icons/logo1.svg
+  String get logo1 => 'assets/icons/logo1.svg';
 
   /// File path: assets/icons/mark.svg
   String get mark => 'assets/icons/mark.svg';
@@ -100,6 +109,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/paper_clip.svg
   String get paperClip => 'assets/icons/paper_clip.svg';
+
+  /// File path: assets/icons/plus_icon.svg
+  String get plusIcon => 'assets/icons/plus_icon.svg';
 
   /// File path: assets/icons/send_vector.png
   AssetGenImage get sendVector =>
@@ -124,8 +136,10 @@ class $AssetsIconsGen {
         activeMessage,
         activeProfile,
         activeSearch,
+        apps,
         cancel,
         chatSquare,
+        chats,
         eye,
         heart,
         inactiveHeart,
@@ -139,11 +153,13 @@ class $AssetsIconsGen {
         leftArrow,
         leftIconOfMessageInputWidget,
         logo,
+        logo1,
         mark,
         mark2,
         menu,
         online,
         paperClip,
+        plusIcon,
         sendVector,
         telegram,
         trackIcon,
@@ -496,6 +512,18 @@ class $AssetsImagesGen {
 class $AssetsJsonGen {
   const $AssetsJsonGen();
 
+  /// File path: assets/json/ai_chat.json
+  String get aiChat => 'assets/json/ai_chat.json';
+
+  /// File path: assets/json/avatar.json
+  String get avatar => 'assets/json/avatar.json';
+
+  /// File path: assets/json/baza.json
+  String get baza => 'assets/json/baza.json';
+
+  /// File path: assets/json/empty_video.json
+  String get emptyVideo => 'assets/json/empty_video.json';
+
   /// File path: assets/json/onboarding_animation_1.json
   String get onboardingAnimation1 => 'assets/json/onboarding_animation_1.json';
 
@@ -505,9 +533,20 @@ class $AssetsJsonGen {
   /// File path: assets/json/onboarding_animation_3.json
   String get onboardingAnimation3 => 'assets/json/onboarding_animation_3.json';
 
+  /// File path: assets/json/robot.json
+  String get robot => 'assets/json/robot.json';
+
   /// List of all assets
-  List<String> get values =>
-      [onboardingAnimation1, onboardingAnimation2, onboardingAnimation3];
+  List<String> get values => [
+        aiChat,
+        avatar,
+        baza,
+        emptyVideo,
+        onboardingAnimation1,
+        onboardingAnimation2,
+        onboardingAnimation3,
+        robot
+      ];
 }
 
 class Assets {

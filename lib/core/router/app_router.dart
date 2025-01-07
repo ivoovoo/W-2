@@ -1,38 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/core.dart';
-import 'package:social_network/core/utils/token_funcs.dart';
+import 'package:social_network/core/widgets/unauthorized_dialog_box.dart';
 import 'package:social_network/features/auth_screen/auth_screen.dart';
 import 'package:social_network/features/auth_screen/widgets/page/registration_screen.dart';
 import 'package:social_network/features/center/widgets/page/center_page.dart';
 import 'package:social_network/features/chats/widget/page/chat_page.dart';
-import 'package:social_network/features/chats/widget/page/chats_page.dart';
+import 'package:social_network/features/chats/widget/page/chat_tab.dart';
 import 'package:social_network/features/chats/widget/page/content_page.dart';
+import 'package:social_network/features/chats/widget/page/create_app_page.dart';
 import 'package:social_network/features/comments/widget/page/comments_page.dart';
+import 'package:social_network/features/chats/widget/page/creat_group_chat_page.dart';
 import 'package:social_network/features/dating_feed_screen/dating_feed_screen.dart';
 import 'package:social_network/features/interests/widget/page/interests_page.dart';
 import 'package:social_network/features/other_profile/other_profile.dart';
-import 'package:social_network/features/profile_page/profile_page.dart';
+import 'package:social_network/features/profile/profile_page.dart';
 
 import '../../features/home_page/home_page.dart';
 import 'app_router_names.dart';
+
+class AuthNotifier extends ChangeNotifier {
+  bool _isAuthenticated;
+
+  AuthNotifier(this._isAuthenticated);
+
+  bool get isAuthenticated {
+    return _isAuthenticated;
+  }
+
+  void signIn() async {
+    print('SignIn');
+    _isAuthenticated = true;
+    notifyListeners();
+  }
+
+  void signOut() async {
+    print("SignOut");
+    _isAuthenticated = false;
+    notifyListeners();
+  }
+}
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
 late AuthNotifier authNotifier;
+late bool isAuthenticated;
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/registrationPage/authPage',
+  initialLocation: '/home',
   redirect: (BuildContext context, GoRouterState state) {
-    final isAuthenticated = authNotifier.isAuthenticated;
-
-    if (!isAuthenticated && state.fullPath != '/registrationPage/authPage') {
-      return '/registrationPage/authPage';
-    }
-
-    if (isAuthenticated && state.fullPath == '/registrationPage/authPage') {
+    isAuthenticated = authNotifier.isAuthenticated;
+    print(state.fullPath);
+    print(isAuthenticated);
+    if (!isAuthenticated) {
+      if (state.fullPath == '/centerTab' ||
+          state.fullPath == '/chatTab' ||
+          state.fullPath == '/userProfile') {
+        return '/registrationPage/authPage';
+      } else if (state.fullPath == '/registrationPage/authPage') {
+        return '/registrationPage/authPage';
+      } else if (state.fullPath == '/home') {
+        return '/home';
+      } else if (state.fullPath == '/datingFeedScreen') {
+        return '/datingFeedScreen';
+      }
+    } else if (isAuthenticated &&
+            state.fullPath == '/registrationPage/authPage' ||
+        state.fullPath == '/registrationPage') {
       return '/home';
     }
 
@@ -56,17 +92,7 @@ final GoRouter router = GoRouter(
               name: AppRouterNames.home,
               path: '/home',
               builder: (BuildContext context, GoRouterState state) =>
-                  HomePage(),
-              routes: [
-                GoRoute(
-                  name: AppRouterNames.otherProfile,
-                  path: 'otherProfile',
-                  builder: (BuildContext context, GoRouterState state) {
-                    int userId = state.extra as int;
-                    return OtherProfilePage(userId: userId);
-                  },
-                ),
-              ],
+                  HomePage(isAuthenticated: isAuthenticated),
             ),
           ],
         ),
@@ -76,7 +102,7 @@ final GoRouter router = GoRouter(
               name: AppRouterNames.datingFeedScreen,
               path: '/datingFeedScreen',
               builder: (BuildContext context, GoRouterState state) =>
-                  const DatingFeedScreen(),
+                  DatingFeedScreen(isAuthenticated: isAuthenticated),
             ),
           ],
         ),
@@ -86,7 +112,9 @@ final GoRouter router = GoRouter(
               name: AppRouterNames.centerTab,
               path: '/centerTab',
               builder: (BuildContext context, GoRouterState state) {
-                return const CenterPage();
+                return isAuthenticated
+                    ? const CenterPage()
+                    : const UnauthorizedDialogPage();
               },
             ),
           ],
@@ -94,10 +122,11 @@ final GoRouter router = GoRouter(
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              name: AppRouterNames.chats,
-              path: '/chats',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const ChatsPage(),
+              name: AppRouterNames.chatTab,
+              path: '/chatTab',
+              builder: (BuildContext context, GoRouterState state) {
+                return const ChatTab();
+              },
             ),
           ],
         ),
@@ -106,8 +135,9 @@ final GoRouter router = GoRouter(
             GoRoute(
               name: AppRouterNames.userProfile,
               path: '/userProfile',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const ProfilePage(),
+              builder: (BuildContext context, GoRouterState state) {
+                return const ProfilePage();
+              },
             ),
           ],
         ),
@@ -158,9 +188,55 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'authPage',
           name: AppRouterNames.authPage,
-          builder: (BuildContext context, GoRouterState state) => AuthScreen(),
+          builder: (BuildContext context, GoRouterState state) =>
+              const AuthScreen(),
         ),
       ],
+    ),
+    GoRoute(
+      name: AppRouterNames.otherProfile,
+      path: '/otherProfile',
+      builder: (BuildContext context, GoRouterState state) {
+        int userId = state.extra as int;
+        return OtherProfilePage(userId: userId);
+      },
+    ),
+    GoRoute(
+      name: AppRouterNames.createGroupChat,
+      path: '/createGroupChat',
+      builder: (BuildContext context, GoRouterState state) {
+        return const CreateGroupChatPage();
+      },
+    ),
+    GoRoute(
+      name: AppRouterNames.createApp,
+      path: '/createApp',
+      builder: (BuildContext context, GoRouterState state) {
+        return const CreateAppPage();
+      },
+    ),
+    GoRoute(
+      name: AppRouterNames.unauthorizedDialog,
+      path: '/unauthorizedDialog',
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          child: const UnauthorizedDialogPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0); // Анимация снизу вверх
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+      },
     ),
   ],
 );

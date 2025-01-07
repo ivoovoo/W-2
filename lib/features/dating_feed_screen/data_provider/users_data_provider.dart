@@ -10,6 +10,7 @@ abstract interface class IUsersDataProvider {
     String? interest,
     int? age_min,
     int? age_max,
+    int? city,
   ]);
 }
 
@@ -21,18 +22,24 @@ class UsersDataProvider implements IUsersDataProvider {
     String? interest,
     int? age_min,
     int? age_max,
+    int? city,
   ]) async {
     try {
       Map<String, String> interestt =
           interest != null ? {"interests": interest} : {};
       Map<String, int> age_minn = age_min != null ? {"age_min": age_min} : {};
       Map<String, int> age_maxx = age_max != null ? {"age_max": age_max} : {};
+      Map<String, int> cityy = city != null ? {"city": city} : {};
 
-      Response response = await apiRequester.toGet('user/api/list_user/', {
-        ...interestt,
-        ...age_maxx,
-        ...age_minn,
-      });
+      print(interestt);
+      print(age_maxx);
+      print(age_minn);
+      print(cityy);
+      print('KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
+      Response response = await apiRequester.toGetUnAuthorized(
+        'user/api/list_user/',
+        {...interestt, ...age_maxx, ...age_minn, ...cityy},
+      );
 
       if (response.statusCode == 200) {
         log("USER LISTTTTTTTTTTTTTTTTTTTTTTTTTT result== ${response.data}");
@@ -44,8 +51,10 @@ class UsersDataProvider implements IUsersDataProvider {
       }
 
       throw response;
-    } catch (e) {
+    } catch (e, st) {
       print('ERROR GET USERSSSSSSSSSSSSSSSS $e');
+      print(st);
+      print('TTTTTTTTTTTTTTTTTTTTTTTT');
 
       throw CatchException.convertException(e);
     }

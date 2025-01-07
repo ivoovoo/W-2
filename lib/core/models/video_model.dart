@@ -7,7 +7,7 @@ part 'video_model.g.dart';
 class VideoResponse with _$VideoResponse {
   factory VideoResponse({
     @JsonKey(name: 'all_videos') required List<Video> allVideos,
-    @JsonKey(name: 'subscribed_videos') required List<Video> subscribedVideos,
+    @JsonKey(name: 'subscribed_videos') required List<Video>? subscribedVideos,
   }) = _VideoResponse;
 
   factory VideoResponse.fromJson(Map<String, dynamic> json) =>
@@ -18,7 +18,7 @@ class VideoResponse with _$VideoResponse {
 class Video with _$Video {
   factory Video({
     required int id,
-    @JsonKey(name: 'category_video') required CategoryVideo categoryVideo,
+    @JsonKey(name: 'category_video') required CategoryVideo? categoryVideo,
     @JsonKey(name: 'video_file') required String videoFile,
     required String author,
     @JsonKey(name: 'author_id') required int authorId,

@@ -24,6 +24,7 @@ class ContentPage extends StatelessWidget {
     );
     var padding = MediaQuery.paddingOf(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(

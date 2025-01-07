@@ -1,42 +1,21 @@
+import 'package:social_network/core/core.dart';
+import 'package:social_network/core/data/local_storage_keys.dart';
 import 'package:social_network/features/interests/data_provider/interests_data_provider.dart';
 
 import '../model/interest_model.dart';
 
 class InterestsRepository {
   final IInterestsDataProvider interestsDataProvider;
+  final ILocalStorageDataProvider localStorageDataProvider;
 
-  InterestsRepository({required this.interestsDataProvider});
+  InterestsRepository({
+    required this.interestsDataProvider,
+    required this.localStorageDataProvider,
+  });
 
   Future<InterestResponse> getAllInterests() {
-    return interestsDataProvider.getAllInterests();
+    return interestsDataProvider.getAllInterests(
+      localStorageDataProvider.getString(LocalStorageKeys.authToken)!,
+    );
   }
 }
-
-// class InterestsRepository {
-//   static const interests = <String>[
-//     '🔥 Страсть',
-//     '🍹 Вечеринка',
-//     '👼🏻 Семья',
-//     '🎮  Игры',
-//     '🎨 Творчество',
-//     '🦄 Обменяться подарками',
-//     '🦋 Развитие',
-//     '💵 Бизнес',
-//     '🔋️ Технологии',
-//     '🕊 Поделиться историей ',
-//     '⛵️ Приключение',
-//     '🏖 Совместный Chill',
-//     '🔥 Страсть',
-//     '🍹 Вечеринка',
-//     '👼🏻 Семья',
-//     '🎮  Игры',
-//     '🎨 Творчество',
-//     '🦄 Обменяться подарками',
-//     '🦋 Развитие',
-//     '💵 Бизнес',
-//     '🔋️ Технологии',
-//     '🕊 Поделиться историей ',
-//     '⛵️ Приключение',
-//     '🏖 Совместный Chill',
-//   ];
-// }

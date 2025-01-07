@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/features/chats/widget/page/chat_page.dart';
-
 import '../../comments/widget/avatar_in_comments_page.dart';
-import '../repository/chats_repository.dart';
 
 class StickerContent extends StatelessWidget {
   final String url;
@@ -10,6 +7,7 @@ class StickerContent extends StatelessWidget {
   final bool isSender;
   final bool haveStories;
   final String? pathToImage;
+  final VoidCallback onTap;
 
   const StickerContent({
     super.key,
@@ -18,6 +16,7 @@ class StickerContent extends StatelessWidget {
     required this.isSender,
     required this.haveStories,
     this.pathToImage,
+    required this.onTap,
   });
 
   @override
@@ -34,15 +33,7 @@ class StickerContent extends StatelessWidget {
           isCommentsPage: isCommentsPage,
           pathToImage: pathToImage,
           isLeft: true,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: onTap,
         ),
         Padding(
           padding: const EdgeInsets.all(4.0),
@@ -78,15 +69,7 @@ class StickerContent extends StatelessWidget {
           isCommentsPage: isCommentsPage,
           pathToImage: pathToImage,
           isLeft: false,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         ChatScreen(chatModel: ChatsRepository.chats.first),
-            //   ),
-            // );
-          },
+          onTap: () {},
         ),
       ],
     );

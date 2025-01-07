@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:social_network/features/home_page/home_page.dart';
 import 'package:social_network/features/messages_page/messages_page.dart';
 import 'package:social_network/features/notification_page/notification_page.dart';
-import 'package:social_network/features/search_page/search_page.dart';
+import 'package:social_network/features/search_page/groups_page.dart';
 import 'package:social_network/nav_bar_widget.dart';
 import 'package:social_network/features/profile_page/profile_page.dart';
 

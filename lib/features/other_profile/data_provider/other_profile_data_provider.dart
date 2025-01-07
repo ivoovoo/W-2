@@ -4,24 +4,41 @@ import 'package:dio/dio.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 
 import '../../../core/helpers/catch_exception.dart';
-import '../../profile_page/model/user_model.dart';
+import '../../profile/model/user_model.dart';
 
 abstract interface class IOtherProfileDataProvider {
-  Future<UserModel> getOtherProfile(int userId);
+  Future<UserModel> getOtherProfile(
+    int userId,
+    String token,
+  );
 
-  Future<String> subscribe(int userId);
+  Future<String> subscribe(
+    int userId,
+    String token,
+    String csrfToken,
+  );
 
-  Future<String> unsubscribe(int userId);
+  Future<String> unsubscribe(
+    int userId,
+    String token,
+    String csrfToken,
+  );
 }
 
 class OtherProfileDataProvider implements IOtherProfileDataProvider {
   ApiRequester apiRequester = ApiRequester();
 
   @override
-  Future<UserModel> getOtherProfile(int userId) async {
+  Future<UserModel> getOtherProfile(
+    int userId,
+    String token,
+  ) async {
     try {
       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
-      Response response = await apiRequester.toGet('user/api/$userId/');
+      Response response = await apiRequester.toGet(
+        'user/api/$userId/',
+        token,
+      );
 
       if (response.statusCode == 200) {
         log("${response.statusCode}");
@@ -42,11 +59,18 @@ class OtherProfileDataProvider implements IOtherProfileDataProvider {
   }
 
   @override
-  Future<String> subscribe(int userId) async {
+  Future<String> subscribe(
+    int userId,
+    String token,
+    String csrfToken,
+  ) async {
     try {
       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
-      Response response =
-          await apiRequester.toPostFor('user/api/subscription/$userId/');
+      Response response = await apiRequester.toPostWithCsrfToken(
+        'user/api/subscription/$userId/',
+        token,
+        csrfToken,
+      );
 
       if (response.statusCode == 200) {
         log("${response.statusCode}");
@@ -69,11 +93,18 @@ class OtherProfileDataProvider implements IOtherProfileDataProvider {
   }
 
   @override
-  Future<String> unsubscribe(int userId) async {
+  Future<String> unsubscribe(
+    int userId,
+    String token,
+    String csrfToken,
+  ) async {
     try {
       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
-      Response response =
-          await apiRequester.toDelete('user/api/subscription/$userId/');
+      Response response = await apiRequester.toDelete(
+        'user/api/subscription/$userId/',
+        token,
+        csrfToken,
+      );
 
       if (response.statusCode == 200) {
         log("${response.statusCode}");

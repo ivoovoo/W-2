@@ -3,11 +3,16 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_network/core/data/local_storage_keys.dart';
+import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/features/comments/model/comment_model.dart';
 
-import '../../../../core/utils/token_funcs.dart';
-import '../../../chats/model/content_model.dart';
+import '../../../../generated/l10n.dart';
+import '../../../chats/models/chats_model/content_model.dart';
 import '../../../chats/widget/widget.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -57,13 +62,15 @@ class _CommentsPageState extends State<CommentsPage> {
 
   void _connectToSocket() async {
     try {
-      var token = await getToken();
-      var user = await getUserData();
-      userId = user['user_id'];
+      String token = context
+          .read<SharedPreferences>()
+          .getString(LocalStorageKeys.authToken)!;
+      userId =
+          context.read<SharedPreferences>().getInt(LocalStorageKeys.userId)!;
       print('Токен: $token');
 
       socket = await WebSocket.connect(
-        'ws://45.153.191.237:8000/ws/video/${widget.videoId}/',
+        'ws://45.153.191.237/ws/video/${widget.videoId}/',
         headers: {
           'Cookie': 'access_token=$token',
           "Content-Type": "application/json",
@@ -185,7 +192,7 @@ class _CommentsPageState extends State<CommentsPage> {
                   },
                 ),
                 Text(
-                  'Комментарии ${comments.length}',
+                  '${S.of(context).comments} ${comments.length}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Color(0xff000000),
@@ -193,12 +200,18 @@ class _CommentsPageState extends State<CommentsPage> {
                     fontFamily: 'Inter',
                   ),
                 ),
-                CircleAvatar(
-                  radius: 21,
-                  backgroundImage: NetworkImage(
-                    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
-                  ),
+                Lottie.asset(
+                  'assets/json/avatar.json',
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
+                // CircleAvatar(
+                //   radius: 21,
+                //   backgroundImage: NetworkImage(
+                //     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
+                //   ),
+                // ),
               ],
             ),
             Expanded(
@@ -225,6 +238,12 @@ class _CommentsPageState extends State<CommentsPage> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: TextContent(
+                              onTap: () {
+                                context.pushNamed(
+                                  AppRouterNames.otherProfile,
+                                  extra: message.author,
+                                );
+                              },
                               text: message.content,
                               isSender: message.author == userId,
                               isCommentsPage: true,
@@ -240,6 +259,12 @@ class _CommentsPageState extends State<CommentsPage> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: AudioContent(
+                              onTap: () {
+                                context.pushNamed(
+                                  AppRouterNames.otherProfile,
+                                  extra: message.author,
+                                );
+                              },
                               isSender: message.author == userId,
                               url: message.content,
                               isCommentsPage: true,
@@ -255,6 +280,12 @@ class _CommentsPageState extends State<CommentsPage> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: ImageContent(
+                              onTap: () {
+                                context.pushNamed(
+                                  AppRouterNames.otherProfile,
+                                  extra: message.author,
+                                );
+                              },
                               url: message.content,
                               isCommentsPage: true,
                               pathToImage:
@@ -274,6 +305,12 @@ class _CommentsPageState extends State<CommentsPage> {
                               isCommentsPage: true,
                               isSender: message.author == userId,
                               haveStories: true,
+                              onTap: () {
+                                context.pushNamed(
+                                  AppRouterNames.otherProfile,
+                                  extra: message.author,
+                                );
+                              },
                               pathToImage:
                                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
                             ),
@@ -286,7 +323,12 @@ class _CommentsPageState extends State<CommentsPage> {
                                 : Alignment.centerLeft,
                             child: StickerContent(
                               url: message.content,
-                              // Предполагается, что это URL наклейки
+                              onTap: () {
+                                context.pushNamed(
+                                  AppRouterNames.otherProfile,
+                                  extra: message.author,
+                                );
+                              },
                               isCommentsPage: true,
                               pathToImage:
                                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',

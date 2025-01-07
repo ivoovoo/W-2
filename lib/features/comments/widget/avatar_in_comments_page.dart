@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class AvatarInCommentsPage extends StatefulWidget {
   const AvatarInCommentsPage({
@@ -69,8 +70,8 @@ class _AvatarInCommentsPageState extends State<AvatarInCommentsPage> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(40),
                                     child: widget.pathToImage != null
-                                        ? Image.network(
-                                            widget.pathToImage!,
+                                        ? Lottie.asset(
+                                            'assets/json/avatar.json',
                                             fit: BoxFit.cover,
                                             height: 62,
                                             width: 62,
@@ -81,8 +82,8 @@ class _AvatarInCommentsPageState extends State<AvatarInCommentsPage> {
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(40),
                                   child: widget.pathToImage != null
-                                      ? Image.network(
-                                          widget.pathToImage!,
+                                      ? Lottie.asset(
+                                          'assets/json/avatar.json',
                                           fit: BoxFit.cover,
                                           height: 62,
                                           width: 62,
@@ -138,8 +139,8 @@ class _AvatarInCommentsPageState extends State<AvatarInCommentsPage> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(40),
                                   child: widget.pathToImage != null
-                                      ? Image.network(
-                                          widget.pathToImage!,
+                                      ? Lottie.asset(
+                                          'assets/json/avatar.json',
                                           fit: BoxFit.cover,
                                           height: 62,
                                           width: 62,
@@ -150,8 +151,8 @@ class _AvatarInCommentsPageState extends State<AvatarInCommentsPage> {
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(40),
                                 child: widget.pathToImage != null
-                                    ? Image.network(
-                                        widget.pathToImage!,
+                                    ? Lottie.asset(
+                                        'assets/json/avatar.json',
                                         fit: BoxFit.cover,
                                         height: 62,
                                         width: 62,

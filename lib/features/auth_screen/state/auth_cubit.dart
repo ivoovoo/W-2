@@ -26,6 +26,30 @@ class AuthCubit extends Cubit<AuthhState> {
     emit(AuthInitial());
   }
 
+  String buttonTextCreateGroup = '@nickname';
+
+  void definitionTextButtonOfCreateGroup(int pageIndex) {
+    if (pageIndex == 0) {
+      buttonTextCreateGroup = '@nickname';
+    } else if (pageIndex == 1) {
+      buttonTextCreateGroup = 'description';
+    } else {}
+    emit(AuthInitial());
+  }
+
+  String buttonTextCreateApp = '@nickname';
+
+  void definitionTextButtonOfCreateApp(int pageIndex) {
+    if (pageIndex == 0) {
+      buttonTextCreateApp = '@nickname';
+    } else if (pageIndex == 1) {
+      buttonTextCreateApp = 'description';
+    } else {
+      buttonTextCreateApp = 'url';
+    }
+    emit(AuthInitial());
+  }
+
   Color firstGradientColorForGradientIconButton = AppColors.kGreyColor1;
   Color secondGradientColorForGradientIconButton = AppColors.kGreyColor2;
 

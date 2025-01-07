@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/models/video_model.dart';
@@ -9,7 +10,12 @@ import 'package:social_network/features/home_page/logic/home_bloc.dart';
 import 'widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    required this.isAuthenticated,
+  });
+
+  final bool isAuthenticated;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,6 +26,8 @@ class _HomePageState extends State<HomePage> {
     allVideos: [],
     subscribedVideos: [],
   );
+  int viewsCount = 0;
+  bool firstView = true;
 
   String extractUsername(String author) {
     // Разбиваем строку на части, используя пробел
@@ -31,6 +39,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+        overlays: [SystemUiOverlay.top]);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light));
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         state.when(
@@ -63,10 +78,21 @@ class _HomePageState extends State<HomePage> {
                       height: double.infinity,
                       width: double.infinity,
                       child: CustomVideoPlayerWidget(
-                          videoPath: videoResponse.allVideos[index].videoFile,
-                          thumbnail:
-                              videoResponse.allVideos[index].videoPreview ??
-                                  ""),
+                        idVideo: videoResponse.allVideos[index].id,
+                        videoPath: videoResponse.allVideos[index].videoFile,
+                        thumbnail:
+                            videoResponse.allVideos[index].videoPreview ?? "",
+                        viewsCountPlus: (oneView) {
+                          if (firstView) {
+                            viewsCount =
+                                videoResponse.allVideos[index].viewsCount;
+                          }
+                          setState(() {
+                            firstView = false;
+                            viewsCount++;
+                          });
+                        },
+                      ),
                     ),
                     Positioned(
                       bottom: 100.0,
@@ -85,11 +111,14 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   ProfileButton(
                                     onTap: () {
-                                      context.pushNamed(
-                                        AppRouterNames.otherProfile,
-                                        extra: videoResponse
-                                            .allVideos[index].authorId,
-                                      );
+                                      widget.isAuthenticated
+                                          ? context.pushNamed(
+                                              AppRouterNames.otherProfile,
+                                              extra: videoResponse
+                                                  .allVideos[index].authorId,
+                                            )
+                                          : context.pushNamed(
+                                              AppRouterNames.authPage);
                                     },
                                     name: extractUsername(
                                       videoResponse.allVideos[index].author,
@@ -98,18 +127,26 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   ActivityTapeHorizontal(
                                     likesCount: 2,
-                                    viewsCount: videoResponse
-                                        .allVideos[index].viewsCount,
+                                    viewsCount: firstView
+                                        ? videoResponse
+                                            .allVideos[index].viewsCount
+                                        : viewsCount,
                                     onPressMessagesFunc: () {
-                                      context.pushNamed(
-                                        AppRouterNames.commentsPage,
-                                        extra:
-                                            videoResponse.allVideos[index].id,
-                                      );
+                                      widget.isAuthenticated
+                                          ? context.pushNamed(
+                                              AppRouterNames.commentsPage,
+                                              extra: videoResponse
+                                                  .allVideos[index].id,
+                                            )
+                                          : context.pushNamed(
+                                              AppRouterNames.authPage);
                                     },
                                     onTap: () {
-                                      context.pushNamed(
-                                          AppRouterNames.interestsPage);
+                                      widget.isAuthenticated
+                                          ? context.pushNamed(
+                                              AppRouterNames.interestsPage)
+                                          : context.pushNamed(
+                                              AppRouterNames.authPage);
                                     },
                                     // isVisible: BlocProvider.of<HomeScreenCubit>(context).isInterfaceVisible,
                                   )

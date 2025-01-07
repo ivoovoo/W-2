@@ -7,15 +7,19 @@ import 'package:social_network/features/interests/model/interest_model.dart';
 import '../../../core/helpers/catch_exception.dart';
 
 abstract interface class IInterestsDataProvider {
-  Future<InterestResponse> getAllInterests();
+  Future<InterestResponse> getAllInterests(String token);
 }
 
 class InterestsDataProvider implements IInterestsDataProvider {
   ApiRequester apiRequester = ApiRequester();
+
   @override
-  Future<InterestResponse> getAllInterests() async {
+  Future<InterestResponse> getAllInterests(String token) async {
     try {
-      Response response = await apiRequester.toGet('user/api/add_interests/');
+      Response response = await apiRequester.toGet(
+        'user/api/add_interests/',
+        token,
+      );
 
       if (response.statusCode == 200) {
         log("${response.statusCode}");

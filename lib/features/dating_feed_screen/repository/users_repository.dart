@@ -10,11 +10,8 @@ class UsersRepository {
     String? interest,
     int? age_min,
     int? age_max,
+    int? city,
   ]) {
-    return usersDataProvider.getUsers(
-      interest,
-      age_min,
-      age_max,
-    );
+    return usersDataProvider.getUsers(interest, age_min, age_max, city);
   }
 }

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:social_network/features/other_profile/data_provider/other_profile_data_provider.dart';
 import 'package:social_network/features/other_profile/repository/other_profile_repository.dart';
-import 'package:social_network/features/profile_page/widgets/floating_button.dart';
-import 'package:social_network/features/profile_page/widgets/header_widget.dart';
-import 'package:social_network/features/profile_page/widgets/photo_list_widget.dart';
-import 'package:social_network/features/profile_page/widgets/profile_main_widget.dart';
+import 'package:social_network/features/profile/widgets/header_widget.dart';
+import 'package:social_network/features/profile/widgets/profile_main_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'package:social_network/data.dart';
 
-import '../profile_page/model/user_model.dart';
+import '../profile/model/user_model.dart';
 import 'logic/other_profile_bloc.dart';
 
 class OtherProfilePage extends StatefulWidget {
@@ -23,7 +21,7 @@ class OtherProfilePage extends StatefulWidget {
 
   final int userId;
 
-  static List<String> items = ['Сцена', 'Видео', 'Музыка', 'Новости'];
+  static List<String> items = ['Сцены', 'Видео', 'Музыка', 'Новости'];
 
   @override
   State<OtherProfilePage> createState() => _OtherProfilePageState();
@@ -36,9 +34,12 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
 
   @override
   void initState() {
-    otherProfileBloc = OtherProfileBloc(OtherProfileRepository(
-        otherProfileDataProvider: OtherProfileDataProvider()))
-      ..add(OtherProfileEvent.init(widget.userId));
+    otherProfileBloc = OtherProfileBloc(
+      OtherProfileRepository(
+        otherProfileDataProvider: OtherProfileDataProvider(),
+        localStorageDataProvider: context.read<ILocalStorageDataProvider>(),
+      ),
+    )..add(OtherProfileEvent.init(widget.userId));
     super.initState();
   }
 
@@ -54,43 +55,45 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
         systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
-    return BlocBuilder<OtherProfileBloc, OtherProfileState>(
-      bloc: otherProfileBloc,
-      builder: (context, state) {
-        state.when(
-          initial: () {},
-          loadInProgress: () {},
-          loadSuccess: (user, response) {
-            userModel = user ??
-                UserModel(
-                  id: -1,
-                  username: 'UNKNOWN',
-                  email: '',
-                  isOnline: false,
-                  followYou: false,
-                  followHim: false,
-                  subscribersCount: 0,
-                  subscriptionsCount: 0,
-                  userVideos: [],
-                );
-            responseStatusSubscription = response ?? '';
-          },
-          loadFailure: (error) {},
-        );
-        if (state is OtherProfileLoadInProgressState ||
-            state is OtherProfileInitialState) {
-          return const Center(
-            child: CircularProgressIndicator(),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: BlocBuilder<OtherProfileBloc, OtherProfileState>(
+        bloc: otherProfileBloc,
+        builder: (context, state) {
+          state.when(
+            initial: () {},
+            loadInProgress: () {},
+            loadSuccess: (user, response) {
+              userModel = user ??
+                  UserModel(
+                    id: -1,
+                    username: 'UNKNOWN',
+                    email: '',
+                    city: '',
+                    isOnline: false,
+                    followYou: false,
+                    followHim: false,
+                    subscribersCount: 0,
+                    subscriptionsCount: 0,
+                    userVideos: [],
+                  );
+              responseStatusSubscription = response ?? '';
+            },
+            loadFailure: (error) {},
           );
-        }
-        if (state is OtherProfileLoadFailureState) {
-          return Center(
-            child: Text(state.error),
-          );
-        } else {
-          return ChangeNotifierProvider(
-            create: (context) => CustomCarouselSliderState(),
-            child: SafeArea(
+          if (state is OtherProfileLoadInProgressState ||
+              state is OtherProfileInitialState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is OtherProfileLoadFailureState) {
+            return Center(
+              child: Text(state.error),
+            );
+          } else {
+            return ChangeNotifierProvider(
+              create: (context) => CustomCarouselSliderState(),
               child: Column(
                 children: [
                   Expanded(
@@ -119,38 +122,60 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                               },
                               isStorisExist: true,
                             ),
-                            const PhotoListWidget(),
+                            // const PhotoListWidget(),
                             TabsListWidget(items: OtherProfilePage.items),
-                            StaggeredGridWidget(
-                              items: [
-                                [
-                                  Assets.images.stag1.path,
-                                  Assets.images.stag2.path,
-                                  Assets.images.stag3.path,
-                                  Assets.images.stag4.path
-                                ],
+
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(height: 150),
+                                Lottie.asset(
+                                  'assets/json/empty_video.json',
+                                  fit: BoxFit.fitHeight,
+                                  height: 200,
+                                ),
                               ],
-                              leftCoef: 0.3,
-                              rightCoef: 0.53,
                             ),
+                            // StaggeredGridWidget(
+                            //   items: [
+                            //     [
+                            //       Assets.images.stag1.path,
+                            //       Assets.images.stag2.path,
+                            //       Assets.images.stag3.path,
+                            //       Assets.images.stag4.path
+                            //     ],
+                            //   ],
+                            //   leftCoef: 0.3,
+                            //   rightCoef: 0.53,
+                            // ),
                             /*Padding(
                       padding: EdgeInsets.fromLTRB(20, 30, 20, 8 * rw(context)),
                       child: const FloatingButton(),
                     )*/
                           ],
                         ),
-                        const Positioned(
-                            bottom: 16, right: 32, child: FloatingButton())
+                        Positioned(
+                          bottom: 16,
+                          right: 16,
+                          child: SizedBox(
+                            height: 70,
+                            width: 70,
+                            child: Lottie.asset(
+                              'assets/json/ai_chat.json',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 60.h),
+                  // SizedBox(height: 60.h),
                 ],
               ),
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
   }
 }

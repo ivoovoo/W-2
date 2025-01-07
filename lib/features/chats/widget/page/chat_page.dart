@@ -4,11 +4,13 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_network/core/utils/token_funcs.dart';
-import 'package:social_network/features/chats/model/content_model.dart';
-import 'package:social_network/features/chats/model/message_model.dart';
-
+import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_network/core/data/local_storage_keys.dart';
+import 'package:social_network/features/chats/models/chats_model/content_model.dart';
+import '../../models/chats_model/message_model.dart';
 import '../widget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -65,9 +67,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _connectToSocket() async {
     try {
-      var token = await getToken();
-      var user = await getUserData();
-      userId = user['user_id'];
+      String token = context
+          .read<SharedPreferences>()
+          .getString(LocalStorageKeys.authToken)!;
+      userId =
+          context.read<SharedPreferences>().getInt(LocalStorageKeys.userId)!;
       print('Токен: $token');
 
       socket = await WebSocket.connect(
@@ -107,13 +111,13 @@ class _ChatScreenState extends State<ChatScreen> {
         // Если это отдельное сообщение
         if (parsedData['message_type'] != null) {
           final newMessage = Message(
-            room: widget.chatId,
+            room: widget.typeOfChat == 'chat_group' ? null : widget.chatId,
+            roomGroup: widget.typeOfChat == 'chat_group' ? widget.chatId : null,
             sender: parsedData['sender_id'],
-            // ID отправителя (или получателя)
             createdAt: TimeOfDay.now().format(context),
             messageRead: parsedData['message_read'],
             messageType: parsedData['message_type'],
-            content: parsedData['content'], // или переданный createdAt
+            content: parsedData['content'],
           );
 
           setState(() {
@@ -165,7 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (scrollController.hasClients) {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
     }
@@ -217,7 +221,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Column(
                   children: [
                     Text(
-                      '@${widget.userName == 'unknown' ? chatPartner.username : widget.userName}',
+                      '${widget.typeOfChat == 'chat_group' ? "" : "@"}${widget.userName == 'unknown' ? chatPartner.username : widget.userName}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xff000000),
@@ -225,22 +229,22 @@ class _ChatScreenState extends State<ChatScreen> {
                         fontFamily: 'Inter',
                       ),
                     ),
-                    const Text(
-                      'Онлайн',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff00ffd1),
-                        fontFamily: 'Inter',
-                      ),
-                    ),
+                    // Text(
+                    //   S.of(context).online,
+                    //   style: const TextStyle(
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w500,
+                    //     color: Color(0xff00ffd1),
+                    //     fontFamily: 'Inter',
+                    //   ),
+                    // ),
                   ],
                 ),
-                CircleAvatar(
-                  radius: 21,
-                  backgroundImage: NetworkImage(
-                    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
-                  ),
+                Lottie.asset(
+                  'assets/json/avatar.json',
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
               ],
             ),
@@ -266,11 +270,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: TextContent(
+                              onTap: () {},
                               text: message.content,
                               isSender: message.sender == userId,
-                              isCommentsPage: false,
+                              isCommentsPage: widget.typeOfChat == "chat_group"
+                                  ? true
+                                  : false,
                               pathToImage: '',
-                              haveStories: false,
+                              haveStories: true,
                             ),
                           );
                         } else if (message.messageType == "voice") {
@@ -279,10 +286,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: AudioContent(
+                              onTap: () {},
                               isSender: message.sender == userId,
                               url: message.content,
-                              isCommentsPage: false,
-                              haveStories: false,
+                              isCommentsPage: widget.typeOfChat == "chat_group"
+                                  ? true
+                                  : false,
+                              haveStories: true,
                               pathToImage: '',
                             ),
                           );
@@ -292,10 +302,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: ImageContent(
+                              onTap: () {},
                               url: message.content,
-                              isCommentsPage: false,
+                              isCommentsPage: widget.typeOfChat == "chat_group"
+                                  ? true
+                                  : false,
                               isSender: message.sender == userId,
-                              haveStories: false,
+                              haveStories: true,
                               pathToImage: '',
                             ),
                           );
@@ -306,10 +319,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                 : Alignment.centerLeft,
                             child: VideoContent(
                               videoPath: message.content,
-                              isCommentsPage: false,
+                              isCommentsPage: widget.typeOfChat == "chat_group"
+                                  ? true
+                                  : false,
                               pathToImage: '',
                               isSender: message.sender == userId,
-                              haveStories: false,
+                              haveStories: true,
+                              onTap: () {},
                             ),
                           );
                         } else if (message.messageType == "sticker") {
@@ -318,11 +334,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: StickerContent(
+                              onTap: () {},
                               url: message.content,
-                              // Предполагается, что это URL наклейки
-                              isCommentsPage: false,
+                              isCommentsPage: widget.typeOfChat == "chat_group"
+                                  ? true
+                                  : false,
                               isSender: message.sender == userId,
-                              haveStories: false,
+                              haveStories: true,
                               pathToImage: '',
                             ),
                           );
@@ -338,16 +356,6 @@ class _ChatScreenState extends State<ChatScreen> {
             MessageInputWidget(
               onSend: (dynamic content, ContentType contentType) {
                 _sendMessage(content, contentType);
-                // setState(() {
-                //   messages.add(
-                //     ContentModel(
-                //       id: DateTime.now().millisecondsSinceEpoch,
-                //       contentType: contentType,
-                //       content: content,
-                //       isSender: true,
-                //     ),
-                //   );
-                // });
               },
             ),
             SizedBox(height: padding.bottom),
