@@ -6,6 +6,8 @@ import 'package:lottie/lottie.dart';
 import 'package:social_network/features/chats/logics/apps_logic/apps_bloc.dart';
 import 'package:social_network/features/chats/widget/plus_and_arrow_forward_icons.dart';
 import 'package:social_network/features/chats/widget/widget.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../core/router/app_router_names.dart';
 import '../../../../generated/l10n.dart';
@@ -27,10 +29,6 @@ class _AppsPageState extends State<AppsPage>
   @override
   void initState() {
     super.initState();
-    // groupsBloc =
-    //     GroupsBloc(GroupsRepository(groupsDataProvider: GroupsDataProvider()))
-    //       ..add(const GroupsEvent.init());
-    // Инициализируем контроллер анимации
     _controller = AnimationController(
       duration: const Duration(seconds: 5),
       vsync: this,
@@ -39,10 +37,29 @@ class _AppsPageState extends State<AppsPage>
 
   @override
   void dispose() {
-    // Освобождаем контроллер при удалении виджета
-    // groupsBloc.close();
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _launchURLInApp(String url) async {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
+    //     statusBarIconBrightness: Brightness.dark,
+    //   ),
+    // );
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.inAppWebView,
+      webViewConfiguration: WebViewConfiguration(
+        enableJavaScript: false,
+        enableDomStorage: false,
+      ),
+    )) {
+      throw 'Could not launch $uri';
+    }
   }
 
   void showChatDeletedSnackBar(BuildContext context, VoidCallback onUndo) {
@@ -153,7 +170,9 @@ class _AppsPageState extends State<AppsPage>
                       onTapPlusIcon: () {
                         context.pushNamed(AppRouterNames.createApp);
                       },
-                      onTapArrowForwardIcon: () {},
+                      onTapArrowForwardIcon: () {
+                        context.pushNamed(AppRouterNames.siteCategories);
+                      },
                     ),
                     const SizedBox(height: 16),
                     Wrap(
@@ -179,17 +198,23 @@ class _AppsPageState extends State<AppsPage>
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               onLongPress: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  isScrollControlled: false,
-                                  builder: (context) => DeleteBottomSheet(
-                                    url: '',
-                                    delete: () {},
-                                  ),
+                                // showModalBottomSheet(
+                                //   context: context,
+                                //   backgroundColor: Colors.transparent,
+                                //   isScrollControlled: false,
+                                //   builder: (context) => DeleteBottomSheet(
+                                //     url: '',
+                                //     delete: () {},
+                                //   ),
+                                // );
+                              },
+                              onTap: () {
+                                // _launchURLInApp(appsModel.sites[i].url);
+                                context.pushNamed(
+                                  AppRouterNames.customWebView,
+                                  extra: appsModel.sites[i].url,
                                 );
                               },
-                              onTap: () {},
                               child: SizedBox(
                                 height: 100,
                                 width: 100,

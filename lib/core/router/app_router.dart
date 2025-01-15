@@ -9,12 +9,17 @@ import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:social_network/features/chats/widget/page/chat_tab.dart';
 import 'package:social_network/features/chats/widget/page/content_page.dart';
 import 'package:social_network/features/chats/widget/page/create_app_page.dart';
+import 'package:social_network/features/chats/widget/page/custom_web_view.dart';
 import 'package:social_network/features/comments/widget/page/comments_page.dart';
 import 'package:social_network/features/chats/widget/page/creat_group_chat_page.dart';
 import 'package:social_network/features/dating_feed_screen/dating_feed_screen.dart';
+import 'package:social_network/features/edit_profile/widget/page/edit_profile_page.dart';
 import 'package:social_network/features/interests/widget/page/interests_page.dart';
 import 'package:social_network/features/other_profile/other_profile.dart';
+import 'package:social_network/features/profile/model/user_model.dart';
 import 'package:social_network/features/profile/profile_page.dart';
+import 'package:social_network/features/profile/widgets/page/avatars_page.dart';
+import 'package:social_network/features/site_categories/widget/page/site_categories_page.dart';
 
 import '../../features/home_page/home_page.dart';
 import 'app_router_names.dart';
@@ -150,6 +155,28 @@ final GoRouter router = GoRouter(
           const InterestsPage(),
     ),
     GoRoute(
+      path: '/siteCategories',
+      name: AppRouterNames.siteCategories,
+      builder: (BuildContext context, GoRouterState state) =>
+          const SiteCategoriesPage(),
+    ),
+    GoRoute(
+      path: '/customWebView',
+      name: AppRouterNames.customWebView,
+      builder: (BuildContext context, GoRouterState state) {
+        String urlOfSite = state.extra as String;
+        return CustomWebView(url: urlOfSite);
+      },
+    ),
+    GoRoute(
+      path: '/avatarsPage',
+      name: AppRouterNames.avatarsPage,
+      builder: (BuildContext context, GoRouterState state) {
+        List<AvatarImage> avatars = state.extra as List<AvatarImage>;
+        return AvatarsPage(profilePictures: avatars);
+      },
+    ),
+    GoRoute(
       path: '/chatsDetail/:type_of_chat/:user_name',
       name: AppRouterNames.chatsDetail,
       builder: (BuildContext context, GoRouterState state) {
@@ -213,6 +240,13 @@ final GoRouter router = GoRouter(
       path: '/createApp',
       builder: (BuildContext context, GoRouterState state) {
         return const CreateAppPage();
+      },
+    ),
+    GoRoute(
+      name: AppRouterNames.editProfile,
+      path: '/editProfile',
+      builder: (BuildContext context, GoRouterState state) {
+        return const EditProfilePage();
       },
     ),
     GoRoute(

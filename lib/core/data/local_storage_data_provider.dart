@@ -90,14 +90,18 @@ final class LocalStorageDataProvider implements ILocalStorageDataProvider {
 
   @override
   Future<bool> clear() {
-    _prefs.remove(LocalStorageKeys.isAuthenticated);
-    _prefs.remove(LocalStorageKeys.userName);
-    _prefs.remove(LocalStorageKeys.authToken);
-    _prefs.remove(LocalStorageKeys.csrfToken);
-    _prefs.remove(LocalStorageKeys.categoryVideo);
-    _prefs.remove(LocalStorageKeys.ageMaxOfCategoryVideo);
-    _prefs.remove(LocalStorageKeys.ageMinOfCategoryVideo);
-
-    return _prefs.remove(LocalStorageKeys.userId);
+    return _prefs.clear();
   }
+  // @override
+  // Future<bool> clear() {
+  //   _prefs.remove(LocalStorageKeys.isAuthenticated);
+  //   _prefs.remove(LocalStorageKeys.userName);
+  //   _prefs.remove(LocalStorageKeys.authToken);
+  //   _prefs.remove(LocalStorageKeys.csrfToken);
+  //   _prefs.remove(LocalStorageKeys.categoryVideo);
+  //   _prefs.remove(LocalStorageKeys.ageMaxOfCategoryVideo);
+  //   _prefs.remove(LocalStorageKeys.ageMinOfCategoryVideo);
+  //
+  //   return _prefs.remove(LocalStorageKeys.userId);
+  // }
 }

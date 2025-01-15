@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_network/features/other_profile/data_provider/other_profile_data_provider.dart';
 import 'package:social_network/features/other_profile/repository/other_profile_repository.dart';
@@ -9,6 +10,7 @@ import 'package:social_network/features/profile/widgets/profile_main_widget.dart
 import 'package:provider/provider.dart';
 
 import 'package:social_network/data.dart';
+import 'package:social_network/generated/l10n.dart';
 
 import '../profile/model/user_model.dart';
 import 'logic/other_profile_bloc.dart';
@@ -20,8 +22,6 @@ class OtherProfilePage extends StatefulWidget {
   });
 
   final int userId;
-
-  static List<String> items = ['Сцены', 'Видео', 'Музыка', 'Новости'];
 
   @override
   State<OtherProfilePage> createState() => _OtherProfilePageState();
@@ -76,6 +76,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                     subscribersCount: 0,
                     subscriptionsCount: 0,
                     userVideos: [],
+                    profilePictures: [],
                   );
               responseStatusSubscription = response ?? '';
             },
@@ -92,86 +93,64 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
               child: Text(state.error),
             );
           } else {
-            return ChangeNotifierProvider(
-              create: (context) => CustomCarouselSliderState(),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        ListView(
-                          children: [
-                            // const IdRowWidget(),
-                            HeaderWidget(username: userModel.username),
-                            ProfileMainWidget(
-                              userName: userModel.username,
-                              userId: userModel.id,
-                              subscribers: userModel.subscribersCount,
-                              subscriptions: userModel.subscriptionsCount,
-                              moments: userModel.userVideos.length,
-                              followHim: userModel.followHim,
-                              followYou: userModel.followYou,
-                              subscribe: () {
-                                otherProfileBloc.add(
-                                    OtherProfileEvent.subscribe(userModel.id));
-                              },
-                              unSubscribe: () {
-                                otherProfileBloc.add(
-                                    OtherProfileEvent.unsubscribe(
-                                        userModel.id));
-                              },
-                              isStorisExist: true,
-                            ),
-                            // const PhotoListWidget(),
-                            TabsListWidget(items: OtherProfilePage.items),
-
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(height: 150),
-                                Lottie.asset(
-                                  'assets/json/empty_video.json',
-                                  fit: BoxFit.fitHeight,
-                                  height: 200,
-                                ),
-                              ],
-                            ),
-                            // StaggeredGridWidget(
-                            //   items: [
-                            //     [
-                            //       Assets.images.stag1.path,
-                            //       Assets.images.stag2.path,
-                            //       Assets.images.stag3.path,
-                            //       Assets.images.stag4.path
-                            //     ],
-                            //   ],
-                            //   leftCoef: 0.3,
-                            //   rightCoef: 0.53,
-                            // ),
-                            /*Padding(
-                      padding: EdgeInsets.fromLTRB(20, 30, 20, 8 * rw(context)),
-                      child: const FloatingButton(),
-                    )*/
-                          ],
-                        ),
-                        Positioned(
-                          bottom: 16,
-                          right: 16,
-                          child: SizedBox(
-                            height: 70,
-                            width: 70,
-                            child: Lottie.asset(
-                              'assets/json/ai_chat.json',
-                              fit: BoxFit.cover,
-                            ),
+            return Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      ListView(
+                        children: [
+                          // const IdRowWidget(),
+                          HeaderWidget(username: userModel.username),
+                          ProfileMainWidget(
+                            profilePictures: userModel.profilePictures ?? [],
+                            userName: userModel.username,
+                            userId: userModel.id,
+                            subscribers: userModel.subscribersCount,
+                            subscriptions: userModel.subscriptionsCount,
+                            moments: userModel.userVideos.length,
+                            followHim: userModel.followHim,
+                            followYou: userModel.followYou,
+                            subscribe: () {
+                              otherProfileBloc.add(
+                                  OtherProfileEvent.subscribe(userModel.id));
+                            },
+                            unSubscribe: () {
+                              otherProfileBloc.add(
+                                  OtherProfileEvent.unsubscribe(userModel.id));
+                            },
+                            isStorisExist: true,
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(height: 130.h),
+                              Lottie.asset(
+                                'assets/json/empty_video.json',
+                                fit: BoxFit.fitHeight,
+                                height: 200,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        bottom: 16,
+                        right: 16,
+                        child: SizedBox(
+                          height: 70,
+                          width: 70,
+                          child: Lottie.asset(
+                            'assets/json/ai_chat.json',
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  // SizedBox(height: 60.h),
-                ],
-              ),
+                ),
+                // SizedBox(height: 60.h),
+              ],
             );
           }
         },

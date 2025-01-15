@@ -5,6 +5,7 @@ import 'package:social_network/features/chats/widget/page/chat_with_ai_page.dart
 import 'package:social_network/features/chats/widget/page/chats_page.dart';
 import 'package:social_network/features/chats/widget/page/groups_page.dart';
 import 'package:social_network/features/chats/widget/page/apps_page.dart';
+import 'package:social_network/generated/l10n.dart';
 
 class ChatTab extends StatefulWidget {
   const ChatTab({super.key});
@@ -76,7 +77,8 @@ class _ChatTabState extends State<ChatTab> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            child: const ButtonOfChatTab(buttonName: 'APPS'),
+                            child:
+                                ButtonOfChatTab(buttonName: S.of(context).apps),
                           ),
                         ),
                         const SizedBox(width: 20),
@@ -99,7 +101,8 @@ class _ChatTabState extends State<ChatTab> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            child: const ButtonOfChatTab(buttonName: 'CHATS'),
+                            child: ButtonOfChatTab(
+                                buttonName: S.of(context).groups),
                           ),
                         ),
                       ],

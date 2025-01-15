@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_network/core/data/local_storage_keys.dart';
@@ -11,11 +12,10 @@ import 'package:social_network/features/profile/widgets/floating_button.dart';
 import 'package:social_network/features/profile/widgets/header_widget.dart';
 import 'package:social_network/features/profile/widgets/profile_main_widget.dart';
 import 'package:social_network/data.dart';
+import 'package:social_network/generated/l10n.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
-
-  static List<String> items = ['Сцены', 'Видео', 'Музыка', 'Новости'];
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -23,12 +23,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileBloc profileBloc;
-
-  //
-  // Future<int> getUserId() async {
-  //   Map<String, dynamic> userData = await getUserData();
-  //   return userData['user_id'];
-  // }
 
   @override
   void initState() {
@@ -68,57 +62,51 @@ class _ProfilePageState extends State<ProfilePage> {
             signOutSuccess: () {
               return const SizedBox.shrink();
             },
-            loadSuccess: (user) => ChangeNotifierProvider(
-              create: (context) => CustomCarouselSliderState(),
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          ListView(
-                            children: [
-                              HeaderWidget(username: user.username),
-                              ProfileMainWidget(
-                                userName: '',
-                                userId: -1,
-                                isStorisExist: true,
-                                subscribers: user.subscribersCount,
-                                subscriptions: user.subscriptionsCount,
-                                moments: user.userVideos.length,
-                                followHim: user.followHim,
-                                followYou: user.followYou,
-                                subscribe: () {},
-                                unSubscribe: () {},
-                                isOtherProfile: false,
-                              ),
-                              // const PhotoListWidget(),
-                              TabsListWidget(items: ProfilePage.items),
-                              // StaggeredGridWidget(
-                              //   items: [
-                              //     [
-                              //       Assets.images.stag1.path,
-                              //       Assets.images.stag2.path,
-                              //       Assets.images.stag3.path,
-                              //       Assets.images.stag4.path
-                              //     ]
-                              //   ],
-                              //   leftCoef: 0.3,
-                              //   rightCoef: 0.53,
-                              // ),
-                            ],
-                          ),
-                          const Positioned(
-                            bottom: 16,
-                            right: 32,
-                            child: FloatingButton(),
-                          ),
-                        ],
-                      ),
+            loadSuccess: (user) => SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        ListView(
+                          children: [
+                            HeaderWidget(username: user.username),
+                            ProfileMainWidget(
+                              profilePictures: user.profilePictures ?? [],
+                              userName: user.username,
+                              userId: user.id,
+                              isStorisExist: true,
+                              subscribers: user.subscribersCount,
+                              subscriptions: user.subscriptionsCount,
+                              moments: user.userVideos.length,
+                              followHim: user.followHim,
+                              followYou: user.followYou,
+                              subscribe: () {},
+                              unSubscribe: () {},
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(height: 130.h),
+                                Lottie.asset(
+                                  'assets/json/cup_animation.json',
+                                  fit: BoxFit.fitHeight,
+                                  height: 200,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const Positioned(
+                          bottom: 16,
+                          right: 32,
+                          child: FloatingButton(),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 60.h),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 60.h),
+                ],
               ),
             ),
             loadFailure: (error) => Center(

@@ -86,7 +86,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
         systemNavigationBarIconBrightness: Brightness.light));
     return BlocBuilder<ProfileCubit, ProfileeState>(
       builder: (context, state) {

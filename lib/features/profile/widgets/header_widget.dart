@@ -31,7 +31,7 @@ class HeaderWidget extends StatelessWidget {
               SizedBox(
                 width: 8 * rw(context),
               ),
-              SvgPicture.asset('assets/icons/verified.svg')
+              // SvgPicture.asset('assets/icons/verified.svg')
             ],
           ),
           Row(

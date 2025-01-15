@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_network/core/constants/constants.dart';
 import 'package:social_network/core/widgets/custom_gradient_button.dart';
@@ -17,9 +18,11 @@ class TextFieldAndButton extends StatefulWidget {
     required this.onChanged,
     required this.isActive,
     required this.selectedGroupImage,
+    required this.isFirstPage,
   }) : super(key: key);
 
   final TextEditingController controller;
+  final bool isFirstPage;
   final String hintText;
   final void Function()? buttonOnTap;
   final void Function(String)? onChanged;
@@ -103,14 +106,37 @@ class _TextFieldAndButtonState extends State<TextFieldAndButton> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: widget.hintText,
+                        prefixText: widget.isFirstPage ? '@' : '',
                         hintStyle: AppStyles.kGreyColorW700(14.0),
+                        prefixStyle: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14.0,
+                          color: Colors.black,
+                          // foreground: Paint()..shader = linearGradient,
+                        ),
                       ),
+                      // inputFormatters: [
+                      //   TextInputFormatter.withFunction((oldValue, newValue) {
+                      //     if (!newValue.text.startsWith('@')) {
+                      //       return TextEditingValue(
+                      //         text: '@${newValue.text.replaceAll('@', '')}',
+                      //         selection: TextSelection.collapsed(
+                      //             offset: newValue.selection.end + 1),
+                      //       );
+                      //     }
+                      //     return newValue;
+                      //   }),
+                      // ],
                     )
                   : InkWell(
                       onTap: widget.isActive ? null : pickAndUploadFile,
-                      child: Center(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          file == null ? 'Select photo' : 'Photo selected',
+                          file == null
+                              ? S.of(context).select_photo
+                              : S.of(context).photo_selected,
                           style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,

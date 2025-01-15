@@ -122,9 +122,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 13.h,
-                        ),
+                        SizedBox(height: 13.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -135,7 +133,27 @@ class _AuthScreenState extends State<AuthScreen> {
                                   });
                                 },
                                 icon: Assets.icons.leftArrow),
-                            SvgPicture.asset(Assets.icons.logo1),
+                            Stack(
+                              children: [
+                                const SizedBox(
+                                  height: 40,
+                                  width: 150,
+                                ),
+                                Positioned(
+                                  top: -55,
+                                  left: 0,
+                                  right: 0,
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 150,
+                                    child: Lottie.asset(
+                                      'assets/json/hello_animation.json',
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox.shrink(),
                           ],
                         ),
@@ -143,6 +161,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
+                          isFirstPage: pageIndex == 0,
                           controller: definitionTextController(),
                           hintText: BlocProvider.of<AuthCubit>(context)
                               .buttonTextAuth,
@@ -159,10 +178,17 @@ class _AuthScreenState extends State<AuthScreen> {
                               // updateRec();
                               print(usernameController.text);
                               print(passController.text);
+                              String userName = '';
+                              if (usernameController.text.startsWith("@")) {
+                                userName = usernameController.text
+                                    .substring(1); // Удаляем символ @
+                              } else {
+                                userName = usernameController.text;
+                              }
                               context
                                   .read<ProfileBloc>()
                                   .add(ProfileEvent.signIn(
-                                    username: usernameController.text,
+                                    username: userName,
                                     password: passController.text,
                                   ));
                             } else {
@@ -206,7 +232,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 context.pop();
                               },
                               child: UserAgreement(
-                                firstText: S.of(context).i_have_not,
+                                firstText: S.of(context).create,
                                 secondText: S.of(context).account,
                                 thirdText: '',
                                 // firstText:

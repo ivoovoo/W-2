@@ -8,4 +8,9 @@ class LocalStorageKeys {
   static const String ageMaxOfCategoryVideo = 'age_max_of_category_video';
   static const String ageMinOfCategoryVideo = 'age_min_of_category_video';
   static const String categoryVideo = 'category_of_video';
+  static const String languageOfApp = 'languageOfApp';
+  static const String userBirthday = 'userBirthday';
+  static const String ageMaxOfSiteCategory = 'age_max_of_site_category';
+  static const String ageMinOfSiteCategory = 'age_min_of_site_category';
+  static const String siteCategory = 'site_category';
 }

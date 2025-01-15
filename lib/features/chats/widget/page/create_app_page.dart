@@ -14,6 +14,8 @@ import 'package:social_network/features/auth_screen/widgets/text_field_and_butto
 import 'package:social_network/features/auth_screen/widgets/user_agreement.dart';
 import 'package:social_network/features/chats/logics/apps_logic/apps_bloc.dart';
 
+import '../../../../generated/l10n.dart';
+
 class CreateAppPage extends StatefulWidget {
   const CreateAppPage({super.key});
 
@@ -164,7 +166,11 @@ class _CreateAppPageState extends State<CreateAppPage> {
                                   });
                                 },
                                 icon: Assets.icons.leftArrow),
-                            SvgPicture.asset(Assets.icons.logo1),
+                            Lottie.asset(
+                              'assets/json/apps.json',
+                              height: 50,
+                              width: 50,
+                            ),
                             const SizedBox.shrink(),
                           ],
                         ),
@@ -172,6 +178,7 @@ class _CreateAppPageState extends State<CreateAppPage> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
+                          isFirstPage: pageIndex == 0,
                           controller: definitionTextController(),
                           hintText: BlocProvider.of<AuthCubit>(context)
                               .buttonTextCreateApp,
@@ -195,11 +202,18 @@ class _CreateAppPageState extends State<CreateAppPage> {
                                 .definitionColorsGradientIconButton(value);
                           },
                           selectedGroupImage: (image, imageFilee) {
+                            String appName = '';
+                            if (appNameController.text.startsWith("@")) {
+                              appName = appNameController.text
+                                  .substring(1); // Удаляем символ @
+                            } else {
+                              appName = appNameController.text;
+                            }
                             setState(() {
                               imageFile = imageFilee;
                               imageSelected = true;
                               formDataSiteImage = FormData.fromMap({
-                                "name": appNameController.text,
+                                "name": appName,
                                 "description": descriptionController.text,
                                 "url": webLinkController.text,
                                 "site_image": image,
@@ -250,15 +264,10 @@ class _CreateAppPageState extends State<CreateAppPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                context.pop();
-                              },
-                              child: UserAgreement(
-                                firstText: 'create ',
-                                secondText: 'app',
-                                thirdText: '',
-                              ),
+                            UserAgreement(
+                              firstText: S.of(context).create,
+                              secondText: S.of(context).app,
+                              thirdText: '',
                             ),
                             GradientIconButton(
                               onTap: () {

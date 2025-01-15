@@ -62,21 +62,21 @@ class DeleteBottomSheet extends StatelessWidget {
                   backgroundImage: NetworkImage(url),
                   radius: 39,
                 ),
-          const SizedBox(height: 25),
-          InkWell(
-            onTap: () {
-              delete();
-              Navigator.pop(context);
-            },
-            child: Text(
-              S.of(context).delete_for_everyone,
-              style: const TextStyle(
-                color: Color(0xffff7575),
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-              ),
-            ),
-          ),
+          // const SizedBox(height: 25),
+          // InkWell(
+          //   onTap: () {
+          //     delete();
+          //     Navigator.pop(context);
+          //   },
+          //   child: Text(
+          //     S.of(context).delete_for_everyone,
+          //     style: const TextStyle(
+          //       color: Color(0xffff7575),
+          //       fontWeight: FontWeight.w500,
+          //       fontSize: 17,
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 25),
           InkWell(
             onTap: () {

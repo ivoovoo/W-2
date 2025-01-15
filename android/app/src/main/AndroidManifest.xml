@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="w.com.app">
+    package="w.app.now">
     <uses-permission android:name="android.permission.RECORD_AUDIO" android:foregroundServiceType="microphone" />
     <uses-permission android:name="android.permission.CAMERA" android:foregroundServiceType="camera" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -50,6 +50,12 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+<!--            <data android:scheme="http" />-->
+            <data android:scheme="https" />
+        </intent>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

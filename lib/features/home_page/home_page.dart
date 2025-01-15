@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
         systemNavigationBarIconBrightness: Brightness.light));
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
@@ -144,7 +144,9 @@ class _HomePageState extends State<HomePage> {
                                     onTap: () {
                                       widget.isAuthenticated
                                           ? context.pushNamed(
-                                              AppRouterNames.interestsPage)
+                                              AppRouterNames.interestsPage,
+                                              extra: true,
+                                            )
                                           : context.pushNamed(
                                               AppRouterNames.authPage);
                                     },

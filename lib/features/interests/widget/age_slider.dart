@@ -69,7 +69,7 @@ class _AgeSliderState extends State<AgeSlider> {
           ),
           child: RangeSlider(
             values: _currentRangeValues,
-            min: 0,
+            min: 18,
             max: 100,
             onChanged: (RangeValues values) {
               setState(() {

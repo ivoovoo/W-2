@@ -137,9 +137,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 13.h,
-                        ),
+                        SizedBox(height: 13.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -150,7 +148,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
                                 },
                                 icon: Assets.icons.leftArrow),
-                            SvgPicture.asset(Assets.icons.logo1),
+                            Stack(
+                              children: [
+                                const SizedBox(
+                                  height: 40,
+                                  width: 150,
+                                ),
+                                Positioned(
+                                  top: -55,
+                                  left: 0,
+                                  right: 0,
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 150,
+                                    child: Lottie.asset(
+                                      'assets/json/hello_animation.json',
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox.shrink(),
                           ],
                         ),
@@ -159,6 +177,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         TextFieldAndButton(
                           controller: definitionTextController(),
+                          isFirstPage: pageIndex == 0,
                           hintText:
                               BlocProvider.of<AuthCubit>(context).buttonText,
                           isActive: true,
@@ -175,10 +194,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               print(nameController.text);
                               print(emailController.text);
                               print(passController.text);
+                              String userName = '';
+                              if (nameController.text.startsWith("@")) {
+                                userName = nameController.text
+                                    .substring(1); // Удаляем символ @
+                              } else {
+                                userName = nameController.text;
+                              }
                               context
                                   .read<ProfileBloc>()
                                   .add(ProfileEvent.signUp(
-                                    userName: nameController.text,
+                                    userName: userName,
                                     email: emailController.text,
                                     password: passController.text,
                                   ));

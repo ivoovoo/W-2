@@ -16,18 +16,16 @@ class GradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: function,
-      customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
       splashColor: Colors.grey.withOpacity(0.2),
       child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
             horizontal: 16 * rw(context), vertical: 8 * rw(context)),
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: colors),
             borderRadius: BorderRadius.circular(100)),
-        child: Center(
-          child: widget,
-        ),
+        child: widget,
       ),
     );
   }

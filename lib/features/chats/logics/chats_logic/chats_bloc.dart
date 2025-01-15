@@ -13,6 +13,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
     on<ChatsEvent>(
       (event, emit) => event.map(
         init: (event) => _onInit(emit),
+        deleteChat: (event) => _onDeleteChat(event, emit),
       ),
     );
   }
@@ -20,6 +21,21 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   Future<void> _onInit(Emitter<ChatsState> emit) async {
     emit(const ChatsState.loadInProgress());
     try {
+      final responseModel = await chatsRepository.getChats();
+      print('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
+      emit(ChatsState.loadSuccess(responseModel));
+    } catch (e) {
+      emit(
+        ChatsState.loadFailure(e.toString()),
+      );
+    }
+  }
+
+  Future<void> _onDeleteChat(
+      ChatsEventDeleteChat event, Emitter<ChatsState> emit) async {
+    emit(const ChatsState.loadInProgress());
+    try {
+      await chatsRepository.deleteChat(event.chatId);
       final responseModel = await chatsRepository.getChats();
       print('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
       emit(ChatsState.loadSuccess(responseModel));

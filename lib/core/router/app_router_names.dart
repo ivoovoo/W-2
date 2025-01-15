@@ -16,4 +16,8 @@ class AppRouterNames {
   static const unauthorizedDialog = 'unauthorizedDialog';
   static const createGroupChat = 'createGroupChat';
   static const createApp = 'createApp';
+  static const editProfile = 'editProfile';
+  static const siteCategories = 'siteCategories';
+  static const customWebView = 'customWebView';
+  static const avatarsPage = 'avatarsPage';
 }

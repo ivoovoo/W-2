@@ -180,15 +180,15 @@ class _GroupsPageState extends State<GroupsPage>
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               onLongPress: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  isScrollControlled: false,
-                                  builder: (context) => DeleteBottomSheet(
-                                    url: '',
-                                    delete: () {},
-                                  ),
-                                );
+                                // showModalBottomSheet(
+                                //   context: context,
+                                //   backgroundColor: Colors.transparent,
+                                //   isScrollControlled: false,
+                                //   builder: (context) => DeleteBottomSheet(
+                                //     url: '',
+                                //     delete: () {},
+                                //   ),
+                                // );
                               },
                               onTap: () {
                                 context.pushNamed(

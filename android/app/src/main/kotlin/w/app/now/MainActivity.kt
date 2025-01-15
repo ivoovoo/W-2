@@ -1,4 +1,4 @@
-package w.com.app
+package w.app.now
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -18,4 +18,12 @@ class ChatsRepository {
       localStorageDataProvider.getString(LocalStorageKeys.authToken)!,
     );
   }
+
+  Future deleteChat(int chatId) {
+    return chatsDataProvider.deleteChat(
+      chatId,
+      localStorageDataProvider.getString(LocalStorageKeys.authToken)!,
+      localStorageDataProvider.getString(LocalStorageKeys.csrfToken)!,
+    );
+  }
 }

@@ -40,17 +40,11 @@ class $AssetsIconsGen {
   /// File path: assets/icons/active_search.svg
   String get activeSearch => 'assets/icons/active_search.svg';
 
-  /// File path: assets/icons/apps.json
-  String get apps => 'assets/icons/apps.json';
-
   /// File path: assets/icons/cancel.svg
   String get cancel => 'assets/icons/cancel.svg';
 
   /// File path: assets/icons/chat_square.svg
   String get chatSquare => 'assets/icons/chat_square.svg';
-
-  /// File path: assets/icons/chats.json
-  String get chats => 'assets/icons/chats.json';
 
   /// File path: assets/icons/eye.svg
   String get eye => 'assets/icons/eye.svg';
@@ -136,10 +130,8 @@ class $AssetsIconsGen {
         activeMessage,
         activeProfile,
         activeSearch,
-        apps,
         cancel,
         chatSquare,
-        chats,
         eye,
         heart,
         inactiveHeart,
@@ -405,6 +397,9 @@ class $AssetsImagesGen {
   AssetGenImage get profileSelected =>
       const AssetGenImage('assets/images/profile_selected.png');
 
+  /// File path: assets/images/russia.png
+  AssetGenImage get russia => const AssetGenImage('assets/images/russia.png');
+
   /// File path: assets/images/search.png
   AssetGenImage get search => const AssetGenImage('assets/images/search.png');
 
@@ -431,6 +426,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/stag4.png
   AssetGenImage get stag4 => const AssetGenImage('assets/images/stag4.png');
+
+  /// File path: assets/images/usa.png
+  AssetGenImage get usa => const AssetGenImage('assets/images/usa.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
@@ -498,6 +496,7 @@ class $AssetsImagesGen {
         profile6,
         profilePhoto,
         profileSelected,
+        russia,
         search,
         searchIcon,
         searchSelected,
@@ -505,7 +504,8 @@ class $AssetsImagesGen {
         stag1,
         stag2,
         stag3,
-        stag4
+        stag4,
+        usa
       ];
 }
 
@@ -515,14 +515,29 @@ class $AssetsJsonGen {
   /// File path: assets/json/ai_chat.json
   String get aiChat => 'assets/json/ai_chat.json';
 
+  /// File path: assets/json/apps.json
+  String get apps => 'assets/json/apps.json';
+
   /// File path: assets/json/avatar.json
   String get avatar => 'assets/json/avatar.json';
 
   /// File path: assets/json/baza.json
   String get baza => 'assets/json/baza.json';
 
+  /// File path: assets/json/chats.json
+  String get chats => 'assets/json/chats.json';
+
+  /// File path: assets/json/check_mark.json
+  String get checkMark => 'assets/json/check_mark.json';
+
+  /// File path: assets/json/cup_animation.json
+  String get cupAnimation => 'assets/json/cup_animation.json';
+
   /// File path: assets/json/empty_video.json
   String get emptyVideo => 'assets/json/empty_video.json';
+
+  /// File path: assets/json/hello_animation.json
+  String get helloAnimation => 'assets/json/hello_animation.json';
 
   /// File path: assets/json/onboarding_animation_1.json
   String get onboardingAnimation1 => 'assets/json/onboarding_animation_1.json';
@@ -539,9 +554,14 @@ class $AssetsJsonGen {
   /// List of all assets
   List<String> get values => [
         aiChat,
+        apps,
         avatar,
         baza,
+        chats,
+        checkMark,
+        cupAnimation,
         emptyVideo,
+        helloAnimation,
         onboardingAnimation1,
         onboardingAnimation2,
         onboardingAnimation3,

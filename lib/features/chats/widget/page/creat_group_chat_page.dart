@@ -13,6 +13,7 @@ import 'package:social_network/features/auth_screen/state/auth_cubit.dart';
 import 'package:social_network/features/auth_screen/widgets/text_field_and_button.dart';
 import 'package:social_network/features/auth_screen/widgets/user_agreement.dart';
 import 'package:social_network/features/chats/logics/groups_logic/groups_bloc.dart';
+import 'package:social_network/generated/l10n.dart';
 
 class CreateGroupChatPage extends StatefulWidget {
   const CreateGroupChatPage({super.key});
@@ -137,7 +138,11 @@ class _CreateGroupChatPageState extends State<CreateGroupChatPage> {
                               },
                               icon: Assets.icons.leftArrow,
                             ),
-                            SvgPicture.asset(Assets.icons.logo1),
+                            Lottie.asset(
+                              'assets/json/chats.json',
+                              height: 50,
+                              width: 50,
+                            ),
                             const SizedBox.shrink(),
                           ],
                         ),
@@ -145,14 +150,22 @@ class _CreateGroupChatPageState extends State<CreateGroupChatPage> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
+                            isFirstPage: pageIndex == 0,
                             controller: groupNameController,
                             hintText: BlocProvider.of<AuthCubit>(context)
                                 .buttonTextCreateGroup,
                             isActive: pageIndex == 0,
                             selectedGroupImage: (groupImage, imageFilee) {
+                              String grName = '';
+                              if (groupNameController.text.startsWith("@")) {
+                                grName = groupNameController.text
+                                    .substring(1); // Удаляем символ @
+                              } else {
+                                grName = groupNameController.text;
+                              }
                               setState(() {
                                 formDataGroupImage = FormData.fromMap({
-                                  "name": groupNameController.text,
+                                  "name": grName,
                                   "group_image": groupImage,
                                 });
                                 imageFile = imageFilee;
@@ -215,15 +228,10 @@ class _CreateGroupChatPageState extends State<CreateGroupChatPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                context.pop();
-                              },
-                              child: UserAgreement(
-                                firstText: 'create ',
-                                secondText: 'group',
-                                thirdText: '',
-                              ),
+                            UserAgreement(
+                              firstText: S.of(context).create,
+                              secondText: S.of(context).group,
+                              thirdText: '',
                             ),
                             GradientIconButton(
                                 onTap: () {

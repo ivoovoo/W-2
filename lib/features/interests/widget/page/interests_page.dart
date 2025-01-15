@@ -17,11 +17,7 @@ import 'package:social_network/features/interests/widget/interests_item.dart';
 import '../../../../generated/l10n.dart';
 
 class InterestsPage extends StatefulWidget {
-  const InterestsPage(
-      {super.key, this.nameOfCity = 'Москва', this.title = 'Moskvin'});
-
-  final String nameOfCity;
-  final String title;
+  const InterestsPage({super.key});
 
   @override
   State<InterestsPage> createState() => _InterestsPageState();
@@ -32,7 +28,7 @@ class _InterestsPageState extends State<InterestsPage> {
   List<Interest> selectedInterests = [];
   late List<Widget> interestsWidgets;
   late InterestsBloc interestsBloc;
-  String location = 'Неизвестно';
+  String location = '';
   String interestsId = '';
   int? ageMin;
   int? ageMax;
@@ -58,7 +54,7 @@ class _InterestsPageState extends State<InterestsPage> {
     ageMin = await context
             .read<SharedPreferences>()
             .getInt(LocalStorageKeys.ageMinOfCategoryVideo) ??
-        0;
+        18;
     print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
     print('$ageMax IIIIIIIII $ageMin');
   }
@@ -185,7 +181,7 @@ class _InterestsPageState extends State<InterestsPage> {
                   } else {
                     return Column(
                       children: [
-                        SizedBox(height: paddings.top),
+                        SizedBox(height: paddings.top + 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -196,14 +192,6 @@ class _InterestsPageState extends State<InterestsPage> {
                               child: const Icon(
                                 Icons.arrow_back_ios,
                                 size: 25,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              widget.title,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
                                 color: Colors.black,
                               ),
                             ),

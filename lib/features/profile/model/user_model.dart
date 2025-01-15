@@ -18,8 +18,20 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'subscribers_count') required int subscribersCount,
     @JsonKey(name: 'subscriptions_count') required int subscriptionsCount,
     @JsonKey(name: 'user_videos') required List<Video> userVideos,
+    @JsonKey(name: "profile_pictures")
+    required List<AvatarImage>? profilePictures,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
+}
+
+@freezed
+class AvatarImage with _$AvatarImage {
+  factory AvatarImage({
+    required String image,
+  }) = _AvatarImage;
+
+  factory AvatarImage.fromJson(Map<String, dynamic> json) =>
+      _$AvatarImageFromJson(json);
 }

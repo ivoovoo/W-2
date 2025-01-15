@@ -26,22 +26,22 @@ class AuthCubit extends Cubit<AuthhState> {
     emit(AuthInitial());
   }
 
-  String buttonTextCreateGroup = '@nickname';
+  String buttonTextCreateGroup = 'nickname';
 
   void definitionTextButtonOfCreateGroup(int pageIndex) {
     if (pageIndex == 0) {
-      buttonTextCreateGroup = '@nickname';
+      buttonTextCreateGroup = 'nickname';
     } else if (pageIndex == 1) {
       buttonTextCreateGroup = 'description';
     } else {}
     emit(AuthInitial());
   }
 
-  String buttonTextCreateApp = '@nickname';
+  String buttonTextCreateApp = 'nickname';
 
   void definitionTextButtonOfCreateApp(int pageIndex) {
     if (pageIndex == 0) {
-      buttonTextCreateApp = '@nickname';
+      buttonTextCreateApp = 'nickname';
     } else if (pageIndex == 1) {
       buttonTextCreateApp = 'description';
     } else {

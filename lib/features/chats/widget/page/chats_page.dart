@@ -28,7 +28,7 @@ class _ChatsPageState extends State<ChatsPage>
     userId: 0,
   );
   late AnimationController _controller;
-  int secondsLeft = 5; // Начальные 5 секунд
+  int secondsLeft = 3; // Начальные 3 секунд
   late ChatsBloc chatsBloc;
 
   @override
@@ -41,7 +41,7 @@ class _ChatsPageState extends State<ChatsPage>
       ..add(const ChatsEvent.init());
     // Инициализируем контроллер анимации
     _controller = AnimationController(
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 3),
       vsync: this,
     );
   }
@@ -54,7 +54,7 @@ class _ChatsPageState extends State<ChatsPage>
     super.dispose();
   }
 
-  void showChatDeletedSnackBar(BuildContext context, VoidCallback onUndo) {
+  void showChatDeletedSnackBar(BuildContext context) {
     // Запускаем анимацию
     _controller.reset();
     _controller.forward();
@@ -76,20 +76,18 @@ class _ChatsPageState extends State<ChatsPage>
                     color: Colors.black,
                   )),
               SizedBox(width: 15),
-              Text('Чат удалён',
+              Text(S.of(context).chat_deleted,
                   style: TextStyle(fontSize: 14, color: Color(0xffff7575))),
             ],
           );
         },
       ),
-      action: SnackBarAction(
-        textColor: Colors.black,
-        label: S.of(context).cancel,
-        onPressed: () {
-          onUndo(); // Выполнить действие при нажатии "Отмена"
-        },
-      ),
-      duration: Duration(seconds: 5),
+      // action: SnackBarAction(
+      //   textColor: Colors.black,
+      //   label: S.of(context).cancel,
+      //   onPressed: () {},
+      // ),
+      duration: Duration(seconds: 3),
     );
 
     // Показать SnackBar
@@ -183,7 +181,13 @@ class _ChatsPageState extends State<ChatsPage>
                                         isScrollControlled: false,
                                         builder: (context) => DeleteBottomSheet(
                                           url: '',
-                                          delete: () {},
+                                          delete: () {
+                                            showChatDeletedSnackBar(context);
+                                            chatsBloc.add(
+                                              ChatsEvent.deleteChat(chatResponse
+                                                  .currentUserChats[i].id),
+                                            );
+                                          },
                                         ),
                                       );
                                     },
