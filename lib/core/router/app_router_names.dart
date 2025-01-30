@@ -20,4 +20,9 @@ class AppRouterNames {
   static const siteCategories = 'siteCategories';
   static const customWebView = 'customWebView';
   static const avatarsPage = 'avatarsPage';
+  static const marketPage = 'marketPage';
+  static const addVideo = 'addVideo';
+  static const modelOfHouse = 'modelOfHouse';
+  static const secondMenuOfMarket = 'secondMenuOfMarket';
+  static const mapPage = 'mapPage';
 }

@@ -30,9 +30,13 @@ class _CreateGroupChatPageState extends State<CreateGroupChatPage> {
   int pageIndex = 0;
   FormData? formDataGroupImage;
 
+  String? hintTextForTextField;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    hintTextForTextField =
+        S.of(context).nickname; // Здесь можно использовать context
   }
 
   @override
@@ -150,18 +154,21 @@ class _CreateGroupChatPageState extends State<CreateGroupChatPage> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
+                            activeNickname: S.of(context).active_nickname,
                             isFirstPage: pageIndex == 0,
                             controller: groupNameController,
-                            hintText: BlocProvider.of<AuthCubit>(context)
-                                .buttonTextCreateGroup,
+                            hintText: hintTextForTextField!,
                             isActive: pageIndex == 0,
                             selectedGroupImage: (groupImage, imageFilee) {
                               String grName = '';
-                              if (groupNameController.text.startsWith("@")) {
+                              if (groupNameController.text
+                                  .trim()
+                                  .startsWith("@")) {
                                 grName = groupNameController.text
+                                    .trim()
                                     .substring(1); // Удаляем символ @
                               } else {
-                                grName = groupNameController.text;
+                                grName = groupNameController.text.trim();
                               }
                               setState(() {
                                 formDataGroupImage = FormData.fromMap({
@@ -201,8 +208,8 @@ class _CreateGroupChatPageState extends State<CreateGroupChatPage> {
                             setState(() {
                               pageIndex = index;
                             });
-                            BlocProvider.of<AuthCubit>(context)
-                                .definitionTextButtonOfCreateGroup(index);
+                            // BlocProvider.of<AuthCubit>(context)
+                            //     .definitionTextButtonOfCreateGroup(index);
                             BlocProvider.of<AuthCubit>(context)
                                 .definitionUserAgreementText(index + 1);
                           },

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,10 +31,13 @@ class _CreateAppPageState extends State<CreateAppPage> {
 
   int pageIndex = 0;
   FormData? formDataSiteImage;
+  String? hintTextForTextField;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    hintTextForTextField =
+        S.of(context).nickname; // Здесь можно использовать context
   }
 
   @override
@@ -178,10 +180,10 @@ class _CreateAppPageState extends State<CreateAppPage> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
+                          activeNickname: S.of(context).active_nickname,
                           isFirstPage: pageIndex == 0,
                           controller: definitionTextController(),
-                          hintText: BlocProvider.of<AuthCubit>(context)
-                              .buttonTextCreateApp,
+                          hintText: hintTextForTextField!,
                           isActive: pageIndex != 3,
                           buttonOnTap: () {
                             if (pageIndex >= 3) {
@@ -203,11 +205,12 @@ class _CreateAppPageState extends State<CreateAppPage> {
                           },
                           selectedGroupImage: (image, imageFilee) {
                             String appName = '';
-                            if (appNameController.text.startsWith("@")) {
+                            if (appNameController.text.trim().startsWith("@")) {
                               appName = appNameController.text
+                                  .trim()
                                   .substring(1); // Удаляем символ @
                             } else {
-                              appName = appNameController.text;
+                              appName = appNameController.text.trim();
                             }
                             setState(() {
                               imageFile = imageFilee;
@@ -231,10 +234,14 @@ class _CreateAppPageState extends State<CreateAppPage> {
                             controller: pageController,
                             onPageChanged: (index) {
                               setState(() {
+                                if (index == 1) {
+                                  hintTextForTextField =
+                                      S.of(context).description;
+                                } else {
+                                  hintTextForTextField = 'url';
+                                }
                                 pageIndex = index;
                               });
-                              BlocProvider.of<AuthCubit>(context)
-                                  .definitionTextButtonOfCreateApp(index);
                               BlocProvider.of<AuthCubit>(context)
                                   .definitionUserAgreementText(index + 1);
                             },

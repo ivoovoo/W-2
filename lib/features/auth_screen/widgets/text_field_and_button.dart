@@ -19,6 +19,7 @@ class TextFieldAndButton extends StatefulWidget {
     required this.isActive,
     required this.selectedGroupImage,
     required this.isFirstPage,
+    required this.activeNickname,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -26,6 +27,7 @@ class TextFieldAndButton extends StatefulWidget {
   final String hintText;
   final void Function()? buttonOnTap;
   final void Function(String)? onChanged;
+  final String activeNickname;
   final bool isActive;
   final Function(dynamic groupImage, File? imageFile) selectedGroupImage;
 
@@ -36,6 +38,25 @@ class TextFieldAndButton extends StatefulWidget {
 class _TextFieldAndButtonState extends State<TextFieldAndButton> {
   final ImagePicker _picker = ImagePicker();
   File? file;
+
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   Future<void> pickAndUploadFile() async {
     try {
@@ -94,7 +115,21 @@ class _TextFieldAndButtonState extends State<TextFieldAndButton> {
               padding: const EdgeInsets.only(left: 17.0, right: 17.0),
               child: widget.isActive
                   ? TextField(
-                      onChanged: widget.onChanged,
+                      focusNode: _focusNode,
+                      onChanged: widget.isFirstPage
+                          ? (text) {
+                              // Если пользователь удалит "@", можно вернуть его обратно
+                              if (!text.startsWith("@")) {
+                                widget.controller.text = "@";
+                                widget.controller.selection =
+                                    TextSelection.fromPosition(
+                                  TextPosition(
+                                      offset: widget.controller.text.length),
+                                );
+                              }
+                            }
+                          : null,
+                      // onChanged: widget.onChanged,
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
@@ -105,8 +140,12 @@ class _TextFieldAndButtonState extends State<TextFieldAndButton> {
                       controller: widget.controller,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: widget.hintText,
-                        prefixText: widget.isFirstPage ? '@' : '',
+                        hintText: widget.isFirstPage
+                            ? _isFocused
+                                ? widget.hintText
+                                : widget.hintText
+                            : widget.hintText,
+                        // prefixText: widget.isFirstPage ? '@' : '',
                         hintStyle: AppStyles.kGreyColorW700(14.0),
                         prefixStyle: const TextStyle(
                           fontFamily: 'Inter',

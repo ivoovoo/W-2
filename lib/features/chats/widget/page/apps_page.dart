@@ -5,9 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_network/features/chats/logics/apps_logic/apps_bloc.dart';
 import 'package:social_network/features/chats/widget/plus_and_arrow_forward_icons.dart';
-import 'package:social_network/features/chats/widget/widget.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../core/router/app_router_names.dart';
 import '../../../../generated/l10n.dart';
@@ -210,10 +208,28 @@ class _AppsPageState extends State<AppsPage>
                               },
                               onTap: () {
                                 // _launchURLInApp(appsModel.sites[i].url);
+                                // showModalBottomSheet(
+                                //   context: context,
+                                //   isScrollControlled:
+                                //       true, // Позволяет занять весь экран
+                                //   backgroundColor:
+                                //       Colors.white, // Задаёт цвет фона
+                                //   builder: (context) => CustomWebView(
+                                //       appModel: appsModel.sites[i]),
+                                // );
                                 context.pushNamed(
                                   AppRouterNames.customWebView,
-                                  extra: appsModel.sites[i].url,
+                                  extra: appsModel.sites[i],
                                 );
+                                // showCupertinoModalBottomSheet(
+                                //   context: context,
+                                //   builder: (context) => CustomWebView(
+                                //       appModel: appsModel.sites[i]),
+                                //   expand:
+                                //       true, // Экран растягивается на всю высоту
+                                //   enableDrag:
+                                //       true, // Позволяет закрыть свайпом вниз
+                                // );
                               },
                               child: SizedBox(
                                 height: 100,

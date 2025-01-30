@@ -18,8 +18,11 @@ class $AssetsFontsGen {
   /// File path: assets/fonts/Inter_font.ttf
   String get interFont => 'assets/fonts/Inter_font.ttf';
 
+  /// File path: assets/fonts/Raleway-Regular.ttf
+  String get ralewayRegular => 'assets/fonts/Raleway-Regular.ttf';
+
   /// List of all assets
-  List<String> get values => [interMedium, interFont];
+  List<String> get values => [interMedium, interFont, ralewayRegular];
 }
 
 class $AssetsIconsGen {
@@ -509,6 +512,261 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsImagesOfMarketGen {
+  const $AssetsImagesOfMarketGen();
+
+  /// File path: assets/images_of_market/arrow_back_icon_white.svg
+  String get arrowBackIconWhite =>
+      'assets/images_of_market/arrow_back_icon_white.svg';
+
+  /// File path: assets/images_of_market/ascot_house.png
+  AssetGenImage get ascotHouse =>
+      const AssetGenImage('assets/images_of_market/ascot_house.png');
+
+  /// File path: assets/images_of_market/back_icon.svg
+  String get backIcon => 'assets/images_of_market/back_icon.svg';
+
+  /// File path: assets/images_of_market/bag-03.svg
+  String get bag03 => 'assets/images_of_market/bag-03.svg';
+
+  /// File path: assets/images_of_market/bag_icon1.svg
+  String get bagIcon1 => 'assets/images_of_market/bag_icon1.svg';
+
+  /// File path: assets/images_of_market/bath_icon.svg
+  String get bathIcon => 'assets/images_of_market/bath_icon.svg';
+
+  /// File path: assets/images_of_market/bathroom_icon.svg
+  String get bathroomIcon => 'assets/images_of_market/bathroom_icon.svg';
+
+  /// File path: assets/images_of_market/battery_icon.svg
+  String get batteryIcon => 'assets/images_of_market/battery_icon.svg';
+
+  /// File path: assets/images_of_market/bed_icon.svg
+  String get bedIcon => 'assets/images_of_market/bed_icon.svg';
+
+  /// File path: assets/images_of_market/bedroom_icon.svg
+  String get bedroomIcon => 'assets/images_of_market/bedroom_icon.svg';
+
+  /// File path: assets/images_of_market/blue_home_icon.svg
+  String get blueHomeIcon => 'assets/images_of_market/blue_home_icon.svg';
+
+  /// File path: assets/images_of_market/bookmark_icon.svg
+  String get bookmarkIcon => 'assets/images_of_market/bookmark_icon.svg';
+
+  /// File path: assets/images_of_market/bookmark_icon_with_around.svg
+  String get bookmarkIconWithAround =>
+      'assets/images_of_market/bookmark_icon_with_around.svg';
+
+  /// File path: assets/images_of_market/building.svg
+  String get building => 'assets/images_of_market/building.svg';
+
+  /// File path: assets/images_of_market/burger.svg
+  String get burger => 'assets/images_of_market/burger.svg';
+
+  /// File path: assets/images_of_market/car_icon.svg
+  String get carIcon => 'assets/images_of_market/car_icon.svg';
+
+  /// File path: assets/images_of_market/clip_icon.svg
+  String get clipIcon => 'assets/images_of_market/clip_icon.svg';
+
+  /// File path: assets/images_of_market/component1.svg
+  String get component1 => 'assets/images_of_market/component1.svg';
+
+  /// File path: assets/images_of_market/dreamsville_house.png
+  AssetGenImage get dreamsvilleHouse =>
+      const AssetGenImage('assets/images_of_market/dreamsville_house.png');
+
+  /// File path: assets/images_of_market/filter_icon.svg
+  String get filterIcon => 'assets/images_of_market/filter_icon.svg';
+
+  /// File path: assets/images_of_market/globe.svg
+  String get globe => 'assets/images_of_market/globe.svg';
+
+  /// File path: assets/images_of_market/globe_icon.svg
+  String get globeIcon => 'assets/images_of_market/globe_icon.svg';
+
+  /// File path: assets/images_of_market/half_home_screen.png
+  AssetGenImage get halfHomeScreen =>
+      const AssetGenImage('assets/images_of_market/half_home_screen.png');
+
+  /// File path: assets/images_of_market/hotel_1.png
+  AssetGenImage get hotel1 =>
+      const AssetGenImage('assets/images_of_market/hotel_1.png');
+
+  /// File path: assets/images_of_market/hotel_2.png
+  AssetGenImage get hotel2 =>
+      const AssetGenImage('assets/images_of_market/hotel_2.png');
+
+  /// File path: assets/images_of_market/image-no-borders.svg
+  String get imageNoBorders => 'assets/images_of_market/image-no-borders.svg';
+
+  /// File path: assets/images_of_market/image1.png
+  AssetGenImage get image1 =>
+      const AssetGenImage('assets/images_of_market/image1.png');
+
+  /// File path: assets/images_of_market/image2.png
+  AssetGenImage get image2 =>
+      const AssetGenImage('assets/images_of_market/image2.png');
+
+  /// File path: assets/images_of_market/image3.png
+  AssetGenImage get image3 =>
+      const AssetGenImage('assets/images_of_market/image3.png');
+
+  /// File path: assets/images_of_market/leaves.svg
+  String get leaves => 'assets/images_of_market/leaves.svg';
+
+  /// File path: assets/images_of_market/location_icon.svg
+  String get locationIcon => 'assets/images_of_market/location_icon.svg';
+
+  /// File path: assets/images_of_market/main_icon_horizontal.svg
+  String get mainIconHorizontal =>
+      'assets/images_of_market/main_icon_horizontal.svg';
+
+  /// File path: assets/images_of_market/man_image.png
+  AssetGenImage get manImage =>
+      const AssetGenImage('assets/images_of_market/man_image.png');
+
+  /// File path: assets/images_of_market/marker_for_map.svg
+  String get markerForMap => 'assets/images_of_market/marker_for_map.svg';
+
+  /// File path: assets/images_of_market/message_icon.svg
+  String get messageIcon => 'assets/images_of_market/message_icon.svg';
+
+  /// File path: assets/images_of_market/modelImage.png
+  AssetGenImage get modelImage =>
+      const AssetGenImage('assets/images_of_market/modelImage.png');
+
+  /// File path: assets/images_of_market/new_message_icon.svg
+  String get newMessageIcon => 'assets/images_of_market/new_message_icon.svg';
+
+  /// File path: assets/images_of_market/new_notification_icon.svg
+  String get newNotificationIcon =>
+      'assets/images_of_market/new_notification_icon.svg';
+
+  /// File path: assets/images_of_market/new_plus_icon.svg
+  String get newPlusIcon => 'assets/images_of_market/new_plus_icon.svg';
+
+  /// File path: assets/images_of_market/notification_icon.svg
+  String get notificationIcon =>
+      'assets/images_of_market/notification_icon.svg';
+
+  /// File path: assets/images_of_market/off_icon.svg
+  String get offIcon => 'assets/images_of_market/off_icon.svg';
+
+  /// File path: assets/images_of_market/overlay.png
+  AssetGenImage get overlay =>
+      const AssetGenImage('assets/images_of_market/overlay.png');
+
+  /// File path: assets/images_of_market/phone_icon.svg
+  String get phoneIcon => 'assets/images_of_market/phone_icon.svg';
+
+  /// File path: assets/images_of_market/planet.svg
+  String get planet => 'assets/images_of_market/planet.svg';
+
+  /// File path: assets/images_of_market/plus_icon.svg
+  String get plusIcon => 'assets/images_of_market/plus_icon.svg';
+
+  /// File path: assets/images_of_market/profile_icon.svg
+  String get profileIcon => 'assets/images_of_market/profile_icon.svg';
+
+  /// File path: assets/images_of_market/question_icon_with_around.svg
+  String get questionIconWithAround =>
+      'assets/images_of_market/question_icon_with_around.svg';
+
+  /// File path: assets/images_of_market/rectangle7.png
+  AssetGenImage get rectangle7 =>
+      const AssetGenImage('assets/images_of_market/rectangle7.png');
+
+  /// File path: assets/images_of_market/sales_icon.svg
+  String get salesIcon => 'assets/images_of_market/sales_icon.svg';
+
+  /// File path: assets/images_of_market/search_icon.svg
+  String get searchIcon => 'assets/images_of_market/search_icon.svg';
+
+  /// File path: assets/images_of_market/settings_icon.svg
+  String get settingsIcon => 'assets/images_of_market/settings_icon.svg';
+
+  /// File path: assets/images_of_market/simulator_screenshot_C4FC748D-40D4-4554-BD48-9722A93987B8.png
+  AssetGenImage get simulatorScreenshotC4FC748D40D44554BD489722A93987B8 =>
+      const AssetGenImage(
+          'assets/images_of_market/simulator_screenshot_C4FC748D-40D4-4554-BD48-9722A93987B8.png');
+
+  /// File path: assets/images_of_market/txtfield1.png
+  AssetGenImage get txtfield1 =>
+      const AssetGenImage('assets/images_of_market/txtfield1.png');
+
+  /// File path: assets/images_of_market/txtfield2.png
+  AssetGenImage get txtfield2 =>
+      const AssetGenImage('assets/images_of_market/txtfield2.png');
+
+  /// File path: assets/images_of_market/vector.png
+  AssetGenImage get vector =>
+      const AssetGenImage('assets/images_of_market/vector.png');
+
+  /// File path: assets/images_of_market/wavy_check.svg
+  String get wavyCheck => 'assets/images_of_market/wavy_check.svg';
+
+  /// List of all assets
+  List<dynamic> get values => [
+        arrowBackIconWhite,
+        ascotHouse,
+        backIcon,
+        bag03,
+        bagIcon1,
+        bathIcon,
+        bathroomIcon,
+        batteryIcon,
+        bedIcon,
+        bedroomIcon,
+        blueHomeIcon,
+        bookmarkIcon,
+        bookmarkIconWithAround,
+        building,
+        burger,
+        carIcon,
+        clipIcon,
+        component1,
+        dreamsvilleHouse,
+        filterIcon,
+        globe,
+        globeIcon,
+        halfHomeScreen,
+        hotel1,
+        hotel2,
+        imageNoBorders,
+        image1,
+        image2,
+        image3,
+        leaves,
+        locationIcon,
+        mainIconHorizontal,
+        manImage,
+        markerForMap,
+        messageIcon,
+        modelImage,
+        newMessageIcon,
+        newNotificationIcon,
+        newPlusIcon,
+        notificationIcon,
+        offIcon,
+        overlay,
+        phoneIcon,
+        planet,
+        plusIcon,
+        profileIcon,
+        questionIconWithAround,
+        rectangle7,
+        salesIcon,
+        searchIcon,
+        settingsIcon,
+        simulatorScreenshotC4FC748D40D44554BD489722A93987B8,
+        txtfield1,
+        txtfield2,
+        vector,
+        wavyCheck
+      ];
+}
+
 class $AssetsJsonGen {
   const $AssetsJsonGen();
 
@@ -575,6 +833,8 @@ class Assets {
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsImagesOfMarketGen imagesOfMarket =
+      $AssetsImagesOfMarketGen();
   static const $AssetsJsonGen json = $AssetsJsonGen();
 }
 

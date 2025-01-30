@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/data.dart';
+import 'package:vibration/vibration.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
@@ -22,6 +24,12 @@ class CustomBottomNavBar extends StatefulWidget {
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   int _currentPage = 0;
 
+  void vibrate() async {
+    if (await Vibration.hasVibrator() ?? false) {
+      Vibration.vibrate(duration: 500);
+    }
+  }
+
   // @override
   // void didChangeDependencies() {
   //   super.didChangeDependencies();
@@ -38,6 +46,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     });
   }
 
+  bool isKeyboardVisible = false;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
@@ -45,104 +55,107 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.black,
         systemNavigationBarIconBrightness: Brightness.light));
+    isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.black,
       body: Stack(
         children: [
           widget.child,
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 60.h,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                // color: _currentPage == 3 || _currentPage == 4
-                //     ? Colors.white
-                //     : _currentPage != 2
-                //         ? Colors.grey.withOpacity(
-                //             0.15,
-                //           )
-                //         : Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.r),
-                  topRight: Radius.circular(30.r),
+          Visibility(
+            visible: !isKeyboardVisible,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 60.h,
+                decoration: BoxDecoration(
+                  color: authNotifier.isMarketPage
+                      ? _currentPage == 2
+                          ? Colors.white
+                          : Colors.transparent
+                      : Colors.transparent,
+                  // color: _currentPage == 3 || _currentPage == 4
+                  //     ? Colors.white
+                  //     : _currentPage != 2
+                  //         ? Colors.grey.withOpacity(
+                  //             0.15,
+                  //           )
+                  //         : Colors.white.withOpacity(0.15),
+                  // borderRadius: BorderRadius.only(
+                  //   topLeft: Radius.circular(30.r),
+                  //   topRight: Radius.circular(30.r),
+                  // ),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.05), // цвет тени
+                  //     spreadRadius: 0,
+                  //     blurRadius: 15,
+                  //     offset: Offset(0, 0), // смещение тени
+                  //   ),
+                  // ],
                 ),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.black.withOpacity(0.05), // цвет тени
-                //     spreadRadius: 0,
-                //     blurRadius: 15,
-                //     offset: Offset(0, 0), // смещение тени
-                //   ),
-                // ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _CustomButtonNavBar(
-                      function: () {
-                        // SystemChrome.setSystemUIOverlayStyle(
-                        //     const SystemUiOverlayStyle(
-                        //         statusBarIconBrightness: Brightness.light));
-                        widget.navigationShell.goBranch(0);
-                        _updatePage(0);
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _CustomButtonNavBar(
+                        function: () {
+                          widget.navigationShell.goBranch(0);
+                          _updatePage(0);
+                        },
+                        svgPath: _firstIconDefinition(_currentPage)),
+                    _CustomButtonNavBar(
+                        function: () {
+                          SystemChrome.setSystemUIOverlayStyle(
+                              const SystemUiOverlayStyle(
+                                  statusBarIconBrightness: Brightness.dark));
+                          widget.navigationShell.goBranch(1);
+                          _updatePage(1);
+                        },
+                        svgPath: _secondIconDefinition(_currentPage)),
+                    GradientIconButton(
+                      onDoubleTap: () {
+                        authNotifier.secondMenuOfMarket = false;
+                        authNotifier.switchingToMarket();
+                        widget.navigationShell.goBranch(2);
+                        _updatePage(2);
                       },
-                      svgPath: _firstIconDefinition(_currentPage)),
-                  _CustomButtonNavBar(
-                      function: () {
-                        SystemChrome.setSystemUIOverlayStyle(
-                            const SystemUiOverlayStyle(
-                                statusBarIconBrightness: Brightness.dark));
-                        widget.navigationShell.goBranch(1);
-                        _updatePage(1);
-                        // _pageController.jumpToPage(1);
-                        // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                        //         context)
-                        //     .itsMyProfile();
-                        // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                        //         context)
-                        //     .notMyContent();
+                      isCenterPage: true,
+                      onLongPress: () {
+                        vibrate();
+                        if (authNotifier.isMarketPage) {
+                          widget.navigationShell.goBranch(2);
+                          authNotifier.switchingToCenterPage();
+                          _updatePage(2);
+                        } else {
+                          authNotifier.switchingToMarket();
+                          widget.navigationShell.goBranch(2);
+                          _updatePage(2);
+                        }
                       },
-                      svgPath: _secondIconDefinition(_currentPage)),
-                  GradientIconButton(
-                    onTap: () {
-                      widget.navigationShell.goBranch(2);
-                      _updatePage(2);
-                      // _pageController.jumpToPage(2);
-                      // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                      //         context)
-                      //     .itsMyProfile();
-                      // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                      //         context)
-                      //     .notMyContent();
-                    },
-                    firstGradientColor: AppColors.kBlueColor1,
-                    secondGradientColor: AppColors.kGreenColor1,
-                    icon: Assets.icons.upArrow,
-                  ),
-                  _CustomButtonNavBar(
-                      function: () {
-                        widget.navigationShell.goBranch(3);
-                        _updatePage(3);
-                        // _pageController.jumpToPage(3);
-                        // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                        //         context)
-                        //     .notMyContent();
-                        // BlocProvider.of<HomeScreenAndProfileScreenCubit>(
-                        //         context)
-                        //     .itsMyProfile();
+                      onTap: () {
+                        widget.navigationShell.goBranch(2);
+                        _updatePage(2);
                       },
-                      svgPath: _fourthIconDefinition(_currentPage)),
-                  _CustomButtonNavBar(
-                    function: () {
-                      widget.navigationShell.goBranch(4);
-                      _updatePage(4);
-                      // _pageController.jumpToPage(4);
-                    },
-                    svgPath: _fifthIconDefinition(_currentPage),
-                    color: _fifthIconColorDefinition(_currentPage),
-                  )
-                ],
+                      firstGradientColor: AppColors.kBlueColor1,
+                      secondGradientColor: AppColors.kGreenColor1,
+                      icon: Assets.icons.upArrow,
+                    ),
+                    _CustomButtonNavBar(
+                        function: () {
+                          widget.navigationShell.goBranch(3);
+                          _updatePage(3);
+                        },
+                        svgPath: _fourthIconDefinition(_currentPage)),
+                    _CustomButtonNavBar(
+                      function: () {
+                        widget.navigationShell.goBranch(4);
+                        _updatePage(4);
+                      },
+                      svgPath: _fifthIconDefinition(_currentPage),
+                      color: _fifthIconColorDefinition(_currentPage),
+                    )
+                  ],
+                ),
               ),
             ),
           )
@@ -159,7 +172,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         return icon = Assets.icons.activeHome;
       case 1:
       case 2:
-        return icon = Assets.icons.inactiveHome;
+        return authNotifier.isMarketPage
+            ? icon = Assets.icons.inactiveHome2
+            : icon = Assets.icons.inactiveHome;
       case 3:
       case 4:
         return icon = Assets.icons.inactiveHome2;
@@ -177,7 +192,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       case 1:
         return icon = Assets.icons.activeSearch;
       case 2:
-        return icon = Assets.icons.inactiveSearch;
+        return authNotifier.isMarketPage
+            ? icon = Assets.icons.inactiveSearch2
+            : icon = Assets.icons.inactiveSearch;
       case 3:
       case 4:
         return icon = Assets.icons.inactiveSearch2;
@@ -193,7 +210,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       case 0:
       case 1:
       case 2:
-        return icon = Assets.icons.inactiveMessage;
+        return authNotifier.isMarketPage
+            ? icon = Assets.icons.inactiveMessage2
+            : icon = Assets.icons.inactiveMessage;
       case 3:
         return icon = Assets.icons.activeMessage;
       case 4:
@@ -226,7 +245,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       case 0:
       case 1:
       case 2:
-        return iconColor = Colors.white;
+        return authNotifier.isMarketPage
+            ? iconColor = Colors.grey[400]!
+            : iconColor = Colors.white;
       case 3:
         return iconColor = Colors.grey[400]!;
       case 4:

@@ -30,7 +30,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   String? selectedLanguage; //выбранный язык приложения
   DateTime? selectedDate; // Выбранная дата
-  String birthday = '';
+  String dateForView = '';
   bool isCalendarVisible = false; // Состояние видимости календаря
   CalendarFormat calendarFormat = CalendarFormat.month;
   late EditProfileBloc editProfileBloc;
@@ -132,9 +132,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               initial: () {},
               loadInProgress: () {},
               loadSuccess: (userBirthday) {
-                birthday = userBirthday ?? '2001-01-01';
                 print(userBirthday);
-                selectedDate = DateFormat('yyyy-MM-dd').parse(birthday);
+                selectedDate = DateFormat('yyyy-MM-dd')
+                    .parse(userBirthday ?? '2001-01-01');
+                dateForView = DateFormat('dd-MM-yyyy').format(selectedDate!);
+                dateForView = dateForView.replaceAll('-', '.');
                 print('selectedDate $selectedDate');
               },
               loadFailure: (e) {},
@@ -145,8 +147,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   SizedBox(height: padding.top + 12),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      InkWell(
+                        onTap: () {
+                          context.pop();
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          size: 22,
+                          color: Colors.white,
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
                           setState(() {
@@ -169,16 +181,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Image.asset(
-                              selectedLanguage == "en"
-                                  ? 'assets/images/usa.png'
-                                  : 'assets/images/russia.png',
+                              selectedLanguage == "ru"
+                                  ? 'assets/images/russia.png'
+                                  : 'assets/images/usa.png',
                               height: 15,
                               width: 25,
                               fit: BoxFit.cover,
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              selectedLanguage == 'en' ? 'English' : 'Русский',
+                              selectedLanguage == 'ru' ? 'Русский' : 'English',
                               style: AppTexts.s16w500White,
                             ),
                           ],
@@ -211,38 +223,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   isCalendarVisible
-                      ? Container(
-                          margin: const EdgeInsets.only(top: 16),
-                          // Отступ сверху от кнопки
-                          decoration: const BoxDecoration(
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
                             color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: TableCalendar(
-                            calendarFormat: calendarFormat,
-                            firstDay: DateTime(1900, 1, 1),
-                            lastDay: DateTime.now(),
-                            focusedDay: selectedDate ?? DateTime.now(),
-                            selectedDayPredicate: (day) =>
-                                isSameDay(day, selectedDate),
-                            onDaySelected: (selectedDay, focusedDay) {
-                              editProfileBloc.add(
-                                EditProfileEvent.setBirthday(
-                                  DateFormat('yyyy-MM-dd').format(selectedDay),
-                                ),
-                              );
-                              setState(() {
-                                selectedDate = selectedDay;
-                                isCalendarVisible =
-                                    false; // Закрыть календарь после выбора
-                              });
-                            },
+                            child: TableCalendar(
+                              calendarFormat: calendarFormat,
+                              firstDay: DateTime(1900, 1, 1),
+                              lastDay: DateTime.now(),
+                              focusedDay: selectedDate ?? DateTime.now(),
+                              selectedDayPredicate: (day) =>
+                                  isSameDay(day, selectedDate),
+                              onDaySelected: (selectedDay, focusedDay) {
+                                editProfileBloc.add(
+                                  EditProfileEvent.setBirthday(
+                                    DateFormat('yyyy-MM-dd')
+                                        .format(selectedDay),
+                                  ),
+                                );
+                                setState(() {
+                                  selectedDate = selectedDay;
+                                  isCalendarVisible =
+                                      false; // Закрыть календарь после выбора
+                                });
+                              },
+                            ),
                           ),
                         )
                       : Row(
@@ -296,7 +301,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     ),
                                   ),
                                   child: Text(
-                                    birthday!,
+                                    dateForView,
                                     style: AppTexts.s16w500White,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,

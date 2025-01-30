@@ -12,4 +12,7 @@ class FontFamily {
 
   /// Font family: Inter
   static const String inter = 'Inter';
+
+  /// Font family: Raleway
+  static const String raleway = 'Raleway';
 }

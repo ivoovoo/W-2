@@ -49,6 +49,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           localStorageDataProvider.getString(LocalStorageKeys.authToken)!;
       String csrfToken =
           localStorageDataProvider.getString(LocalStorageKeys.csrfToken)!;
+      print(event.birthday);
       Map<String, String> birthday = {"birth_date": event.birthday};
       final responseModel = await editProfileRepository.setBirthday(
         birthday,
@@ -63,6 +64,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       print('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
       emit(EditProfileState.loadSuccess(event.birthday));
     } catch (e) {
+      print("BLOC ERROR BIRTHDAY");
       emit(
         EditProfileState.loadFailure(e.toString()),
       );

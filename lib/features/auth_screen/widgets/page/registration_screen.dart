@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/data.dart';
@@ -29,10 +28,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   PageController pageController = PageController();
 
   int pageIndex = 0;
+  String? hintTextForTextField;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    hintTextForTextField =
+        S.of(context).nickname; // Здесь можно использовать context
   }
 
   @override
@@ -176,27 +178,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: 44.h,
                         ),
                         TextFieldAndButton(
+                          activeNickname: S.of(context).active_nickname,
                           controller: definitionTextController(),
                           isFirstPage: pageIndex == 0,
-                          hintText:
-                              BlocProvider.of<AuthCubit>(context).buttonText,
+                          hintText: hintTextForTextField!,
                           isActive: true,
                           buttonOnTap: () {
                             if (pageIndex >= 2) {
-                              // NetServ().getMessages();
-                              /*registerUser(
-                                      nameController.text,
-                                      emailController.text,
-                                      passController.text);*/
-                              // loginUser(emailController.text,
-                              //     passController.text);
-                              // updateRec();
                               print(nameController.text);
                               print(emailController.text);
                               print(passController.text);
                               String userName = '';
-                              if (nameController.text.startsWith("@")) {
+                              if (nameController.text.trim().startsWith("@")) {
                                 userName = nameController.text
+                                    .trim()
                                     .substring(1); // Удаляем символ @
                               } else {
                                 userName = nameController.text;
@@ -228,9 +223,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           controller: pageController,
                           onPageChanged: (index) {
-                            pageIndex = index;
-                            BlocProvider.of<AuthCubit>(context)
-                                .definitionTextButton(index);
+                            setState(() {
+                              if (index == 1) {
+                                hintTextForTextField = 'email';
+                              } else {
+                                hintTextForTextField = S.of(context).password;
+                              }
+                              pageIndex = index;
+                            });
                             BlocProvider.of<AuthCubit>(context)
                                 .definitionUserAgreementText(index);
                           },
@@ -251,12 +251,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 firstText: S.of(context).i_already_have_an,
                                 secondText: S.of(context).account,
                                 thirdText: '',
-                                // firstText:
-                                //     BlocProvider.of<AuthCubit>(context).firstText,
-                                // secondText: BlocProvider.of<AuthCubit>(context)
-                                //     .secondText,
-                                // thirdText:
-                                //     BlocProvider.of<AuthCubit>(context).thirdText,
                               ),
                             ),
                             GradientIconButton(
