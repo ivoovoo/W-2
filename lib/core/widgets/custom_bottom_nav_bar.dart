@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_network/core/blocs/keyboard_cubit/keyboard_cubit.dart';
 import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/data.dart';
 import 'package:vibration/vibration.dart';
@@ -56,6 +58,12 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         systemNavigationBarColor: Colors.black,
         systemNavigationBarIconBrightness: Brightness.light));
     isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    if (isKeyboardVisible) {
+      context.read<KeyboardCubit>().toOpenKeyboard();
+    } else {
+      context.read<KeyboardCubit>().toCloseKeyboard();
+      setState(() {});
+    }
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.black,
@@ -69,7 +77,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               child: Container(
                 height: 60.h,
                 decoration: BoxDecoration(
-                  color: authNotifier.isMarketPage
+                  color: appNotifier.isMarketPage
                       ? _currentPage == 2
                           ? Colors.white
                           : Colors.transparent
@@ -114,20 +122,20 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                         svgPath: _secondIconDefinition(_currentPage)),
                     GradientIconButton(
                       onDoubleTap: () {
-                        authNotifier.secondMenuOfMarket = false;
-                        authNotifier.switchingToMarket();
+                        appNotifier.secondMenuOfMarket = false;
+                        appNotifier.switchingToMarket();
                         widget.navigationShell.goBranch(2);
                         _updatePage(2);
                       },
                       isCenterPage: true,
                       onLongPress: () {
                         vibrate();
-                        if (authNotifier.isMarketPage) {
+                        if (appNotifier.isMarketPage) {
                           widget.navigationShell.goBranch(2);
-                          authNotifier.switchingToCenterPage();
+                          appNotifier.switchingToCenterPage();
                           _updatePage(2);
                         } else {
-                          authNotifier.switchingToMarket();
+                          appNotifier.switchingToMarket();
                           widget.navigationShell.goBranch(2);
                           _updatePage(2);
                         }
@@ -172,7 +180,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         return icon = Assets.icons.activeHome;
       case 1:
       case 2:
-        return authNotifier.isMarketPage
+        return appNotifier.isMarketPage
             ? icon = Assets.icons.inactiveHome2
             : icon = Assets.icons.inactiveHome;
       case 3:
@@ -192,7 +200,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       case 1:
         return icon = Assets.icons.activeSearch;
       case 2:
-        return authNotifier.isMarketPage
+        return appNotifier.isMarketPage
             ? icon = Assets.icons.inactiveSearch2
             : icon = Assets.icons.inactiveSearch;
       case 3:
@@ -210,7 +218,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       case 0:
       case 1:
       case 2:
-        return authNotifier.isMarketPage
+        return appNotifier.isMarketPage
             ? icon = Assets.icons.inactiveMessage2
             : icon = Assets.icons.inactiveMessage;
       case 3:
@@ -245,7 +253,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       case 0:
       case 1:
       case 2:
-        return authNotifier.isMarketPage
+        return appNotifier.isMarketPage
             ? iconColor = Colors.grey[400]!
             : iconColor = Colors.white;
       case 3:

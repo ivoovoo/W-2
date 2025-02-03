@@ -195,7 +195,7 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
                               child: SvgPicture.asset(
                                   'assets/images_of_market/new_plus_icon.svg'),
                               onTap: () {
-                                authNotifier.switchingToSecondMenu();
+                                appNotifier.switchingToSecondMenu();
                               },
                             ),
                           ],
@@ -218,7 +218,12 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
                         loadFailure: (error) {},
                       );
                       if (state is AnnouncementLoadInProgressState) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Container(
+                          color: Colors.white,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       } else if (state is AnnouncementLoadFailureState) {
                         return Center(
                           child: Text(state.error),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_network/core/blocs/keyboard_cubit/keyboard_cubit.dart';
 import 'package:social_network/core/widgets/gradient_icon_button.dart';
 import 'package:social_network/features/auth_screen/state/auth_cubit.dart';
 import 'package:social_network/market/first_menu/widget/house_card.dart';
@@ -19,9 +20,8 @@ class SecondMenuScreen extends StatefulWidget {
 }
 
 class _SecondMenuScreenState extends State<SecondMenuScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   int? selectedButton = 0; // Хранит индекс выбранной кнопки
-
   ImagePicker imagePicker = ImagePicker();
 
   void onButtonPressed(int index) {
@@ -37,6 +37,7 @@ class _SecondMenuScreenState extends State<SecondMenuScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.removeObserver(this);
     _controller = AnimationController(
       duration: const Duration(seconds: 5),
       vsync: this,
@@ -103,9 +104,6 @@ class _SecondMenuScreenState extends State<SecondMenuScreen>
 
   @override
   Widget build(BuildContext context) {
-    isKeyboardVisible2 = MediaQuery.of(context).viewInsets.bottom > 0;
-    print(isKeyboardVisible2);
-    print('IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIi');
     return SizedBox(
       child: Column(
         children: [
@@ -454,45 +452,6 @@ class _SecondMenuScreenState extends State<SecondMenuScreen>
                                     },
                                   ),
                                 ),
-                                // Row(
-                                //   children: [
-                                //     // SvgPicture слева
-                                //     SvgPicture.asset(
-                                //       'assets/images_of_market/clip_icon.svg',
-                                //       height: 40.0,
-                                //       width: 48.0,
-                                //     ),
-                                //     SizedBox(width: 8.0),
-                                //     Expanded(
-                                //       child: TextField(
-                                //         controller:
-                                //             _textEditingControllercontroller,
-                                //         decoration: InputDecoration(
-                                //             hintText: 'WHAT’S YOU SELL?',
-                                //             border: InputBorder.none),
-                                //       ),
-                                //     ),
-                                //     SizedBox(width: 8.0),
-                                //     InkWell(
-                                //       onTap: _sendMessage,
-                                //       child: Container(
-                                //         width: 40,
-                                //         height: 40,
-                                //         decoration: BoxDecoration(
-                                //           color: Colors.grey,
-                                //           borderRadius: BorderRadius.circular(20),
-                                //         ),
-                                //         child: Center(
-                                //           child: Image.asset(
-                                //             'assets/images_of_market/vector.png',
-                                //             width: 100,
-                                //             height: 100,
-                                //           ),
-                                //         ),
-                                //       ), // Измените текст кнопки по мере необходимости
-                                //     ),
-                                //   ],
-                                // ),
                               ],
                             ),
                           ),
@@ -504,13 +463,18 @@ class _SecondMenuScreenState extends State<SecondMenuScreen>
               ],
             ),
           ),
-          Visibility(
-            visible: !isKeyboardVisible2,
-            child: Container(
-              height: 60.h,
-              color: Colors.white,
-              // color: const Color.fromRGBO(250, 250, 250, 1),
-            ),
+          BlocBuilder<KeyboardCubit, KeyboardState>(
+            builder: (context, state) {
+              if (state is KeyboardInitial) {
+                isKeyboardVisible2 = false;
+              } else {
+                isKeyboardVisible2 = true;
+              }
+              return Visibility(
+                visible: !isKeyboardVisible2,
+                child: SizedBox(height: 60.h),
+              );
+            },
           ),
         ],
       ),

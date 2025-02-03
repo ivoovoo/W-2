@@ -31,14 +31,14 @@ class GradientIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      height: authNotifier.isMarketPage ? 48 : 40,
-      width: authNotifier.isMarketPage ? 48 : 46,
+      height: appNotifier.isMarketPage ? 48 : 40,
+      width: appNotifier.isMarketPage ? 48 : 46,
       alignment: Alignment.center,
       duration: const Duration(milliseconds: 500),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           gradient: onLongPress != null
-              ? authNotifier.isMarketPage
+              ? appNotifier.isMarketPage
                   ? const LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -90,7 +90,7 @@ class GradientIconButton extends StatelessWidget {
                     color: Colors.white,
                   )
                 : isCenterPage
-                    ? authNotifier.isMarketPage
+                    ? appNotifier.isMarketPage
                         ? SvgPicture.asset(
                             'assets/images_of_market/filter_icon.svg')
                         : SvgPicture.asset(icon)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_network/core/blocs/keyboard_cubit/keyboard_cubit.dart';
 import 'package:social_network/core/core.dart';
 import 'package:social_network/core/language/language_bloc.dart';
 import 'package:social_network/core/state/home_screen/home_screen_cubit.dart';
@@ -34,6 +35,8 @@ class BlocScope extends StatelessWidget {
             context.read<HomeRepository>(),
           )..add(const HomeEventInit()),
         ),
+        BlocProvider<KeyboardCubit>(
+            create: (BuildContext context) => KeyboardCubit()),
         BlocProvider<HomeScreenAndProfileScreenCubit>(
             create: (BuildContext context) =>
                 HomeScreenAndProfileScreenCubit()),

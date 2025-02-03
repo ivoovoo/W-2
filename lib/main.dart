@@ -17,7 +17,7 @@ Future<void> main() async {
 
   // Проверяем авторизацию перед запуском приложения
   final issAuthenticated = await isAuthenticated();
-  authNotifier = AuthNotifier(issAuthenticated, false);
+  appNotifier = AppNotifier(issAuthenticated, false);
   return runApp(TranslationProvider(child: const MyApp()));
 }
 

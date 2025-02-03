@@ -63,7 +63,7 @@ class ProfileRepository {
       LocalStorageKeys.userName,
       response2.data['user'],
     );
-    authNotifier.signIn();
+    appNotifier.signIn();
     print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
     var user = await getProfile(response2.data['user_id']);
     return user;
@@ -80,6 +80,6 @@ class ProfileRepository {
       localStorageDataProvider.getString(LocalStorageKeys.csrfToken)!,
     );
     await localStorageDataProvider.clear();
-    authNotifier.signOut();
+    appNotifier.signOut();
   }
 }

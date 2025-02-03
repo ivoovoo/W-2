@@ -30,13 +30,13 @@ import '../../features/home_page/home_page.dart';
 import '../../market/first_menu/widget/page/first_menu.dart';
 import 'app_router_names.dart';
 
-class AuthNotifier extends ChangeNotifier {
+class AppNotifier extends ChangeNotifier {
   bool _isAuthenticated;
   bool _isMarketPage;
   bool? isCenterPage;
   bool? secondMenuOfMarket;
 
-  AuthNotifier(
+  AppNotifier(
     this._isAuthenticated,
     this._isMarketPage,
   );
@@ -84,14 +84,14 @@ class AuthNotifier extends ChangeNotifier {
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
-late AuthNotifier authNotifier;
+late AppNotifier appNotifier;
 late bool isAuthenticated;
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/home',
   redirect: (BuildContext context, GoRouterState state) {
-    isAuthenticated = authNotifier.isAuthenticated;
+    isAuthenticated = appNotifier.isAuthenticated;
     print(state.fullPath);
     print(isAuthenticated);
     if (!isAuthenticated) {
@@ -114,7 +114,7 @@ final GoRouter router = GoRouter(
 
     return null;
   },
-  refreshListenable: authNotifier,
+  refreshListenable: appNotifier,
   // Подписка на изменения
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
@@ -152,18 +152,18 @@ final GoRouter router = GoRouter(
               name: AppRouterNames.centerTab,
               path: '/centerTab',
               redirect: (BuildContext context, GoRouterState state) {
-                if (authNotifier.isMarketPage) {
-                  if (authNotifier.secondMenuOfMarket ?? false) {
+                if (appNotifier.isMarketPage) {
+                  if (appNotifier.secondMenuOfMarket ?? false) {
                     return '/centerTab/secondMenuOfMarket';
                   }
                   return '/centerTab/marketPage';
-                } else if (authNotifier.isCenterPage ?? false) {
+                } else if (appNotifier.isCenterPage ?? false) {
                   return '/centerTab/addVideo';
                 }
                 return null;
               },
               builder: (BuildContext context, GoRouterState state) {
-                print('ssssssssssssssssssssss ${authNotifier.isMarketPage}');
+                print('ssssssssssssssssssssss ${appNotifier.isMarketPage}');
                 return isAuthenticated
                     ? const CenterPage()
                     : const UnauthorizedDialogPage();
