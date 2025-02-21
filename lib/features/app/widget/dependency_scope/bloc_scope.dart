@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:social_network/core/blocs/keyboard_cubit/keyboard_cubit.dart';
 import 'package:social_network/core/core.dart';
 import 'package:social_network/core/language/language_bloc.dart';
-import 'package:social_network/core/state/home_screen/home_screen_cubit.dart';
-import 'package:social_network/core/state/home_screen_and_profile_screen/home_screen_and_profile_screen_cubit.dart';
-import 'package:social_network/core/state/profile/profile_cubit.dart';
 import 'package:social_network/features/chats/logics/apps_logic/apps_bloc.dart';
 import 'package:social_network/features/chats/logics/groups_logic/groups_bloc.dart';
 import 'package:social_network/features/chats/repositories/apps_repository/apps_repository.dart';
@@ -14,6 +12,7 @@ import 'package:social_network/features/home_page/logic/home_bloc.dart';
 import 'package:social_network/features/home_page/repository/home_repository.dart';
 import 'package:social_network/features/profile/logic/profile_bloc.dart';
 import 'package:social_network/features/profile/repository/profile_repository.dart';
+import 'package:social_network/market/create_advertisement/notifiers/notifier_of_menu.dart';
 
 class BlocScope extends StatelessWidget {
   const BlocScope({required this.child, super.key});
@@ -24,6 +23,7 @@ class BlocScope extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => NotifierOfMenu()),
         BlocProvider<LanguageBloc>(
           create: (context) =>
               LanguageBloc(context.read<ILocalStorageDataProvider>())

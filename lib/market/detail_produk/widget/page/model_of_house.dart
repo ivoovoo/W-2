@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:social_network/market/detail_produk/widget/avatar_widget.dart';
 import 'package:social_network/market/detail_produk/widget/image_widget.dart';
-import 'package:social_network/market/first_menu/model/announcement_model.dart';
+import 'package:social_network/market/first_menu/model/advertisement_model.dart';
 import '../../../../core/router/app_router_names.dart';
 import '../../../../generated/l10n.dart';
 import '../../../Theme/style.dart';
@@ -14,50 +14,60 @@ import '../../../Theme/style.dart';
 class ModelOfHouse extends StatefulWidget {
   const ModelOfHouse({
     super.key,
-    required this.announcementModel,
+    required this.advertisementModel,
   });
 
-  final AnnouncementModel announcementModel;
+  final AdvertisementModel advertisementModel;
 
   @override
   State<ModelOfHouse> createState() => _ModelOfHouseState();
 }
 
 class _ModelOfHouseState extends State<ModelOfHouse> {
-  LatLng location = const LatLng(32.1211, -46.1867);
+  LatLng location = const LatLng(39.7837304, -100.445882);
   final MapController _mapController = MapController();
+  double? latitude;
+  double? longitude;
+  String currentAddress = '';
 
-  Future<void> _searchAddress(String address) async {
+  /// Обратное геокодирование для получения адреса
+  Future<void> _updateAddress(double lat, double lon) async {
     try {
       final response = await Dio().get(
-        'https://nominatim.openstreetmap.org/search',
+        'https://nominatim.openstreetmap.org/reverse',
         queryParameters: {
-          'q': address,
+          'lat': lat,
+          'lon': lon,
           'format': 'json',
         },
       );
 
-      if (response.data.isNotEmpty) {
-        final result = response.data[0];
-        final double lat = double.parse(result['lat']);
-        final double lon = double.parse(result['lon']);
-
-        setState(() {
-          location = LatLng(lat, lon);
-        });
-
-        // Перемещаем карту к найденной точке
-        _mapController.move(location, 11.0);
-      }
+      final data = response.data;
+      print(data);
+      print("RTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+      setState(() {
+        currentAddress = data['display_name'] ?? 'Не удалось определить адрес';
+      });
+      _mapController.move(LatLng(lat, lon), 11.0);
     } catch (e) {
-      print('ERROR ADDRESS');
+      setState(() {
+        currentAddress = 'Ошибка при определении адреса';
+      });
     }
   }
 
   @override
   void initState() {
-    _searchAddress(widget.announcementModel.city.cityName);
     super.initState();
+    latitude = widget.advertisementModel.latitude;
+    longitude = widget.advertisementModel.longitude;
+    print(latitude);
+    print(longitude);
+    location = LatLng(latitude!, longitude!);
+    _updateAddress(
+      widget.advertisementModel.latitude,
+      widget.advertisementModel.longitude,
+    );
   }
 
   @override
@@ -67,9 +77,9 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
       body: Column(
         children: [
           ImageWidget(
-            name: widget.announcementModel.name,
-            address: widget.announcementModel.city.cityName,
-            pathToImage: widget.announcementModel.images[0].image,
+            name: widget.advertisementModel.name,
+            address: currentAddress,
+            pathToImage: widget.advertisementModel.images[0].image,
           ),
           Expanded(
             child: ListView(
@@ -82,7 +92,7 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  widget.announcementModel.description,
+                  widget.advertisementModel.description,
                   style: Style.AppBarTxtStyle.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -143,11 +153,35 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                   style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset('assets/images_of_market/image1.png'),
-                  ],
+                SizedBox(
+                  height: 72,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.advertisementModel.images.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          context.pushNamed(
+                            AppRouterNames.content,
+                            extra:
+                                'http://45.153.191.237${widget.advertisementModel.images[index].image}',
+                          );
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            'http://45.153.191.237${widget.advertisementModel.images[index].image}',
+                            height: 72,
+                            width: 72,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 16);
+                    },
+                  ),
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
@@ -157,9 +191,17 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                     child: FlutterMap(
                       mapController: _mapController,
                       options: MapOptions(
+                        interactionOptions: const InteractionOptions(
+                            flags: InteractiveFlag.none),
                         initialCenter: location,
                         // Центр карты
                         initialZoom: 11.0, // Масштаб карты
+                        onTap: (_, __) {
+                          context.pushNamed(
+                            AppRouterNames.mapPage,
+                            extra: currentAddress,
+                          );
+                        },
                       ),
                       children: [
                         TileLayer(
@@ -220,7 +262,7 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                         ),
                       ),
                       Text(
-                        widget.announcementModel.price,
+                        widget.advertisementModel.price,
                         style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -228,9 +270,7 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                     ],
                   ),
                   InkWell(
-                    onTap: () {
-                      context.pushNamed(AppRouterNames.mapPage);
-                    },
+                    onTap: () {},
                     child: Container(
                       height: 43,
                       width: 122,

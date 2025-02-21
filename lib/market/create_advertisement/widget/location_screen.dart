@@ -2,31 +2,34 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:social_network/core/widgets/gradient_icon_button.dart';
+import 'package:social_network/core/constants/gen/assets.gen.dart';
+import 'package:social_network/features/auth_screen/state/auth_cubit.dart';
 import 'package:social_network/market/map/widget/svg_icon_widget.dart';
 
-import '../../../../core/constants/gen/assets.gen.dart';
-import '../../../../features/auth_screen/state/auth_cubit.dart';
+import '../../../core/widgets/gradient_icon_button.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({
     super.key,
-    required this.cityName,
+    required this.isMenuItemScreen,
+    required this.sendLanLng,
   });
 
-  final String cityName;
+  final bool isMenuItemScreen;
+  final Function(LatLng) sendLanLng;
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<LocationScreen> createState() => _LocationScreenState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _LocationScreenState extends State<LocationScreen> {
   double latitude = 39.7837304;
   double longitude = -100.445882;
-  String currentAddress = 'Адрес...';
+  String currentAddress = 'Текущий адрес...';
   final TextEditingController _searchController = TextEditingController();
   final MapController _mapController = MapController();
   LatLng? _searchedLocation;
@@ -36,7 +39,57 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _searchAddress(widget.cityName);
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Проверяем доступность службы местоположения
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Служба местоположения отключена')),
+      );
+      return;
+    }
+
+    // Проверяем разрешения
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Разрешение на доступ к местоположению отклонено')),
+        );
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Разрешение на доступ к местоположению навсегда отклонено')),
+      );
+      return;
+    }
+
+    // Получаем текущее местоположение
+    final position = await Geolocator.getCurrentPosition();
+    widget.sendLanLng(LatLng(
+      position.latitude,
+      position.longitude,
+    ));
+    setState(() {
+      _currentLocation = LatLng(position.latitude, position.longitude);
+    });
+
+    // Центрируем карту на текущем местоположении
+    _mapController.move(_currentLocation!, 15.0);
+    _updateAddress(_currentLocation!.latitude, _currentLocation!.longitude);
   }
 
   /// Обратное геокодирование для получения адреса
@@ -52,6 +105,8 @@ class _MapPageState extends State<MapPage> {
       );
 
       final data = response.data;
+      print(data);
+      print("RTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
       setState(() {
         currentAddress = data['display_name'] ?? 'Не удалось определить адрес';
       });
@@ -62,10 +117,8 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> _searchAddress([String cityName = '']) async {
-    final String address = _searchController.text.isEmpty
-        ? cityName.trim()
-        : _searchController.text.trim();
+  Future<void> _searchAddress() async {
+    final String address = _searchController.text.trim();
 
     if (address.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -98,7 +151,7 @@ class _MapPageState extends State<MapPage> {
         });
 
         // Перемещаем карту к найденной точке
-        _mapController.move(_searchedLocation!, 11.0);
+        _mapController.move(_searchedLocation!, 15.0);
         _updateAddress(
             _searchedLocation!.latitude, _searchedLocation!.longitude);
       } else {
@@ -129,8 +182,8 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     var paddings = MediaQuery.paddingOf(context);
-    return Scaffold(
-      body: Stack(
+    return SizedBox(
+      child: Stack(
         children: [
           FlutterMap(
             mapController: _mapController,
@@ -144,16 +197,19 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
               initialCenter: _currentLocation ?? LatLng(latitude, longitude),
-              initialZoom: 11.0,
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-              ),
+              // Центр карты
+              initialZoom: 13.0,
+              // Масштаб карты
               onTap: (tapPosition, point) {
                 setState(() {
                   _searchedLocation = point;
                 });
+                widget.sendLanLng(point);
                 _updateAddress(point.latitude, point.longitude);
               },
+              interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+              ),
             ),
             children: [
               TileLayer(
@@ -161,7 +217,7 @@ class _MapPageState extends State<MapPage> {
                     'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
                 subdomains: ['a', 'b', 'c'],
                 userAgentPackageName: 'com.example.app',
-                retinaMode: true, // Активируем Retina Mode автоматически
+                retinaMode: true,
               ),
               MarkerLayer(
                 markers: [
@@ -185,13 +241,16 @@ class _MapPageState extends State<MapPage> {
           Positioned(
             top: paddings.top + 20,
             left: 20,
-            child: InkWell(
-              onTap: () {
-                context.pop();
-              },
-              child: const SvgIconWidget(
-                  pathToIcon:
-                      'assets/images_of_market/arrow_back_icon_white.svg'),
+            child: Visibility(
+              visible: !widget.isMenuItemScreen,
+              child: InkWell(
+                onTap: () {
+                  context.pop();
+                },
+                child: const SvgIconWidget(
+                    pathToIcon:
+                        'assets/images_of_market/arrow_back_icon_white.svg'),
+              ),
             ),
           ),
           Positioned(

@@ -16,10 +16,11 @@ import 'package:social_network/features/chats/widget/page/creat_group_chat_page.
 import 'package:social_network/features/dating_feed_screen/dating_feed_screen.dart';
 import 'package:social_network/features/edit_profile/widget/page/edit_profile_page.dart';
 import 'package:social_network/features/interests/widget/page/interests_page.dart';
+import 'package:social_network/market/create_advertisement/create_advertisement_screen.dart';
 import 'package:social_network/market/detail_produk/widget/page/model_of_house.dart';
-import 'package:social_network/market/first_menu/model/announcement_model.dart';
+import 'package:social_network/market/first_menu/model/advertisement_model.dart';
+import 'package:social_network/market/home_screen/home_screen_of_market.dart';
 import 'package:social_network/market/map/widget/page/map_page.dart';
-import 'package:social_network/market/second_menu/widget/page/second_menu.dart';
 import 'package:social_network/features/other_profile/other_profile.dart';
 import 'package:social_network/features/profile/model/user_model.dart';
 import 'package:social_network/features/profile/profile_page.dart';
@@ -27,14 +28,13 @@ import 'package:social_network/features/profile/widgets/page/avatars_page.dart';
 import 'package:social_network/features/site_categories/widget/page/site_categories_page.dart';
 
 import '../../features/home_page/home_page.dart';
-import '../../market/first_menu/widget/page/first_menu.dart';
 import 'app_router_names.dart';
 
 class AppNotifier extends ChangeNotifier {
   bool _isAuthenticated;
   bool _isMarketPage;
-  bool? isCenterPage;
-  bool? secondMenuOfMarket;
+  bool isCenterPage = true;
+  bool secondMenuOfMarket = false;
 
   AppNotifier(
     this._isAuthenticated,
@@ -153,19 +153,22 @@ final GoRouter router = GoRouter(
               path: '/centerTab',
               redirect: (BuildContext context, GoRouterState state) {
                 if (appNotifier.isMarketPage) {
-                  if (appNotifier.secondMenuOfMarket ?? false) {
+                  if (appNotifier.secondMenuOfMarket) {
                     return '/centerTab/secondMenuOfMarket';
                   }
                   return '/centerTab/marketPage';
-                } else if (appNotifier.isCenterPage ?? false) {
+                } else if (appNotifier.isCenterPage) {
                   return '/centerTab/addVideo';
                 }
                 return null;
               },
               builder: (BuildContext context, GoRouterState state) {
-                print('ssssssssssssssssssssss ${appNotifier.isMarketPage}');
                 return isAuthenticated
-                    ? const CenterPage()
+                    ? appNotifier.isMarketPage
+                        ? appNotifier.secondMenuOfMarket
+                            ? const CreateAdvertisementScreen()
+                            : const HomeScreenOfMarket()
+                        : const CenterPage()
                     : const UnauthorizedDialogPage();
               },
               routes: [
@@ -173,13 +176,13 @@ final GoRouter router = GoRouter(
                   path: 'marketPage',
                   name: AppRouterNames.marketPage,
                   builder: (BuildContext context, GoRouterState state) =>
-                      const FirstMenuScreen(),
+                      const HomeScreenOfMarket(),
                 ),
                 GoRoute(
                   path: 'secondMenuOfMarket',
                   name: AppRouterNames.secondMenuOfMarket,
                   builder: (BuildContext context, GoRouterState state) =>
-                      const SecondMenuScreen(),
+                      const CreateAdvertisementScreen(),
                 ),
                 GoRoute(
                   path: 'addVideo',
@@ -226,7 +229,7 @@ final GoRouter router = GoRouter(
       name: AppRouterNames.modelOfHouse,
       builder: (BuildContext context, GoRouterState state) {
         return ModelOfHouse(
-            announcementModel: state.extra as AnnouncementModel);
+            advertisementModel: state.extra as AdvertisementModel);
       },
     ),
     GoRoute(
@@ -356,7 +359,7 @@ final GoRouter router = GoRouter(
       name: AppRouterNames.mapPage,
       path: '/mapPage',
       builder: (BuildContext context, GoRouterState state) {
-        return const MapPage();
+        return MapPage(cityName: state.extra as String);
       },
     ),
     GoRoute(

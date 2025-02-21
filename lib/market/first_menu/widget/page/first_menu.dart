@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:social_network/core/core.dart';
 import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/core/router/app_router_names.dart';
-import 'package:social_network/market/first_menu/data_provider/announcements_data_provider.dart';
-import 'package:social_network/market/first_menu/logic/announcement_bloc.dart';
-import 'package:social_network/market/first_menu/model/announcement_model.dart';
-import 'package:social_network/market/first_menu/repository/announcement_repository.dart';
+import 'package:social_network/market/first_menu/data_provider/advertisements_data_provider.dart';
+import 'package:social_network/market/first_menu/logic/advertisement_bloc.dart';
+import 'package:social_network/market/first_menu/model/advertisement_model.dart';
+import 'package:social_network/market/first_menu/repository/advertisement_repository.dart';
 import 'package:social_network/market/first_menu/repository/first_menu_repository.dart';
 import 'package:social_network/market/first_menu/widget/house_card.dart';
 import 'package:social_network/market/theme/style.dart';
@@ -27,7 +28,7 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
     with SingleTickerProviderStateMixin {
   bool _isDrawerOpen = false;
   double screenWidth = 400;
-  late AnnouncementBloc announcementBloc;
+  late AdvertisementBloc advertisementBloc;
 
   void _toggleDrawer() {
     setState(() {
@@ -35,7 +36,7 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
     });
   }
 
-  List<AnnouncementModel> announcements = [];
+  List<AdvertisementModel> advertisements = [];
 
   final List<String> distances = FirstMenuRepository.distances;
   final List<String> images = FirstMenuRepository.images;
@@ -66,12 +67,12 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
   @override
   void initState() {
     super.initState();
-    announcementBloc = AnnouncementBloc(
-      AnnouncementRepository(
+    advertisementBloc = AdvertisementBloc(
+      AdvertisementRepository(
         localStorageDataProvider: context.read<ILocalStorageDataProvider>(),
-        announcementDataProvider: AnnouncementDataProvider(),
+        advertisementDataProvider: AdvertisementDataProvider(),
       ),
-    )..add(const AnnouncementEvent.init());
+    )..add(const AdvertisementEvent.init());
     _controller = AnimationController(
       duration: const Duration(seconds: 5),
       vsync: this,
@@ -82,7 +83,7 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
 
   @override
   void dispose() {
-    announcementBloc.close();
+    advertisementBloc.close();
     _controller.dispose();
     super.dispose();
   }
@@ -206,25 +207,26 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
                   alignment: Alignment.centerRight,
                   scale: _isDrawerOpen ? 0.5 : 1.0,
                   duration: const Duration(milliseconds: 300),
-                  child: BlocBuilder<AnnouncementBloc, AnnouncementState>(
-                    bloc: announcementBloc,
+                  child: BlocBuilder<AdvertisementBloc, AdvertisementState>(
+                    bloc: advertisementBloc,
                     builder: (context, state) {
                       state.when(
                         initial: () {},
                         loadInProgress: () {},
-                        loadSuccess: (announcementsResponse) {
-                          announcements = announcementsResponse.myAnnouncements;
+                        loadSuccess: (advertisementsResponse) {
+                          advertisements =
+                              advertisementsResponse.myAdvertisements;
                         },
                         loadFailure: (error) {},
                       );
-                      if (state is AnnouncementLoadInProgressState) {
+                      if (state is AdvertisementLoadInProgressState) {
                         return Container(
                           color: Colors.white,
                           child: const Center(
                             child: CircularProgressIndicator(),
                           ),
                         );
-                      } else if (state is AnnouncementLoadFailureState) {
+                      } else if (state is AdvertisementLoadFailureState) {
                         return Center(
                           child: Text(state.error),
                         );
@@ -386,21 +388,23 @@ class _FirstMenuScreenState extends State<FirstMenuScreen>
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 scrollDirection: Axis.horizontal,
-                                itemCount: announcements.length,
+                                itemCount: advertisements.length,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
                                       context.pushNamed(
                                         AppRouterNames.modelOfHouse,
-                                        extra: announcements[index],
+                                        extra: advertisements[index],
                                       );
                                     },
                                     child: HouseCard(
                                       isNetworkImage: true,
                                       pathToImage:
-                                          announcements[index].images[0].image,
-                                      name: announcements[index].name,
-                                      address: announcements[index].description,
+                                          advertisements[index].images[0].image,
+                                      name: advertisements[index].name,
+                                      address: LatLng(111, 1111),
+                                      myLocation: null,
+                                      info: '',
                                     ),
                                     // child: SelectHouse(
                                     //   width: 226,

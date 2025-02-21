@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:social_network/core/blocs/keyboard_cubit/keyboard_cubit.dart';
 import 'package:social_network/core/router/app_router.dart';
 import 'package:social_network/data.dart';
+import 'package:social_network/market/create_advertisement/notifiers/notifier_of_menu.dart';
 import 'package:vibration/vibration.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
@@ -143,6 +145,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       onTap: () {
                         widget.navigationShell.goBranch(2);
                         _updatePage(2);
+                        if (appNotifier.secondMenuOfMarket ?? false) {
+                          if (context.read<NotifierOfMenu>().isMenuOpen) {
+                            context.read<NotifierOfMenu>().closeMenu();
+                          } else {
+                            context.read<NotifierOfMenu>().openMenu();
+                          }
+                        }
                       },
                       firstGradientColor: AppColors.kBlueColor1,
                       secondGradientColor: AppColors.kGreenColor1,

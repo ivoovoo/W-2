@@ -4,13 +4,13 @@ import 'package:meta/meta.dart';
 part 'keyboard_state.dart';
 
 class KeyboardCubit extends Cubit<KeyboardState> {
-  KeyboardCubit() : super(KeyboardInitial());
+  KeyboardCubit() : super(KeyboardClosed());
 
-  void toOpenKeyboard(){
+  void toOpenKeyboard() {
     emit(KeyboardOpened());
   }
 
-  void toCloseKeyboard(){
-    emit(KeyboardInitial());
+  void toCloseKeyboard() {
+    emit(KeyboardClosed());
   }
 }

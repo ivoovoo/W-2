@@ -572,6 +572,17 @@ class $AssetsImagesOfMarketGen {
   /// File path: assets/images_of_market/component1.svg
   String get component1 => 'assets/images_of_market/component1.svg';
 
+  /// File path: assets/images_of_market/condition_menu_icon.svg
+  String get conditionMenuIcon =>
+      'assets/images_of_market/condition_menu_icon.svg';
+
+  /// File path: assets/images_of_market/connect_menu_icon.svg
+  String get connectMenuIcon => 'assets/images_of_market/connect_menu_icon.svg';
+
+  /// File path: assets/images_of_market/delivery_menu_icon.svg
+  String get deliveryMenuIcon =>
+      'assets/images_of_market/delivery_menu_icon.svg';
+
   /// File path: assets/images_of_market/dreamsville_house.png
   AssetGenImage get dreamsvilleHouse =>
       const AssetGenImage('assets/images_of_market/dreamsville_house.png');
@@ -597,6 +608,10 @@ class $AssetsImagesOfMarketGen {
   AssetGenImage get hotel2 =>
       const AssetGenImage('assets/images_of_market/hotel_2.png');
 
+  /// File path: assets/images_of_market/how_many_menu_icon.svg
+  String get howManyMenuIcon =>
+      'assets/images_of_market/how_many_menu_icon.svg';
+
   /// File path: assets/images_of_market/image-no-borders.svg
   String get imageNoBorders => 'assets/images_of_market/image-no-borders.svg';
 
@@ -612,11 +627,19 @@ class $AssetsImagesOfMarketGen {
   AssetGenImage get image3 =>
       const AssetGenImage('assets/images_of_market/image3.png');
 
+  /// File path: assets/images_of_market/information_menu_icon.svg
+  String get informationMenuIcon =>
+      'assets/images_of_market/information_menu_icon.svg';
+
   /// File path: assets/images_of_market/leaves.svg
   String get leaves => 'assets/images_of_market/leaves.svg';
 
   /// File path: assets/images_of_market/location_icon.svg
   String get locationIcon => 'assets/images_of_market/location_icon.svg';
+
+  /// File path: assets/images_of_market/location_menu_icon.svg
+  String get locationMenuIcon =>
+      'assets/images_of_market/location_menu_icon.svg';
 
   /// File path: assets/images_of_market/main_icon_horizontal.svg
   String get mainIconHorizontal =>
@@ -660,11 +683,17 @@ class $AssetsImagesOfMarketGen {
   /// File path: assets/images_of_market/phone_icon.svg
   String get phoneIcon => 'assets/images_of_market/phone_icon.svg';
 
+  /// File path: assets/images_of_market/photo_menu_icon.svg
+  String get photoMenuIcon => 'assets/images_of_market/photo_menu_icon.svg';
+
   /// File path: assets/images_of_market/planet.svg
   String get planet => 'assets/images_of_market/planet.svg';
 
   /// File path: assets/images_of_market/plus_icon.svg
   String get plusIcon => 'assets/images_of_market/plus_icon.svg';
+
+  /// File path: assets/images_of_market/price_menu_icon.svg
+  String get priceMenuIcon => 'assets/images_of_market/price_menu_icon.svg';
 
   /// File path: assets/images_of_market/profile_icon.svg
   String get profileIcon => 'assets/images_of_market/profile_icon.svg';
@@ -706,6 +735,9 @@ class $AssetsImagesOfMarketGen {
   /// File path: assets/images_of_market/wavy_check.svg
   String get wavyCheck => 'assets/images_of_market/wavy_check.svg';
 
+  /// File path: assets/images_of_market/what_menu_icon.svg
+  String get whatMenuIcon => 'assets/images_of_market/what_menu_icon.svg';
+
   /// List of all assets
   List<dynamic> get values => [
         arrowBackIconWhite,
@@ -726,6 +758,9 @@ class $AssetsImagesOfMarketGen {
         carIcon,
         clipIcon,
         component1,
+        conditionMenuIcon,
+        connectMenuIcon,
+        deliveryMenuIcon,
         dreamsvilleHouse,
         filterIcon,
         globe,
@@ -733,12 +768,15 @@ class $AssetsImagesOfMarketGen {
         halfHomeScreen,
         hotel1,
         hotel2,
+        howManyMenuIcon,
         imageNoBorders,
         image1,
         image2,
         image3,
+        informationMenuIcon,
         leaves,
         locationIcon,
+        locationMenuIcon,
         mainIconHorizontal,
         manImage,
         markerForMap,
@@ -751,8 +789,10 @@ class $AssetsImagesOfMarketGen {
         offIcon,
         overlay,
         phoneIcon,
+        photoMenuIcon,
         planet,
         plusIcon,
+        priceMenuIcon,
         profileIcon,
         questionIconWithAround,
         rectangle7,
@@ -763,7 +803,8 @@ class $AssetsImagesOfMarketGen {
         txtfield1,
         txtfield2,
         vector,
-        wavyCheck
+        wavyCheck,
+        whatMenuIcon
       ];
 }
 

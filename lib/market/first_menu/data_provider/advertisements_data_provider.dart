@@ -3,16 +3,16 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 import 'package:social_network/core/helpers/catch_exception.dart';
-import 'package:social_network/market/first_menu/model/announcement_model.dart';
+import 'package:social_network/market/first_menu/model/advertisement_model.dart';
 
-abstract interface class IAnnouncementDataProvider {
-  Future<AnnouncementResponse> getAllAnnouncement(String token);
+abstract interface class IAdvertisementDataProvider {
+  Future<AdvertisementResponse> getAllAdvertisements(String token);
 }
 
-class AnnouncementDataProvider implements IAnnouncementDataProvider {
+class AdvertisementDataProvider implements IAdvertisementDataProvider {
   ApiRequester apiRequester = ApiRequester();
   @override
-  Future<AnnouncementResponse> getAllAnnouncement(String token) async {
+  Future<AdvertisementResponse> getAllAdvertisements(String token) async {
     try {
       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
       Response response = await apiRequester.toGet(
@@ -22,9 +22,9 @@ class AnnouncementDataProvider implements IAnnouncementDataProvider {
 
       if (response.statusCode == 200) {
         log("${response.statusCode}");
-        log("ANNNNNNNNNNNNNNNNNNNNN result== ${response.data}");
+        log("ADDDDDDDDDDDDDDDDDDS result== ${response.data}");
         if (response.data != null && response.data is Map<String, dynamic>) {
-          return AnnouncementResponse.fromJson(response.data);
+          return AdvertisementResponse.fromJson(response.data);
         } else {
           throw Exception('Invalid response data');
         }
@@ -32,7 +32,7 @@ class AnnouncementDataProvider implements IAnnouncementDataProvider {
 
       throw response;
     } catch (e) {
-      print('ERROR GET ANNNNNNNNNNNNNNNNNNNNNNN $e');
+      print('ERROR GET ADDDDDDDDDDDDDDDDDDDS $e');
 
       throw CatchException.convertException(e);
     }

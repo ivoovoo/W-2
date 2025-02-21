@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:social_network/core/blocs/keyboard_cubit/keyboard_cubit.dart';
 import 'package:social_network/core/widgets/gradient_icon_button.dart';
 import 'package:social_network/features/auth_screen/state/auth_cubit.dart';
@@ -316,7 +317,9 @@ class _SecondMenuScreenState extends State<SecondMenuScreen>
                                     child: HouseCard(
                                       pathToImage: images[0],
                                       name: names[0],
-                                      address: descriptions[0],
+                                      address: LatLng(11, 11),
+                                      myLocation: null,
+                                      info: '',
                                     ),
                                   );
                                 },
@@ -465,7 +468,7 @@ class _SecondMenuScreenState extends State<SecondMenuScreen>
           ),
           BlocBuilder<KeyboardCubit, KeyboardState>(
             builder: (context, state) {
-              if (state is KeyboardInitial) {
+              if (state is KeyboardClosed) {
                 isKeyboardVisible2 = false;
               } else {
                 isKeyboardVisible2 = true;

@@ -78,7 +78,7 @@ class ApiRequester {
 
   Future<Response> toPostWithCsrfToken(
       String url, String? token, String? csrfToken,
-      [Object? data]) async {
+      [Object? data, String? contentType]) async {
     Dio dio = await initDio();
     print('AUTH TOKENNNNNNNNNNNNNNNNNNNNN');
     print(token);
@@ -90,8 +90,8 @@ class ApiRequester {
         url,
         data: data,
         options: Options(
+          contentType: contentType,
           headers: {
-            // "Content-Type": "application/json",
             "Authorization": "Bearer $token",
             "X-Csrftoken": "$csrfToken",
             "Cookie": "csrftoken=$csrfToken",

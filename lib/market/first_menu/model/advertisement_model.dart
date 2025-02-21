@@ -1,43 +1,45 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'announcement_model.freezed.dart';
+part 'advertisement_model.freezed.dart';
 
-part 'announcement_model.g.dart';
+part 'advertisement_model.g.dart';
 
 @freezed
-class AnnouncementResponse with _$AnnouncementResponse {
-  const factory AnnouncementResponse({
-    @JsonKey(name: "my_ads") required List<AnnouncementModel> myAnnouncements,
-  }) = _AnnouncementResponse;
+class AdvertisementResponse with _$AdvertisementResponse {
+  const factory AdvertisementResponse({
+    @JsonKey(name: "my_ads") required List<AdvertisementModel> myAdvertisements,
+  }) = _AdvertisementResponse;
 
-  factory AnnouncementResponse.fromJson(Map<String, dynamic> json) =>
-      _$AnnouncementResponseFromJson(json);
+  factory AdvertisementResponse.fromJson(Map<String, dynamic> json) =>
+      _$AdvertisementResponseFromJson(json);
 }
 
 @freezed
-class AnnouncementModel with _$AnnouncementModel {
-  const factory AnnouncementModel({
+class AdvertisementModel with _$AdvertisementModel {
+  const factory AdvertisementModel({
     required int id,
     required String name,
     required String description,
     required int author,
-    required City city,
-    @JsonKey(name: 'ad_type') required AnnouncementType announcementType,
+    // required City city,
+    required double latitude,
+    required double longitude,
+    @JsonKey(name: 'ad_type') required AdvertisementType advertisementType,
     required String price,
     required List<dynamic>? videos,
-    required List<AnnouncementImage> images,
+    required List<AdvertisementImage> images,
     @JsonKey(name: 'created_at') required String createdAt,
     @JsonKey(name: 'main_category') required Category mainCategory,
-    @JsonKey(name: "additional_category") required Category additionalCategory,
-    @JsonKey(name: "sub_category") required SubCategory subCategory,
-    required Attribute attribute,
+    @JsonKey(name: "additional_category") required Category? additionalCategory,
+    @JsonKey(name: "sub_category") required SubCategory? subCategory,
+    required Attribute? attribute,
     @JsonKey(name: "additional_attribute")
-    required AdditionalAttribute additionalAttribute,
-    @JsonKey(name: "subattribute") required SubAttribute subAttribute,
-  }) = _AnnouncementModel;
+    required AdditionalAttribute? additionalAttribute,
+    @JsonKey(name: "subattribute") required SubAttribute? subAttribute,
+  }) = _AdvertisementModel;
 
-  factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
-      _$AnnouncementModelFromJson(json);
+  factory AdvertisementModel.fromJson(Map<String, dynamic> json) =>
+      _$AdvertisementModelFromJson(json);
 }
 
 @freezed
@@ -51,25 +53,25 @@ class City with _$City {
 }
 
 @freezed
-class AnnouncementType with _$AnnouncementType {
-  const factory AnnouncementType({
+class AdvertisementType with _$AdvertisementType {
+  const factory AdvertisementType({
     required String type,
-  }) = _AnnouncementType;
+  }) = _AdvertisementType;
 
-  factory AnnouncementType.fromJson(Map<String, dynamic> json) =>
-      _$AnnouncementTypeFromJson(json);
+  factory AdvertisementType.fromJson(Map<String, dynamic> json) =>
+      _$AdvertisementTypeFromJson(json);
 }
 
 @freezed
-class AnnouncementImage with _$AnnouncementImage {
-  const factory AnnouncementImage({
+class AdvertisementImage with _$AdvertisementImage {
+  const factory AdvertisementImage({
     required int id,
     required int ad,
     required String image,
-  }) = _AnnouncementImage;
+  }) = _AdvertisementImage;
 
-  factory AnnouncementImage.fromJson(Map<String, dynamic> json) =>
-      _$AnnouncementImageFromJson(json);
+  factory AdvertisementImage.fromJson(Map<String, dynamic> json) =>
+      _$AdvertisementImageFromJson(json);
 }
 
 @freezed

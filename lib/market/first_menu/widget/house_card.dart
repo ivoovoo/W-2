@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:social_network/market/Theme/style.dart';
 
 class HouseCard extends StatelessWidget {
@@ -7,16 +9,30 @@ class HouseCard extends StatelessWidget {
     required this.pathToImage,
     required this.name,
     required this.address,
+    required this.myLocation,
+    required this.info,
     this.isNetworkImage = false,
   });
 
   final String pathToImage;
   final String name;
-  final String address;
+  final String info;
   final bool isNetworkImage;
+  final LatLng? myLocation;
+  final LatLng address;
 
   @override
   Widget build(BuildContext context) {
+    int? distance;
+    if (myLocation != null) {
+      distance = Geolocator.distanceBetween(
+            myLocation!.latitude,
+            myLocation!.longitude,
+            address.latitude,
+            address.longitude,
+          ) ~/
+          1000;
+    }
     return Container(
       height: 272,
       width: 222,
@@ -84,7 +100,7 @@ class HouseCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '18 km',
+                            distance == null ? '... km' : '$distance km',
                             style: Style.AppBarTxtStyle.copyWith(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
@@ -111,7 +127,7 @@ class HouseCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      address,
+                      info,
                       style: Style.AppBarTxtStyle.copyWith(
                         color: Colors.white,
                         fontSize: 12,
