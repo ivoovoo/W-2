@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:social_network/features/chats/widget/page/chat_with_ai_page.dart';
 import 'package:social_network/features/chats/widget/page/chats_page.dart';
 import 'package:social_network/features/chats/widget/page/groups_page.dart';
 import 'package:social_network/features/chats/widget/page/apps_page.dart';
 import 'package:social_network/generated/l10n.dart';
+
+import '../../../../core/router/app_router_names.dart';
 
 class ChatTab extends StatefulWidget {
   const ChatTab({super.key});
@@ -83,7 +85,17 @@ class _ChatTabState extends State<ChatTab> {
                         ),
                         const SizedBox(width: 20),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            context.pushNamed(
+                              AppRouterNames.chatsDetail,
+                              extra: 1,
+                              pathParameters: {
+                                'type_of_chat': 'chat',
+                                'user_name': "unknown",
+                                'is_ai_chat': 'true',
+                              },
+                            );
+                          },
                           child: Lottie.asset(
                             'assets/json/ai_chat.json',
                             fit: BoxFit.cover,

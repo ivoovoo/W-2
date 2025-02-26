@@ -283,16 +283,18 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/chatsDetail/:type_of_chat/:user_name',
+      path: '/chatsDetail/:type_of_chat/:user_name/:is_ai_chat',
       name: AppRouterNames.chatsDetail,
       builder: (BuildContext context, GoRouterState state) {
         int chatId = state.extra as int;
         String typeOfChat = state.pathParameters['type_of_chat'] as String;
         String userName = state.pathParameters['user_name'] as String;
+        String isAiChat = state.pathParameters['is_ai_chat'] as String;
         return ChatScreen(
           chatId: chatId,
           typeOfChat: typeOfChat,
           userName: userName,
+          isAiChat: isAiChat,
         );
       },
     ),
