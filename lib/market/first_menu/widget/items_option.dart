@@ -26,19 +26,25 @@ class RowOptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 70,
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(imgPath),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              imgPath,
+              height: 70,
+              width: 70,
+              fit: BoxFit.cover,
+            ),
+          ),
           SizedBox(width: 10),
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 10,
-              ),
               Text(
                 name,
                 style: Style.AppBarTxtStyle.copyWith(

@@ -432,7 +432,8 @@ class _RentScreenState extends State<RentScreen> {
               ),
               SizedBox(
                 height: 400,
-                child: ListView.builder(
+                child: ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   dragStartBehavior: DragStartBehavior.start,
                   itemCount: items.length,
                   itemBuilder: (context, index) {
@@ -449,6 +450,9 @@ class _RentScreenState extends State<RentScreen> {
                         svgPath2: item['svgPath2']!,
                       ),
                     );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 16);
                   },
                 ),
               ),
