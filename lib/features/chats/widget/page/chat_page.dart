@@ -17,14 +17,12 @@ class ChatScreen extends StatefulWidget {
   final int chatId;
   final String typeOfChat;
   final String userName;
-  final String? isAiChat;
 
   const ChatScreen({
     super.key,
     required this.chatId,
     required this.typeOfChat,
     required this.userName,
-    this.isAiChat = 'false',
   });
 
   @override
@@ -77,9 +75,6 @@ class _ChatScreenState extends State<ChatScreen> {
       print('Токен: $token');
       String url =
           'ws://45.153.191.237/ws/${widget.typeOfChat}/${widget.chatId}/';
-      if (widget.isAiChat == 'true') {
-        url = 'ws://45.153.191.237/ws/aichat/chat/';
-      }
 
       socket = await WebSocket.connect(
         url,
@@ -228,9 +223,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Column(
                   children: [
                     Text(
-                      widget.isAiChat == 'true'
-                          ? 'AI'
-                          : '${widget.typeOfChat == 'chat_group' ? "" : "@"}${widget.userName == 'unknown' ? chatPartner.username : widget.userName}',
+                      '${widget.typeOfChat == 'chat_group' ? "" : "@"}${widget.userName == 'unknown' ? chatPartner.username : widget.userName}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xff000000),

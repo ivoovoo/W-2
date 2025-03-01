@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:country_currency_pickers/country.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sealed_currencies/sealed_currencies.dart';
 import 'package:social_network/core/data/local_storage_data_provider.dart';
 import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/market/Theme/style.dart';
@@ -18,6 +22,8 @@ import 'package:social_network/market/first_menu/widget/house_card.dart';
 import 'package:social_network/market/first_menu/widget/items_option.dart';
 import 'package:social_network/market/first_menu/widget/select_option_item.dart';
 import 'package:social_network/market/home_screen/widget/plus_button.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RentScreen extends StatefulWidget {
   const RentScreen({
@@ -40,6 +46,28 @@ class _RentScreenState extends State<RentScreen> {
   late AdvertisementBloc _advertisementBloc;
   String currentAddress = 'Текущий адрес...';
   LatLng? _currentLocation;
+  String countryCode = '';
+  String currency = '';
+  double exchangeRate = 0;
+
+  /// Примерный маппинг стран в валюты (ISO 4217)
+  Map<String, String> countryToCurrency = {
+    "US": "USD",
+    "KG": "KGS",
+    "RU": "RUB",
+    "GB": "GBP",
+    "DE": "EUR",
+    "FR": "EUR",
+    "CN": "CNY",
+    "JP": "JPY",
+    // Добавь другие страны по необходимости
+  };
+
+  /// Получить валюту по коду страны
+  String? getCurrencyByCountry(String countryCode) {
+    return countryToCurrency[countryCode.toUpperCase()] ??
+        "USD"; // По умолчанию USD
+  }
 
   void onOptionPressed(int index) {
     setState(() {
@@ -120,6 +148,13 @@ class _RentScreenState extends State<RentScreen> {
       final data = response.data;
       print(data);
       print("RTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+      countryCode = data['address']['country_code'];
+      log(countryCode);
+      // currency = FiatCurrency.fromCode(countryCode, currencies).code;
+      // currency = CountryCurrencyPicker.getCurrencyCode(countryCode);
+      currency = getCurrencyByCountry(countryCode)!;
+      log(currency);
+      convertPrice();
       setState(() {
         currentAddress =
             data['address']['neighbourhood'] ?? 'Не удалось определить адрес';
@@ -128,6 +163,34 @@ class _RentScreenState extends State<RentScreen> {
       setState(() {
         currentAddress = 'Ошибка при определении адреса';
       });
+    }
+  }
+
+  Future<double?> getExchangeRate(
+      String fromCurrency, String toCurrency) async {
+    const apiKey =
+        '8e5b8a767f903179e92acc7c'; // Зарегистрируйся и получи API-ключ
+    final url = Uri.parse(
+        'https://v6.exchangerate-api.com/v6/$apiKey/latest/$fromCurrency');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['conversion_rates'][toCurrency];
+    } else {
+      print('Ошибка при получении курса валют');
+      return null;
+    }
+  }
+
+  Future<void> convertPrice() async {
+    final _exchangeRate = await getExchangeRate("USD", currency);
+
+    if (_exchangeRate != null) {
+      exchangeRate = _exchangeRate;
+    } else {
+      print("Не удалось получить курс валют.");
     }
   }
 
@@ -323,6 +386,10 @@ class _RentScreenState extends State<RentScreen> {
                         context.pushNamed(
                           AppRouterNames.modelOfHouse,
                           extra: advertisements[index],
+                          pathParameters: {
+                            "currency": currency,
+                            "exchangeRate": exchangeRate.toString(),
+                          },
                         );
                       },
                       child: HouseCard(

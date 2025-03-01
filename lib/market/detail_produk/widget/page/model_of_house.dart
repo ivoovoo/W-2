@@ -15,9 +15,13 @@ class ModelOfHouse extends StatefulWidget {
   const ModelOfHouse({
     super.key,
     required this.advertisementModel,
+    required this.exchangeRate,
+    required this.currency,
   });
 
   final AdvertisementModel advertisementModel;
+  final String exchangeRate;
+  final String currency;
 
   @override
   State<ModelOfHouse> createState() => _ModelOfHouseState();
@@ -72,6 +76,8 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
 
   @override
   Widget build(BuildContext context) {
+    String price =
+        "${(double.parse(widget.exchangeRate) * double.parse(widget.advertisementModel.price)).toStringAsFixed(2)} ${widget.currency}";
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -252,6 +258,7 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         S.of(context).price,
@@ -260,13 +267,19 @@ class _ModelOfHouseState extends State<ModelOfHouse> {
                           fontWeight: FontWeight.w400,
                           color: Colors.grey,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       Text(
-                        widget.advertisementModel.price,
-                        style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
+                        price,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                      )
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
                   InkWell(

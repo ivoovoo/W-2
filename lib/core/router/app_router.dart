@@ -8,6 +8,7 @@ import 'package:social_network/features/center/widgets/page/center_page.dart';
 import 'package:social_network/features/chats/models/apps_model/apps_model.dart';
 import 'package:social_network/features/chats/widget/page/chat_page.dart';
 import 'package:social_network/features/chats/widget/page/chat_tab.dart';
+import 'package:social_network/features/chats/widget/page/chat_with_ai.dart';
 import 'package:social_network/features/chats/widget/page/content_page.dart';
 import 'package:social_network/features/chats/widget/page/create_app_page.dart';
 import 'package:social_network/features/chats/widget/page/custom_web_view.dart';
@@ -225,11 +226,14 @@ final GoRouter router = GoRouter(
           const InterestsPage(),
     ),
     GoRoute(
-      path: '/modelOfHouse',
+      path: '/modelOfHouse/:exchangeRate/:currency',
       name: AppRouterNames.modelOfHouse,
       builder: (BuildContext context, GoRouterState state) {
         return ModelOfHouse(
-            advertisementModel: state.extra as AdvertisementModel);
+          advertisementModel: state.extra as AdvertisementModel,
+          exchangeRate: state.pathParameters['exchangeRate'] as String,
+          currency: state.pathParameters['currency'] as String,
+        );
       },
     ),
     GoRoute(
@@ -283,18 +287,16 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/chatsDetail/:type_of_chat/:user_name/:is_ai_chat',
+      path: '/chatsDetail/:type_of_chat/:user_name',
       name: AppRouterNames.chatsDetail,
       builder: (BuildContext context, GoRouterState state) {
         int chatId = state.extra as int;
         String typeOfChat = state.pathParameters['type_of_chat'] as String;
         String userName = state.pathParameters['user_name'] as String;
-        String isAiChat = state.pathParameters['is_ai_chat'] as String;
         return ChatScreen(
           chatId: chatId,
           typeOfChat: typeOfChat,
           userName: userName,
-          isAiChat: isAiChat,
         );
       },
     ),
@@ -362,6 +364,13 @@ final GoRouter router = GoRouter(
       path: '/mapPage',
       builder: (BuildContext context, GoRouterState state) {
         return MapPage(cityName: state.extra as String);
+      },
+    ),
+    GoRoute(
+      name: AppRouterNames.chatWithAi,
+      path: '/chatWithAi',
+      builder: (BuildContext context, GoRouterState state) {
+        return ChatWithAiScreen();
       },
     ),
     GoRoute(

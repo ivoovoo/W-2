@@ -86,15 +86,16 @@ class _ChatTabState extends State<ChatTab> {
                         const SizedBox(width: 20),
                         InkWell(
                           onTap: () {
-                            context.pushNamed(
-                              AppRouterNames.chatsDetail,
-                              extra: 1,
-                              pathParameters: {
-                                'type_of_chat': 'chat',
-                                'user_name': "unknown",
-                                'is_ai_chat': 'true',
-                              },
-                            );
+                            // context.pushNamed(
+                            //   AppRouterNames.chatsDetail,
+                            //   extra: 1,
+                            //   pathParameters: {
+                            //     'type_of_chat': 'chat',
+                            //     'user_name': "unknown",
+                            //     'is_ai_chat': 'true',
+                            //   },
+                            // );
+                            context.pushNamed(AppRouterNames.chatWithAi);
                           },
                           child: Lottie.asset(
                             'assets/json/ai_chat.json',

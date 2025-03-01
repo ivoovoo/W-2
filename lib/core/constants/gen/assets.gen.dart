@@ -566,6 +566,9 @@ class $AssetsImagesOfMarketGen {
   /// File path: assets/images_of_market/car_icon.svg
   String get carIcon => 'assets/images_of_market/car_icon.svg';
 
+  /// File path: assets/images_of_market/car_menu_icon.svg
+  String get carMenuIcon => 'assets/images_of_market/car_menu_icon.svg';
+
   /// File path: assets/images_of_market/clip_icon.svg
   String get clipIcon => 'assets/images_of_market/clip_icon.svg';
 
@@ -587,8 +590,14 @@ class $AssetsImagesOfMarketGen {
   AssetGenImage get dreamsvilleHouse =>
       const AssetGenImage('assets/images_of_market/dreamsville_house.png');
 
+  /// File path: assets/images_of_market/fashion_menu_icon.svg
+  String get fashionMenuIcon => 'assets/images_of_market/fashion_menu_icon.svg';
+
   /// File path: assets/images_of_market/filter_icon.svg
   String get filterIcon => 'assets/images_of_market/filter_icon.svg';
+
+  /// File path: assets/images_of_market/food_menu_icon.svg
+  String get foodMenuIcon => 'assets/images_of_market/food_menu_icon.svg';
 
   /// File path: assets/images_of_market/globe.svg
   String get globe => 'assets/images_of_market/globe.svg';
@@ -651,6 +660,10 @@ class $AssetsImagesOfMarketGen {
 
   /// File path: assets/images_of_market/marker_for_map.svg
   String get markerForMap => 'assets/images_of_market/marker_for_map.svg';
+
+  /// File path: assets/images_of_market/marketplace_menu_icon.svg
+  String get marketplaceMenuIcon =>
+      'assets/images_of_market/marketplace_menu_icon.svg';
 
   /// File path: assets/images_of_market/message_icon.svg
   String get messageIcon => 'assets/images_of_market/message_icon.svg';
@@ -756,13 +769,16 @@ class $AssetsImagesOfMarketGen {
         building,
         burger,
         carIcon,
+        carMenuIcon,
         clipIcon,
         component1,
         conditionMenuIcon,
         connectMenuIcon,
         deliveryMenuIcon,
         dreamsvilleHouse,
+        fashionMenuIcon,
         filterIcon,
+        foodMenuIcon,
         globe,
         globeIcon,
         halfHomeScreen,
@@ -780,6 +796,7 @@ class $AssetsImagesOfMarketGen {
         mainIconHorizontal,
         manImage,
         markerForMap,
+        marketplaceMenuIcon,
         messageIcon,
         modelImage,
         newMessageIcon,
