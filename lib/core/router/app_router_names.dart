@@ -26,4 +26,6 @@ class AppRouterNames {
   static const secondMenuOfMarket = 'secondMenuOfMarket';
   static const mapPage = 'mapPage';
   static const chatWithAi = 'chatWithAi';
+  static const videoView = 'videoView';
+  static const infoPage = 'infoPage';
 }

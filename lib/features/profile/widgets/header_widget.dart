@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_network/constants.dart';
 import 'package:social_network/features/profile/widgets/header_button.dart';
 import 'package:social_network/data.dart';
@@ -8,9 +7,11 @@ class HeaderWidget extends StatelessWidget {
   const HeaderWidget({
     super.key,
     required this.username,
+    required this.averageRating,
   });
 
   final String username;
+  final String averageRating;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +42,11 @@ class HeaderWidget extends StatelessWidget {
                 width: 8 * rw(context),
               ),
               HeaderButton(
-                  widget: const GradientText(
-                    '4.91',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    gradient: LinearGradient(
+                  widget: GradientText(
+                    averageRating,
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold),
+                    gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [

@@ -42,45 +42,45 @@ class RowOptionWidget extends StatelessWidget {
           ),
           SizedBox(width: 10),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 name,
                 style: Style.AppBarTxtStyle.copyWith(
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
               Text(
                 cost,
                 style: Style.AppBarTxtStyle.copyWith(
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: Colors.blue),
               ),
-              Row(
-                children: [
-                  SvgPicture.asset(svgPath1),
-                  SizedBox(width: 5),
-                  Text(
-                    description1,
-                    style: Style.AppBarTxtStyle.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey),
-                  ),
-                  SizedBox(width: 10),
-                  SvgPicture.asset(svgPath2),
-                  SizedBox(width: 5),
-                  Text(
-                    description2,
-                    style: Style.AppBarTxtStyle.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     SvgPicture.asset(svgPath1),
+              //     SizedBox(width: 5),
+              //     Text(
+              //       description1,
+              //       style: Style.AppBarTxtStyle.copyWith(
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.grey),
+              //     ),
+              //     SizedBox(width: 10),
+              //     SvgPicture.asset(svgPath2),
+              //     SizedBox(width: 5),
+              //     Text(
+              //       description2,
+              //       style: Style.AppBarTxtStyle.copyWith(
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.grey),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ],

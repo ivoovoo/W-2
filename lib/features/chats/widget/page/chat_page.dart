@@ -253,12 +253,18 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: messages.isEmpty
                   ? Center(
-                      child: Image.asset(
-                        'assets/images/empty_chat.gif',
+                      child: Lottie.asset(
+                        'assets/json/empty_chat.json',
+                        fit: BoxFit.cover,
                         width: 200,
                         height: 150,
-                        fit: BoxFit.cover,
                       ),
+                      // child: Image.asset(
+                      //   'assets/images/empty_chat.gif',
+                      //   width: 200,
+                      //   height: 150,
+                      //   fit: BoxFit.cover,
+                      // ),
                     )
                   : ListView.separated(
                       controller: scrollController,

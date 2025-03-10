@@ -30,6 +30,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   String? selectedLanguage; //выбранный язык приложения
   DateTime? selectedDate; // Выбранная дата
+  String selectedDateForSecondScreen = '';
   String dateForView = '';
   bool isCalendarVisible = false; // Состояние видимости календаря
   CalendarFormat calendarFormat = CalendarFormat.month;
@@ -135,6 +136,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 print(userBirthday);
                 selectedDate = DateFormat('yyyy-MM-dd')
                     .parse(userBirthday ?? '2001-01-01');
+                selectedDateForSecondScreen =
+                    DateFormat('dd-MM-yyyy').format(selectedDate!);
                 dateForView = DateFormat('dd-MM-yyyy').format(selectedDate!);
                 dateForView = dateForView.replaceAll('-', '.');
                 print('selectedDate $selectedDate');
@@ -278,6 +281,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ),
                             Expanded(
                               child: InkWell(
+                                onDoubleTap: () {
+                                  context.pushNamed(
+                                    AppRouterNames.infoPage,
+                                    extra: selectedDateForSecondScreen,
+                                  );
+                                },
                                 onTap: () {
                                   setState(() {
                                     isCalendarVisible = !isCalendarVisible;

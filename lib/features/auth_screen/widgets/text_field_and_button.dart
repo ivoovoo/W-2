@@ -116,20 +116,31 @@ class _TextFieldAndButtonState extends State<TextFieldAndButton> {
               child: widget.isActive
                   ? TextField(
                       focusNode: _focusNode,
-                      onChanged: widget.isFirstPage
-                          ? (text) {
-                              // Если пользователь удалит "@", можно вернуть его обратно
-                              if (!text.startsWith("@")) {
-                                widget.controller.text = "@";
-                                widget.controller.selection =
-                                    TextSelection.fromPosition(
-                                  TextPosition(
-                                      offset: widget.controller.text.length),
-                                );
-                              }
-                            }
-                          : null,
-                      // onChanged: widget.onChanged,
+                      onChanged: (value) {
+                        widget.onChanged!(value);
+                        // if (widget.isFirstPage) {
+                        //   // Если пользователь удалит "@", можно вернуть его обратно
+                        //   if (!value.startsWith("@")) {
+                        //     widget.controller.text = "@";
+                        //     widget.controller.selection =
+                        //         TextSelection.fromPosition(
+                        //       TextPosition(
+                        //           offset: widget.controller.text.length),
+                        //     );
+                        //   }
+                        // }
+                      },
+                      onTap: () {
+                        // Если текстовое поле только что активировалось, вставляем "@" в начало
+                        if (widget.isFirstPage &&
+                            widget.controller.text.isEmpty) {
+                          widget.controller.text = "@";
+                          widget.controller.selection =
+                              TextSelection.fromPosition(
+                            TextPosition(offset: widget.controller.text.length),
+                          );
+                        }
+                      },
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/core.dart';
+import 'package:social_network/core/models/video_model.dart';
 import 'package:social_network/core/widgets/unauthorized_dialog_box.dart';
 import 'package:social_network/features/auth_screen/auth_screen.dart';
 import 'package:social_network/features/auth_screen/widgets/page/registration_screen.dart';
@@ -16,7 +17,9 @@ import 'package:social_network/features/comments/widget/page/comments_page.dart'
 import 'package:social_network/features/chats/widget/page/creat_group_chat_page.dart';
 import 'package:social_network/features/dating_feed_screen/dating_feed_screen.dart';
 import 'package:social_network/features/edit_profile/widget/page/edit_profile_page.dart';
+import 'package:social_network/features/info/widget/page/info_page.dart';
 import 'package:social_network/features/interests/widget/page/interests_page.dart';
+import 'package:social_network/features/profile/widgets/page/video_view_page.dart';
 import 'package:social_network/market/create_advertisement/create_advertisement_screen.dart';
 import 'package:social_network/market/detail_produk/widget/page/model_of_house.dart';
 import 'package:social_network/market/first_menu/model/advertisement_model.dart';
@@ -241,6 +244,18 @@ final GoRouter router = GoRouter(
       name: AppRouterNames.siteCategories,
       builder: (BuildContext context, GoRouterState state) =>
           const SiteCategoriesPage(),
+    ),
+    GoRoute(
+      path: '/videoView',
+      name: AppRouterNames.videoView,
+      builder: (BuildContext context, GoRouterState state) =>
+          VideoViewPage(listOfVideo: state.extra as List<Video>),
+    ),
+    GoRoute(
+      path: '/infoPage',
+      name: AppRouterNames.infoPage,
+      builder: (BuildContext context, GoRouterState state) =>
+          InfoPage(birthDate: state.extra as String),
     ),
     // GoRoute(
     //   path: '/customWebView',

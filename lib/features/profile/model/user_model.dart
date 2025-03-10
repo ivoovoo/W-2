@@ -20,6 +20,7 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'user_videos') required List<Video> userVideos,
     @JsonKey(name: "profile_pictures")
     required List<AvatarImage>? profilePictures,
+    @JsonKey(name: "average_rating") required double averageRating,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

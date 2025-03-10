@@ -7,10 +7,10 @@ import '../../repository/info_repository.dart';
 class InfoPage extends StatefulWidget {
   const InfoPage({
     super.key,
-    this.infoModel = InfoRepository.info,
+    required this.birthDate,
   });
 
-  final InfoModel infoModel;
+  final String birthDate;
 
   @override
   State<InfoPage> createState() => _InfoPageState();
@@ -20,11 +20,12 @@ class _InfoPageState extends State<InfoPage> {
   final List<String> _results = [];
   final TextEditingController _controller = TextEditingController();
   String _birthDate = '';
+  final InfoModel infoModel = InfoRepository.info;
 
   @override
   void initState() {
     super.initState();
-    _birthDate = '25-10-2024'; // Изначальное значение
+    _birthDate = widget.birthDate;
     _controller.text = _birthDate;
     calculateAllNumbers(_birthDate);
   }
@@ -165,7 +166,7 @@ class _InfoPageState extends State<InfoPage> {
                     Rect.fromLTWH(0.0, 0.0, bounds.width, bounds.height),
                   ),
                   child: Text(
-                    widget.infoModel.rating.toString(),
+                    infoModel.rating.toString(),
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,

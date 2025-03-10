@@ -831,6 +831,9 @@ class $AssetsJsonGen {
   /// File path: assets/json/ai_chat.json
   String get aiChat => 'assets/json/ai_chat.json';
 
+  /// File path: assets/json/ai_empty_chat.json
+  String get aiEmptyChat => 'assets/json/ai_empty_chat.json';
+
   /// File path: assets/json/apps.json
   String get apps => 'assets/json/apps.json';
 
@@ -848,6 +851,9 @@ class $AssetsJsonGen {
 
   /// File path: assets/json/cup_animation.json
   String get cupAnimation => 'assets/json/cup_animation.json';
+
+  /// File path: assets/json/empty_chat.json
+  String get emptyChat => 'assets/json/empty_chat.json';
 
   /// File path: assets/json/empty_video.json
   String get emptyVideo => 'assets/json/empty_video.json';
@@ -870,12 +876,14 @@ class $AssetsJsonGen {
   /// List of all assets
   List<String> get values => [
         aiChat,
+        aiEmptyChat,
         apps,
         avatar,
         baza,
         chats,
         checkMark,
         cupAnimation,
+        emptyChat,
         emptyVideo,
         helloAnimation,
         onboardingAnimation1,

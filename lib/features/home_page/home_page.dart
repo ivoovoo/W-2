@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Positioned(
-                      bottom: 100.0,
+                      bottom: 80.0,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

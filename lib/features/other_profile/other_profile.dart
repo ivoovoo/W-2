@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/features/other_profile/data_provider/other_profile_data_provider.dart';
 import 'package:social_network/features/other_profile/repository/other_profile_repository.dart';
 import 'package:social_network/features/profile/widgets/header_widget.dart';
@@ -10,7 +12,6 @@ import 'package:social_network/features/profile/widgets/profile_main_widget.dart
 import 'package:provider/provider.dart';
 
 import 'package:social_network/data.dart';
-import 'package:social_network/generated/l10n.dart';
 
 import '../profile/model/user_model.dart';
 import 'logic/other_profile_bloc.dart';
@@ -77,6 +78,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                     subscriptionsCount: 0,
                     userVideos: [],
                     profilePictures: [],
+                    averageRating: 0,
                   );
               responseStatusSubscription = response ?? '';
             },
@@ -101,7 +103,10 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                       ListView(
                         children: [
                           // const IdRowWidget(),
-                          HeaderWidget(username: userModel.username),
+                          HeaderWidget(
+                            username: userModel.username,
+                            averageRating: userModel.averageRating.toString(),
+                          ),
                           ProfileMainWidget(
                             profilePictures: userModel.profilePictures ?? [],
                             userName: userModel.username,
@@ -121,17 +126,59 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                             },
                             isStorisExist: true,
                           ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(height: 130.h),
-                              Lottie.asset(
-                                'assets/json/empty_video.json',
-                                fit: BoxFit.fitHeight,
-                                height: 200,
-                              ),
-                            ],
-                          ),
+                          userModel.userVideos.isEmpty
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(height: 130.h),
+                                    Lottie.asset(
+                                      'assets/json/empty_video.json',
+                                      fit: BoxFit.fitHeight,
+                                      height: 200,
+                                    ),
+                                  ],
+                                )
+                              : GridView.builder(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: userModel.userVideos.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5,
+                                    childAspectRatio: 0.7,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        context.pushNamed(
+                                          AppRouterNames.videoView,
+                                          extra: userModel.userVideos
+                                              .sublist(index),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 2,
+                                          ),
+                                          image: const DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                              'https://thumbs.dreamstime.com/b/%D0%B8%D0%B7%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B0-%D0%B8%D0%B3%D1%80%D1%8B-png-104743086.jpg',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                         ],
                       ),
                       Positioned(

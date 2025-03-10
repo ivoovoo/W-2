@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:country_currency_pickers/country.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:sealed_currencies/sealed_currencies.dart';
 import 'package:social_network/core/data/local_storage_data_provider.dart';
 import 'package:social_network/core/router/app_router_names.dart';
 import 'package:social_network/market/Theme/style.dart';
@@ -452,7 +450,7 @@ class _RentScreenState extends State<RentScreen> {
                     );
                   },
                   separatorBuilder: (context, index) {
-                    return SizedBox(height: 16);
+                    return const SizedBox(height: 16);
                   },
                 ),
               ),
