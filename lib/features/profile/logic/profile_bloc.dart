@@ -20,6 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         signIn: (event) => _onSignIn(event, emit),
         signUp: (event) => _onSignUp(event, emit),
         signOut: (event) => _onSignOut(emit),
+        enableChatGpt: (event) => _onEnableChatGpt(event, emit),
       ),
     );
   }
@@ -34,6 +35,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(
         ProfileState.loadFailure(e.toString()),
       );
+    }
+  }
+
+  Future<void> _onEnableChatGpt(
+      EnableChatGptProfileEvent event, Emitter<ProfileState> emit) async {
+    try {
+      final responseModel =
+          await profileRepository.enableChatGpt(event.enabled);
+      emit(const ProfileState.enabledChatGpt());
+    } catch (e) {
+      print('Error enable chatgpt');
     }
   }
 

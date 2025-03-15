@@ -22,6 +22,12 @@ abstract interface class IProfileDataProvider {
   );
 
   Future checkAuth(String token);
+
+  Future enabledChatGpt(
+    bool isEnabledChatGpt,
+    String token,
+    String csrfToken,
+  );
 }
 
 class ProfileDataProvider implements IProfileDataProvider {
@@ -136,6 +142,33 @@ class ProfileDataProvider implements IProfileDataProvider {
       }
     } catch (e) {
       print('ERROR $e');
+
+      throw CatchException.convertException(e);
+    }
+  }
+
+  @override
+  Future enabledChatGpt(
+    bool isEnabledChatGpt,
+    String token,
+    String csrfToken,
+  ) async {
+    try {
+      Response response = await apiRequester.toPostWithCsrfToken(
+        "user/update_profile_settings/",
+        token,
+        csrfToken,
+        {"enable_chatgpt": isEnabledChatGpt},
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print(response.data);
+        return response;
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      print('ERROR Enable chatgpt $e');
 
       throw CatchException.convertException(e);
     }

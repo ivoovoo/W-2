@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 import 'package:video_player/video_player.dart';

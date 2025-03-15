@@ -16,4 +16,6 @@ class ProfileEvent with _$ProfileEvent {
   }) = SignUpProfileEvent;
 
   const factory ProfileEvent.signOut() = SignOutProfileEvent;
+
+  const factory ProfileEvent.enableChatGpt(bool enabled) = EnableChatGptProfileEvent;
 }

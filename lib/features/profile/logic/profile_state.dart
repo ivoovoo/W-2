@@ -13,4 +13,6 @@ class ProfileState with _$ProfileState {
 
   const factory ProfileState.loadFailure(String error) =
       ProfileLoadFailureState;
+
+  const factory ProfileState.enabledChatGpt() = ProfileEnabledChatGptState;
 }

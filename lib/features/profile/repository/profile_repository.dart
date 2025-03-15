@@ -21,6 +21,14 @@ class ProfileRepository {
     );
   }
 
+  Future enableChatGpt(bool isEnabledChatGpt) {
+    return profileDataProvider.enabledChatGpt(
+      isEnabledChatGpt,
+      localStorageDataProvider.getString(LocalStorageKeys.authToken)!,
+      localStorageDataProvider.getString(LocalStorageKeys.csrfToken)!,
+    );
+  }
+
   Future<UserModel> signIn(Map<String, String> json) async {
     final response = await profileDataProvider.signIn(json);
 

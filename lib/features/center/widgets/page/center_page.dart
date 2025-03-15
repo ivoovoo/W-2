@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_network/core/data/local_storage_keys.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
 import '../../../../generated/l10n.dart';
 
@@ -20,9 +22,54 @@ class CenterPage extends StatefulWidget {
 
 class _CenterPageState extends State<CenterPage> {
   ApiRequester apiRequester = ApiRequester();
-  final ImagePicker _picker = ImagePicker();
+  File? _videoFile;
+  File? _thumbnailFile;
 
-  Future<void> uploadFile(File file, String fileName) async {
+  Future<void> _pickVideo() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
+    if (pickedFile == null) return;
+
+    setState(() {
+      _videoFile = File(pickedFile.path);
+      _thumbnailFile = null;
+    });
+
+    await _generateThumbnail();
+    await uploadFile(
+      _videoFile!,
+      pickedFile.name,
+      _thumbnailFile!,
+    );
+  }
+
+  Future<void> _generateThumbnail() async {
+    if (_videoFile == null) return;
+
+    Directory tempDir = await getTemporaryDirectory();
+    String thumbnailPath =
+        '${tempDir.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    // Команда ffmpeg для извлечения кадра на 1-й секунде
+    String command =
+        '-i "${_videoFile!.path}" -ss 00:00:00.000 -vframes 1 "$thumbnailPath"';
+
+    await FFmpegKit.execute(command);
+
+    File thumbFile = File(thumbnailPath);
+    if (await thumbFile.exists()) {
+      print('SUCCESSSSSSSSSSSSSSSSSSSSSSS');
+      setState(() {
+        _thumbnailFile = thumbFile;
+      });
+    }
+  }
+
+  Future<void> uploadFile(
+    File file,
+    String fileName,
+    File thumbnailFile,
+  ) async {
     final String url = 'create_video/';
 
     try {
@@ -32,8 +79,8 @@ class _CenterPageState extends State<CenterPage> {
           file.path,
           filename: fileName,
         ),
+        'video_preview': await MultipartFile.fromFile(thumbnailFile.path),
         "created_at": '2024-12-02T12:00:00Z',
-        "video_preview": "",
       });
 
       final String? authToken = context
@@ -60,29 +107,6 @@ class _CenterPageState extends State<CenterPage> {
     }
   }
 
-  Future<void> pickAndUploadFile() async {
-    try {
-      // Выбор файла из галереи
-      final XFile? pickedFile = await _picker.pickVideo(
-        source: ImageSource.gallery,
-      );
-
-      if (pickedFile != null) {
-        File file = File(pickedFile.path);
-        String fileName = pickedFile.name;
-
-        print("Выбранный файл: $fileName");
-
-        // Отправляем файл на сервер
-        await uploadFile(file, fileName);
-      } else {
-        print("Файл не был выбран.");
-      }
-    } catch (e) {
-      print("Ошибка при выборе файла: $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
@@ -106,7 +130,7 @@ class _CenterPageState extends State<CenterPage> {
         ),
         child: Center(
           child: InkWell(
-            onTap: pickAndUploadFile, // Открытие галереи при нажатии
+            onTap: _pickVideo,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -104,6 +106,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                         children: [
                           // const IdRowWidget(),
                           HeaderWidget(
+                            otherProfile: true,
                             username: userModel.username,
                             averageRating: userModel.averageRating.toString(),
                           ),
@@ -166,12 +169,16 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                               BorderRadius.circular(12),
                                           border: Border.all(
                                             color: Colors.black,
-                                            width: 2,
+                                            width: 1,
                                           ),
-                                          image: const DecorationImage(
+                                          image: DecorationImage(
                                             fit: BoxFit.cover,
                                             image: NetworkImage(
-                                              'https://thumbs.dreamstime.com/b/%D0%B8%D0%B7%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B0-%D0%B8%D0%B3%D1%80%D1%8B-png-104743086.jpg',
+                                              userModel.userVideos[index]
+                                                          .videoPreview ==
+                                                      null
+                                                  ? 'https://thumbs.dreamstime.com/b/%D0%B8%D0%B7%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B0-%D0%B8%D0%B3%D1%80%D1%8B-png-104743086.jpg'
+                                                  : 'http://45.153.191.237${userModel.userVideos[index].videoPreview}',
                                             ),
                                           ),
                                         ),

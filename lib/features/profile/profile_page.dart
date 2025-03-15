@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,9 @@ import 'package:social_network/features/profile/widgets/floating_button.dart';
 import 'package:social_network/features/profile/widgets/header_widget.dart';
 import 'package:social_network/features/profile/widgets/profile_main_widget.dart';
 
+import '../../core/constants/gen/assets.gen.dart';
+import 'model/user_model.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -27,6 +31,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileBloc profileBloc;
   ApiRequester apiRequester = ApiRequester();
+  late UserModel user;
 
   @override
   void initState() {
@@ -128,116 +133,151 @@ class _ProfilePageState extends State<ProfilePage> {
       child: BlocBuilder<ProfileBloc, ProfileState>(
         bloc: profileBloc,
         builder: (context, state) {
-          return state.when(
-            initial: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            loadInProgress: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            signOutSuccess: () {
-              return const SizedBox.shrink();
+          state.when(
+            initial: () {},
+            loadInProgress: () {},
+            loadSuccess: (response) {
+              user = response;
             },
-            loadSuccess: (user) => SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        ListView(
-                          children: [
-                            HeaderWidget(
-                              username: user.username,
-                              averageRating: user.averageRating.toString(),
-                            ),
-                            ProfileMainWidget(
-                              profilePictures: user.profilePictures ?? [],
-                              userName: user.username,
-                              userId: user.id,
-                              isStorisExist: true,
-                              subscribers: user.subscribersCount,
-                              subscriptions: user.subscriptionsCount,
-                              moments: user.userVideos.length,
-                              followHim: user.followHim,
-                              followYou: user.followYou,
-                              subscribe: () {},
-                              unSubscribe: () {},
-                            ),
-                            Divider(color: Colors.grey),
-                            user.userVideos.isEmpty
-                                ? Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(height: 130.h),
-                                      Lottie.asset(
-                                        'assets/json/cup_animation.json',
-                                        fit: BoxFit.fitHeight,
-                                        height: 200,
-                                      ),
-                                    ],
-                                  )
-                                : GridView.builder(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: user.userVideos.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 5,
-                                      childAspectRatio: 0.7,
+            signOutSuccess: () {},
+            loadFailure: (error) {},
+            enabledChatGpt: () {},
+          );
+          if (state is ProfileInitialState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ProfileLoadFailureState) {
+            return Center(child: Text(state.error.toString()));
+          } else if (state is ProfileLoadInProgressState) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      ListView(
+                        children: [
+                          HeaderWidget(
+                            otherProfile: false,
+                            username: user.username,
+                            averageRating: user.averageRating.toString(),
+                          ),
+                          ProfileMainWidget(
+                            profilePictures: user.profilePictures ?? [],
+                            userName: user.username,
+                            userId: user.id,
+                            isStorisExist: true,
+                            subscribers: user.subscribersCount,
+                            subscriptions: user.subscriptionsCount,
+                            moments: user.userVideos.length,
+                            followHim: user.followHim,
+                            followYou: user.followYou,
+                            subscribe: () {},
+                            unSubscribe: () {},
+                          ),
+                          user.userVideos.isEmpty
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(height: 130.h),
+                                    Lottie.asset(
+                                      'assets/json/cup_animation.json',
+                                      fit: BoxFit.fitHeight,
+                                      height: 200,
                                     ),
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                        onLongPress: () {
-                                          _showDeleteDialog(
-                                              user.userVideos[index].id);
-                                        },
-                                        onTap: () {
-                                          context.pushNamed(
-                                            AppRouterNames.videoView,
-                                            extra:
-                                                user.userVideos.sublist(index),
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            border: Border.all(
-                                              color: Colors.black,
-                                              width: 2,
-                                            ),
-                                            image: const DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                'https://thumbs.dreamstime.com/b/%D0%B8%D0%B7%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B0-%D0%B8%D0%B3%D1%80%D1%8B-png-104743086.jpg',
-                                              ),
+                                  ],
+                                )
+                              : GridView.builder(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: user.userVideos.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 2,
+                                    mainAxisSpacing: 2,
+                                    childAspectRatio: 0.6,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onLongPress: () {
+                                        _showDeleteDialog(
+                                            user.userVideos[index].id);
+                                      },
+                                      onTap: () {
+                                        context.pushNamed(
+                                          AppRouterNames.videoView,
+                                          extra: user.userVideos.sublist(index),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: user.userVideos[index]
+                                                      .videoPreview ==
+                                                  null
+                                              ? Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                )
+                                              : null,
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                              user.userVideos[index]
+                                                          .videoPreview ==
+                                                      null
+                                                  ? 'https://thumbs.dreamstime.com/b/%D0%B8%D0%B7%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B0-%D0%B8%D0%B3%D1%80%D1%8B-png-104743086.jpg'
+                                                  : 'http://45.153.191.237${user.userVideos[index].videoPreview}',
                                             ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                          ],
-                        ),
-                        const Positioned(
-                          bottom: 16,
-                          right: 32,
-                          child: FloatingButton(),
-                        ),
-                      ],
-                    ),
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                Assets.icons.eye,
+                                                height: 10,
+                                                width: 10,
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                user.userVideos[index]
+                                                    .viewsCount
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Inter',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ],
+                      ),
+                      const Positioned(
+                        bottom: 16,
+                        right: 32,
+                        child: FloatingButton(),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 60.h),
-                ],
-              ),
-            ),
-            loadFailure: (error) => Center(
-              child: Text(error),
+                ),
+                SizedBox(height: 60.h),
+              ],
             ),
           );
         },

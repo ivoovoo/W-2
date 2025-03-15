@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/constants.dart';
 import 'package:social_network/features/profile/widgets/header_button.dart';
 import 'package:social_network/data.dart';
 
-class HeaderWidget extends StatelessWidget {
+import '../logic/profile_bloc.dart';
+
+class HeaderWidget extends StatefulWidget {
   const HeaderWidget({
     super.key,
     required this.username,
     required this.averageRating,
+    required this.otherProfile,
   });
 
   final String username;
   final String averageRating;
+  final bool otherProfile;
+
+  @override
+  State<HeaderWidget> createState() => _HeaderWidgetState();
+}
+
+class _HeaderWidgetState extends State<HeaderWidget> {
+  bool chatGptIsEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +35,7 @@ class HeaderWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                '@$username',
+                '@${widget.username}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -37,13 +49,28 @@ class HeaderWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              HeaderButton(widget: const Text('⚡️'), function: () {}),
+              Visibility(
+                visible: !widget.otherProfile,
+                child: HeaderButton(
+                  widget: const Text('⚡️'),
+                  function: () {
+                    print('TAPPEDDDDD');
+                    setState(() {
+                      chatGptIsEnabled = !chatGptIsEnabled;
+                    });
+                    context
+                        .read<ProfileBloc>()
+                        .add(ProfileEvent.enableChatGpt(chatGptIsEnabled));
+                  },
+                  isEnabledChatGpt: chatGptIsEnabled,
+                ),
+              ),
               SizedBox(
                 width: 8 * rw(context),
               ),
               HeaderButton(
                   widget: GradientText(
-                    averageRating,
+                    widget.averageRating,
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.bold),
                     gradient: const LinearGradient(
