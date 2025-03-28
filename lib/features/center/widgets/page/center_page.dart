@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_network/core/data/local_storage_keys.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+// import 'package:video_compress/video_compress.dart';
 
 import '../../../../generated/l10n.dart';
 
@@ -46,23 +46,27 @@ class _CenterPageState extends State<CenterPage> {
   Future<void> _generateThumbnail() async {
     if (_videoFile == null) return;
 
-    Directory tempDir = await getTemporaryDirectory();
-    String thumbnailPath =
-        '${tempDir.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    // Directory tempDir = await getTemporaryDirectory();
 
-    // Команда ffmpeg для извлечения кадра на 1-й секунде
-    String command =
-        '-i "${_videoFile!.path}" -ss 00:00:00.000 -vframes 1 "$thumbnailPath"';
+    // final thumbFile = await VideoCompress.getFileThumbnail(_videoFile!.path,
+    //     quality: 50, // default(100)
+    //     position: -1 // default(-1)
+    //     );
 
-    await FFmpegKit.execute(command);
+    // String? thumbPath = await VideoThumbnail.thumbnailFile(
+    //   video: _videoFile!.path,
+    //   thumbnailPath: tempDir.path,
+    //   imageFormat: ImageFormat.JPEG,
+    //   maxHeight:
+    //       0, // 0 means keep original height, you can specify a height as needed.
+    //   quality: 75,
+    // );
 
-    File thumbFile = File(thumbnailPath);
-    if (await thumbFile.exists()) {
-      print('SUCCESSSSSSSSSSSSSSSSSSSSSSS');
-      setState(() {
-        _thumbnailFile = thumbFile;
-      });
-    }
+    // File thumbFile = File(thumbPath);
+    print('Thumbnail generated successfully.');
+    setState(() {
+      _thumbnailFile = null;
+    });
   }
 
   Future<void> uploadFile(
@@ -70,7 +74,7 @@ class _CenterPageState extends State<CenterPage> {
     String fileName,
     File thumbnailFile,
   ) async {
-    final String url = 'create_video/';
+    const String url = 'create_video/';
 
     try {
       final formData = FormData.fromMap({

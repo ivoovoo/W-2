@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="a.app.now">
+    package="w.app.w">
     <uses-permission android:name="android.permission.RECORD_AUDIO" android:foregroundServiceType="microphone" />
     <uses-permission android:name="android.permission.CAMERA" android:foregroundServiceType="camera" />
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -14,9 +14,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:usesCleartextTraffic="true"
-        android:label="A"
+        android:label="W"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon"
+        android:icon="@mipmap/ic_launcher"
         tools:replace="android:icon, android:label"
         android:requestLegacyExternalStorage="true">
 

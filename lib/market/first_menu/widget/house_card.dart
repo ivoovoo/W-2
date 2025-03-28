@@ -41,7 +41,7 @@ class HouseCard extends StatelessWidget {
         image: DecorationImage(
           image: isNetworkImage
               ? NetworkImage('http://45.153.191.237$pathToImage')
-              : AssetImage(pathToImage),
+              : AssetImage(pathToImage) as ImageProvider<Object>,
           fit: BoxFit.cover,
         ),
       ),

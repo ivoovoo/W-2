@@ -183,10 +183,10 @@ class _RentScreenState extends State<RentScreen> {
   }
 
   Future<void> convertPrice() async {
-    final _exchangeRate = await getExchangeRate("USD", currency);
+    var exchangeRate = await getExchangeRate("USD", currency);
 
-    if (_exchangeRate != null) {
-      exchangeRate = _exchangeRate;
+    if (exchangeRate != null) {
+      exchangeRate = exchangeRate;
     } else {
       print("Не удалось получить курс валют.");
     }
@@ -283,7 +283,7 @@ class _RentScreenState extends State<RentScreen> {
                       width: 10,
                     ),
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         width: 289,
                         height: 48,
                         child: TextFormField(
@@ -431,7 +431,7 @@ class _RentScreenState extends State<RentScreen> {
               SizedBox(
                 height: 400,
                 child: ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   dragStartBehavior: DragStartBehavior.start,
                   itemCount: items.length,
                   itemBuilder: (context, index) {

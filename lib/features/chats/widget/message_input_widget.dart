@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -10,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:social_network/features/chats/models/chats_model/content_model.dart';
+import 'package:video_editor_2/video_editor.dart';
 
 import '../../../generated/l10n.dart';
 
@@ -51,125 +50,28 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
     super.dispose();
   }
 
-  // Future<void> getVideoCodec(String videoPath) async {
-  //   // Формируем команду для ffprobe
-  //   final command =
-  //       '-v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 $videoPath';
-  //
-  //   // Выполняем команду
-  //   final session = await FFprobeKit.execute(command);
-  //
-  //   // Получаем результат выполнения
-  //   final output = await session.getOutput();
-  //
-  //   // Проверяем кодек
-  //   if (output != null && output.isNotEmpty) {
-  //     print('Video Codec: $output');
-  //     if (output.trim() == 'h264') {
-  //       // Если кодек уже h264, ничего не делаем
-  //       print('Video is already in H264 format, no conversion needed.');
-  //     } else {
-  //       // Если кодек не h264, выполняем конвертацию
-  //       print('Converting video to H264...');
-  //       String outputFilePath =
-  //           videoPath.replaceAll(RegExp(r'\.mp4$'), '_converted.mp4');
-  //       await convertHevcToH264(videoPath, outputFilePath);
-  //       // После конвертации, отправляем новый файл
-  //       sendVideoFile(outputFilePath);
-  //     }
-  //   } else {
-  //     print('Failed to get codec information');
-  //   }
-  // }
-  //
-  // Future<void> convertHevcToH264(
-  //     String inputFilePath, String outputFilePath) async {
-  //   // FFmpeg команда для конвертации HEVC в H264
-  //   String command = '-i $inputFilePath -c:v libx264 -c:a aac $outputFilePath';
-  //
-  //   final session = await FFmpegKit.execute(command);
-  //
-  //   // Получаем логи
-  //   final logs = await session.getLogs();
-  //
-  //   // Выводим логи для диагностики
-  //   for (var log in logs) {
-  //     print('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFmpeg log: ${log.getMessage()}');
-  //   }
-  //
-  //   // Получаем код возврата
-  //   final returnCode = await session.getReturnCode();
-  //
-  //   if (returnCode != null) {
-  //     if (returnCode.isValueSuccess()) {
-  //       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
-  //       print('Conversion successful: $outputFilePath');
-  //     } else {
-  //       // Получаем ошибку, если конвертация не удалась
-  //       print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
-  //       final errorOutput = await session.getLogs();
-  //       print('Conversion failed with error: $errorOutput');
-  //     }
-  //   }
-  // }
-  //
-  // Future<void> sendVideoFile(String videoPath) async {
-  //   final videoFile = File(videoPath);
-  //
-  //   // Преобразование в Base64
-  //   final videoBytes =
-  //       await videoFile.readAsBytes(); // Читаем файл как массив байтов
-  //   final videoBase64 = base64Encode(videoBytes); // Преобразуем в Base64
-  //
-  //   // Вызываем метод onSend с Base64 строкой
-  //   widget.onSend(videoBase64, ContentType.Video);
-  // }
-
-  // Future<void> pickVideo() async {
-  //   final pickedFile = await picker.pickVideo(source: ImageSource.camera);
-  //   if (pickedFile != null) {
-  //     final videoFile = File(pickedFile.path);
-  //     // await getVideoCodec(pickedFile.path);
-  //     print(pickedFile.path);
-  //     print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
-  //
-  //     // Преобразование в Base64
-  //     final videoBytes =
-  //         await videoFile.readAsBytes(); // Читаем файл как массив байтов
-  //     final videoBase64 = base64Encode(videoBytes); // Преобразуем в Base64
-  //
-  //     // Вызываем метод onSend с Base64 строкой
-  //     widget.onSend(videoBase64, ContentType.Video);
-  //   }
-  // }
-
   Future<void> pickVideo() async {
     final pickedFile = await picker.pickVideo(source: ImageSource.camera);
-
     if (pickedFile != null) {
       final originalVideoFile = File(pickedFile.path);
 
-      // Создаем путь для временного файла
-      final rotatedVideoPath =
-          '${originalVideoFile.parent.path}/rotated_video.mp4';
+      // Инициализируем контроллер для обработки видео
+      final controller =
+          VideoEditorController.file(XFile(originalVideoFile.path));
+      await controller.initialize();
 
-      // Выполняем поворот видео с помощью FFmpeg
-      await FFmpegKit.execute(
-          '-i ${originalVideoFile.path} -c:a copy $rotatedVideoPath');
+      // Выполняем поворот видео (90 градусов)
+      controller.rotate90Degrees();
 
-      // Проверяем, создан ли файл с перевернутым видео
-      final rotatedVideoFile = File(rotatedVideoPath);
+      // Используем файл из контроллера, так как библиотека video_editor_2 не предоставляет функцию exportVideo.
+      final rotatedVideoFile = File(controller.file.path);
+      controller.dispose();
+
       if (rotatedVideoFile.existsSync()) {
-        print('Video rotated successfully: $rotatedVideoPath');
-
-        // Преобразуем в Base64
+        print('Video rotated successfully: ${rotatedVideoFile.path}');
         final videoBytes = await rotatedVideoFile.readAsBytes();
         final videoBase64 = base64Encode(videoBytes);
-
-        // Вызываем метод onSend с Base64 строкой
         widget.onSend(videoBase64, ContentType.Video);
-
-        // Удаляем временный файл, если он больше не нужен
         rotatedVideoFile.deleteSync();
       } else {
         print('Error: Rotated video file not created.');
@@ -224,13 +126,13 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Ошибка'),
-          content: Text(
+          title: const Text('Ошибка'),
+          content: const Text(
               'Для записи аудио или видео необходимо разрешить доступ к микрофону и камеру.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
