@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:social_network/features/call_screen/call-screen.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:social_network/core/core.dart';
 import 'package:social_network/features/chats/data_providers/chat_with_ai_data_provider/chat_with_ai_data_provider.dart';
@@ -140,11 +141,20 @@ class _ChatWithAiScreenState extends State<ChatWithAiScreen> {
                           // ),
                         ],
                       ),
-                      Lottie.asset(
-                        'assets/json/ai_chat.json',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
+                      InkWell(
+                        child: Lottie.asset(
+                          'assets/json/ai_chat.json',
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CallScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -247,6 +257,9 @@ class _ChatWithAiScreenState extends State<ChatWithAiScreen> {
                             borderRadius: BorderRadius.circular(37),
                           ),
                           child: TextField(
+                            style: TextStyle(
+                                color:
+                                    _isListening ? Colors.black : Colors.grey),
                             controller: _controller,
                             textCapitalization: TextCapitalization.sentences,
                             // Первое слово в предложении с заглавной буквы
@@ -320,7 +333,7 @@ class _ChatWithAiScreenState extends State<ChatWithAiScreen> {
                                       : _startListening();
                                 },
                                 child: Icon(
-                                  _isListening ? Icons.mic_off : Icons.mic,
+                                  Icons.mic,
                                   color: Colors.white,
                                 ),
                               ),
@@ -338,6 +351,9 @@ class _ChatWithAiScreenState extends State<ChatWithAiScreen> {
                               icon: Assets.icons.upArrow),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 20,
                 ),
               ],
             );

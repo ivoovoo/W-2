@@ -30,8 +30,8 @@ class _InterestsPageState extends State<InterestsPage> {
   late InterestsBloc interestsBloc;
   String location = '';
   String interestsId = '';
-  int? ageMin;
-  int? ageMax;
+  int ageMax = 100; // значения по умолчанию
+  int ageMin = 18;
 
   @override
   void initState() {
@@ -55,6 +55,19 @@ class _InterestsPageState extends State<InterestsPage> {
             .read<SharedPreferences>()
             .getInt(LocalStorageKeys.ageMinOfCategoryVideo) ??
         18;
+    final newAgeMax = await context
+        .read<SharedPreferences>()
+        .getInt(LocalStorageKeys.ageMaxOfCategoryVideo) ?? 100;
+
+    final newAgeMin = await context
+        .read<SharedPreferences>()
+        .getInt(LocalStorageKeys.ageMinOfCategoryVideo) ?? 18;
+
+    setState(() {
+      ageMax = newAgeMax;
+      ageMin = newAgeMin;
+    });
+
     print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
     print('$ageMax IIIIIIIII $ageMin');
   }
@@ -137,11 +150,13 @@ class _InterestsPageState extends State<InterestsPage> {
     var paddings = MediaQuery.viewPaddingOf(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ageMin == null
+      body:
+      ageMin == null
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Colors.red,),
             )
-          : Padding(
+          :
+      Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 22,
               ),

@@ -47,15 +47,22 @@ class _SiteCategoriesPageState extends State<SiteCategoriesPage> {
   }
 
   Future<void> getInterests() async {
-    ageMax = await context
-            .read<SharedPreferences>()
-            .getInt(LocalStorageKeys.ageMaxOfSiteCategory) ??
+    final newAgeMax = await context
+        .read<SharedPreferences>()
+        .getInt(LocalStorageKeys.ageMaxOfSiteCategory) ??
         100;
-    ageMin = await context
-            .read<SharedPreferences>()
-            .getInt(LocalStorageKeys.ageMinOfSiteCategory) ??
+
+    final newAgeMin = await context
+        .read<SharedPreferences>()
+        .getInt(LocalStorageKeys.ageMinOfSiteCategory) ??
         18;
-    print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+
+    setState(() {  // 👈 Критически важно!
+      ageMax = newAgeMax;
+      ageMin = newAgeMin;
+    });
+
+  print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
     print('$ageMax IIIIIIIII $ageMin');
   }
 

@@ -4,11 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_thumbnail_video/index.dart';
+import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_network/core/data/local_storage_keys.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_compress/video_compress.dart';
 // import 'package:video_compress/video_compress.dart';
 
 import '../../../../generated/l10n.dart';
@@ -43,30 +46,62 @@ class _CenterPageState extends State<CenterPage> {
     );
   }
 
+  // Future<void> _generateThumbnail() async {
+  //   if (_videoFile == null) return;
+  //
+  //   Directory tempDir = await getTemporaryDirectory();
+  //
+  //   // final thumbFile = await VideoCompress.getFileThumbnail(_videoFile!.path,
+  //   //     quality: 50, // default(100)
+  //   //     position: -1 // default(-1)
+  //   //     );
+  //
+  //   XFile thumbPath = await VideoThumbnail.thumbnailFile(
+  //     video: _videoFile!.path,
+  //     thumbnailPath: tempDir.path,
+  //     imageFormat: ImageFormat.JPEG,
+  //     maxHeight:
+  //         0, // 0 means keep original height, you can specify a height as needed.
+  //     quality: 75,
+  //   );
+  //
+  //   File thumbFile = File(thumbPath as String);
+  //   print('Thumbnail generated successfully.');
+  //   // setState(() {
+  //   //   _thumbnailFile = null;
+  //   // });
+  // }
+
   Future<void> _generateThumbnail() async {
     if (_videoFile == null) return;
 
-    // Directory tempDir = await getTemporaryDirectory();
+    try {
+      final tempDir = await getTemporaryDirectory();
 
-    // final thumbFile = await VideoCompress.getFileThumbnail(_videoFile!.path,
-    //     quality: 50, // default(100)
-    //     position: -1 // default(-1)
-    //     );
+      final XFile? thumbnailXFile = await VideoThumbnail.thumbnailFile(
+        video: _videoFile!.path,
+        thumbnailPath: tempDir.path,
+        imageFormat: ImageFormat.JPEG,
+        quality: 75,
+      );
 
-    // String? thumbPath = await VideoThumbnail.thumbnailFile(
-    //   video: _videoFile!.path,
-    //   thumbnailPath: tempDir.path,
-    //   imageFormat: ImageFormat.JPEG,
-    //   maxHeight:
-    //       0, // 0 means keep original height, you can specify a height as needed.
-    //   quality: 75,
-    // );
+      if (thumbnailXFile == null) {
+        throw Exception("Не удалось создать миниатюру");
+      }
 
-    // File thumbFile = File(thumbPath);
-    print('Thumbnail generated successfully.');
-    setState(() {
-      _thumbnailFile = null;
-    });
+      final thumbFile = File(thumbnailXFile.path);
+      print('Thumbnail generated successfully at: ${thumbFile.path}');
+
+      setState(() {
+        _thumbnailFile = thumbFile;
+      });
+
+    } catch (e) {
+      debugPrint("Ошибка при создании миниатюры: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Ошибка создания превью: ${e.toString()}")),
+      );
+    }
   }
 
   Future<void> uploadFile(
@@ -77,14 +112,18 @@ class _CenterPageState extends State<CenterPage> {
     const String url = 'create_video/';
 
     try {
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final videoFileName = 'video_$timestamp.mp4';
+      final thumbFileName = 'thumb_$timestamp.jpg';
+
       final formData = FormData.fromMap({
         'category_video': 1,
         'video_file': await MultipartFile.fromFile(
           file.path,
-          filename: fileName,
+          filename: videoFileName,
         ),
-        'video_preview': await MultipartFile.fromFile(thumbnailFile.path),
-        "created_at": '2024-12-02T12:00:00Z',
+        'video_preview': await MultipartFile.fromFile(thumbnailFile.path,filename: thumbFileName),
+        "created_at": DateTime.now().toIso8601String(),
       });
 
       final String? authToken = context
@@ -106,9 +145,18 @@ class _CenterPageState extends State<CenterPage> {
       } else {
         print('Upload failed: ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      print('DioError: ${e.message}');
+      print('Статус: ${e.response?.statusCode}');
+      print('Данные: ${e.response?.data}'); // Здесь сервер часто возвращает детали ошибки
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка загрузки: ${e.response?.data['error'] ?? e.message}')),
+      );
     } catch (e) {
-      print('Error: $e');
+      print('Общая ошибка: $e');
     }
+
   }
 
   @override

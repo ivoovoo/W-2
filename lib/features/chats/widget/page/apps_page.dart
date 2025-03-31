@@ -177,7 +177,7 @@ class _AppsPageState extends State<AppsPage>
                       alignment: WrapAlignment.center,
                       spacing: 18.0,
                       // горизонтальные отступы между элементами
-                      runSpacing: 26.0,
+                      runSpacing: 0.0,
                       // вертикальные отступы между рядами
                       children: [
                         for (int i = 0; i < appsModel.sites.length; i++)

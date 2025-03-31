@@ -101,6 +101,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                       initial: () {},
                       loadInProgress: () {},
                       loadSuccess: (usersResponse) {
+                        print(usersResponse.listUser); // Пустой?
                         users = usersResponse.listUser
                             .where((user) => user.userVideos.isNotEmpty)
                             .toList();
@@ -122,6 +123,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                       );
                     } else {
                       print('State4');
+                      print(users);
                       return users.isEmpty
                           ? Center(
                               child: Text(

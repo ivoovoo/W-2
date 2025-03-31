@@ -25,6 +25,7 @@ class AppContext extends StatelessWidget {
             top: false,
             right: false,
             left: false,
+            bottom: false,
             child: MaterialApp.router(
               locale: appLocale,
               localizationsDelegates: const [
