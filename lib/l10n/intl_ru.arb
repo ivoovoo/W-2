@@ -51,6 +51,9 @@
   "description": "описание",
   "price": "Цена",
   "rent_now": "Бронировать",
-  "description2": "Описание"
-
+  "description2": "Описание",
+  "change": "Изменить",
+  "copy": "Копировать",
+  "forward": "Переслать",
+  "answer": "Ответить"
 }

@@ -51,5 +51,9 @@
   "description": "description",
   "price": "Price",
   "rent_now": "Rent Now",
-  "description2": "Description"
+  "description2": "Description",
+  "change": "Change",
+  "copy": "Copy",
+  "forward": "Forward",
+  "answer": "Answer"
 }

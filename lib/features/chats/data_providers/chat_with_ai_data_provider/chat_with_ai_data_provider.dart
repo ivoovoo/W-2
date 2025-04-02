@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:openai_dart/openai_dart.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 
 import '../../../../core/helpers/catch_exception.dart';
@@ -46,7 +48,7 @@ abstract interface class IChatWithAiDataProvider {
 // }
 
 class ChatWithAiDataProvider implements IChatWithAiDataProvider {
-  final String _baseUrl = "https://openrouter.ai/api/v1/chat/completions"; // Пример URL (уточните в документации)
+  final String _baseUrl = "https://openrouter.ai/api/v1";
 
   Future sendMessage({
     required String message,
@@ -69,24 +71,19 @@ class ChatWithAiDataProvider implements IChatWithAiDataProvider {
           }
         ],
       };
-
-      // Вариант 1: Если toPost поддерживает headers и body
-      // final Response response = await _apiRequester.toPost(
-      //   _baseUrl,
-      //   headers,
-      //   body,
-      // );
       debugPrint('Sending request to Qwen API...');
 
-      // Вариант 2: Использовать Dio напрямую
       final response = await Dio().post(
         _baseUrl,
         options: Options(headers: headers),
         data: body,
       );
+      log(response.statusCode.toString());
+      log(response.data.toString());
+      if (response.statusCode == 200 || response.statusCode == 201) {
 
-      if (response.statusCode == 200) {
         final result = response.data['output'][0]['text'];
+        print(result);
         debugPrint('Received response from Qwen API');
         return result;
       } else {
@@ -96,4 +93,25 @@ class ChatWithAiDataProvider implements IChatWithAiDataProvider {
       throw CatchException.convertException(e);
     }
   }
+  // final openai = OpenAIClient(
+  //   apiKey: dotenv.env['OPENAI_API_KEY']!,
+  // );
+  // Future<void> _chatCompletions(final OpenAIClient client) async {
+  //   final res = await client.createChatCompletion(
+  //     request: const CreateChatCompletionRequest(
+  //       model: ChatCompletionModel.modelId('gpt-4'),
+  //       messages: [
+  //         ChatCompletionMessage.system(
+  //           content: 'You are a helpful assistant.',
+  //         ),
+  //         ChatCompletionMessage.user(
+  //           content: ChatCompletionUserMessageContent.string('Hello!'),
+  //         ),
+  //       ],
+  //       temperature: 0,
+  //     ),
+  //   );
+  //   print(res.choices.first.message.content);
+  // }
+
 }

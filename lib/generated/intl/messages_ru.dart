@@ -28,12 +28,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "already_have_an_account": MessageLookupByLibrary.simpleMessage(
       "Уже есть аккаунт?",
     ),
+    "answer": MessageLookupByLibrary.simpleMessage("Ответить"),
     "app": MessageLookupByLibrary.simpleMessage("сайт"),
     "apply": MessageLookupByLibrary.simpleMessage("Применить"),
     "apps": MessageLookupByLibrary.simpleMessage("САЙТЫ"),
     "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+    "change": MessageLookupByLibrary.simpleMessage("Изменить"),
     "chat_deleted": MessageLookupByLibrary.simpleMessage("Чат удален"),
     "comments": MessageLookupByLibrary.simpleMessage("Комментарии"),
+    "copy": MessageLookupByLibrary.simpleMessage("Копировать"),
     "create": MessageLookupByLibrary.simpleMessage("Создать "),
     "delete_for_everyone": MessageLookupByLibrary.simpleMessage(
       "Удалить у всех",
@@ -48,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "follow": MessageLookupByLibrary.simpleMessage("Стать другом"),
     "followers": MessageLookupByLibrary.simpleMessage("Подписчики"),
     "following": MessageLookupByLibrary.simpleMessage("Подписки"),
+    "forward": MessageLookupByLibrary.simpleMessage("Переслать"),
     "friend": MessageLookupByLibrary.simpleMessage("Дружу"),
     "friends": MessageLookupByLibrary.simpleMessage("Дружим"),
     "group": MessageLookupByLibrary.simpleMessage("группу"),

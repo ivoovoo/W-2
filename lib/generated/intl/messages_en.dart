@@ -28,12 +28,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "already_have_an_account": MessageLookupByLibrary.simpleMessage(
       "Already have an account?",
     ),
+    "answer": MessageLookupByLibrary.simpleMessage("Answer"),
     "app": MessageLookupByLibrary.simpleMessage("app"),
     "apply": MessageLookupByLibrary.simpleMessage("Apply"),
     "apps": MessageLookupByLibrary.simpleMessage("APPS"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "change": MessageLookupByLibrary.simpleMessage("Change"),
     "chat_deleted": MessageLookupByLibrary.simpleMessage("Chat deleted"),
     "comments": MessageLookupByLibrary.simpleMessage("Comments"),
+    "copy": MessageLookupByLibrary.simpleMessage("Copy"),
     "create": MessageLookupByLibrary.simpleMessage("Create "),
     "delete_for_everyone": MessageLookupByLibrary.simpleMessage(
       "Delete for everyone",
@@ -46,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "follow": MessageLookupByLibrary.simpleMessage("Follow"),
     "followers": MessageLookupByLibrary.simpleMessage("Followers"),
     "following": MessageLookupByLibrary.simpleMessage("Following"),
+    "forward": MessageLookupByLibrary.simpleMessage("Forward"),
     "friend": MessageLookupByLibrary.simpleMessage("Friend"),
     "friends": MessageLookupByLibrary.simpleMessage("Friend\'s"),
     "group": MessageLookupByLibrary.simpleMessage("group"),

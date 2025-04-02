@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ class _ChatScreenState extends State<ChatScreen> {
   ChatPartner chatPartner = const ChatPartner(id: -1, username: '');
   late int userId;
   ScrollController scrollController = ScrollController();
+  final GlobalKey _messageKey = GlobalKey();
+  bool _showBlur = false;
+
 
   @override
   void initState() {
@@ -144,6 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (content.isNotEmpty) {
         final jsonMessage = json.encode({'message': content});
         socket.add(jsonMessage); // Отправляем JSON сообщение
+
         print('Отправлено сообщение: $jsonMessage');
       }
     } else if (contentType == ContentType.Video) {
@@ -198,178 +203,192 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
     var padding = MediaQuery.paddingOf(context);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15.0,
-          vertical: 10,
-        ),
-        child: Column(
-          children: [
-            SizedBox(height: padding.top),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15.0,
+              vertical: 10,
+            ),
+            child: Column(
               children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 22,
-                  ),
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-                Column(
+                SizedBox(height: padding.top),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${widget.typeOfChat == 'chat_group' ? "" : "@"}${widget.userName == 'unknown' ? chatPartner.username : widget.userName}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff000000),
-                        fontSize: 20,
-                        fontFamily: 'Inter',
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        size: 22,
                       ),
+                      onPressed: () {
+                        context.pop();
+                      },
                     ),
-                    // Text(
-                    //   S.of(context).online,
-                    //   style: const TextStyle(
-                    //     fontSize: 14,
-                    //     fontWeight: FontWeight.w500,
-                    //     color: Color(0xff00ffd1),
-                    //     fontFamily: 'Inter',
-                    //   ),
-                    // ),
+                    Column(
+                      children: [
+                        Text(
+                          '${widget.typeOfChat == 'chat_group' ? "" : "@"}${widget.userName == 'unknown' ? chatPartner.username : widget.userName}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff000000),
+                            fontSize: 20,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                        // Text(
+                        //   S.of(context).online,
+                        //   style: const TextStyle(
+                        //     fontSize: 14,
+                        //     fontWeight: FontWeight.w500,
+                        //     color: Color(0xff00ffd1),
+                        //     fontFamily: 'Inter',
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                    Lottie.asset(
+                      'assets/json/avatar.json',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
                   ],
                 ),
-                Lottie.asset(
-                  'assets/json/avatar.json',
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
+                Expanded(
+                  child: messages.isEmpty
+                      ? Center(
+                          child: Lottie.asset(
+                            'assets/json/empty_chat.json',
+                            fit: BoxFit.cover,
+                            width: 200,
+                            height: 150,
+                          ),
+                          // child: Image.asset(
+                          //   'assets/images/empty_chat.gif',
+                          //   width: 200,
+                          //   height: 150,
+                          //   fit: BoxFit.cover,
+                          // ),
+                        )
+                      : ListView.separated(
+                          controller: scrollController,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            final message = messages[index];
+                            if (message.messageType == "text") {
+                              return Align(
+                                alignment: message.sender == userId
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: TextContent(
+                                  key: _messageKey,
+                                  onTap: () {},
+                                  text: message.content,
+                                  isSender: message.sender == userId,
+                                  isCommentsPage: widget.typeOfChat == "chat_group"
+                                      ? true
+                                      : false,
+                                  pathToImage: '',
+                                  haveStories: true,
+                                ),
+                              );
+                            } else if (message.messageType == "voice") {
+                              return Align(
+                                alignment: message.sender == userId
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: AudioContent(
+                                  onTap: () {},
+                                  isSender: message.sender == userId,
+                                  url: message.content,
+                                  isCommentsPage: widget.typeOfChat == "chat_group"
+                                      ? true
+                                      : false,
+                                  haveStories: true,
+                                  pathToImage: '',
+                                ),
+                              );
+                            } else if (message.messageType == "image") {
+                              return Align(
+                                alignment: message.sender == userId
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: ImageContent(
+                                  onTap: () {},
+                                  url: message.content,
+                                  isCommentsPage: widget.typeOfChat == "chat_group"
+                                      ? true
+                                      : false,
+                                  isSender: message.sender == userId,
+                                  haveStories: true,
+                                  pathToImage: '',
+                                ),
+                              );
+                            } else if (message.messageType == "video") {
+                              return Align(
+                                alignment: message.sender == userId
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: VideoContent(
+                                  videoPath: message.content,
+                                  isCommentsPage: widget.typeOfChat == "chat_group"
+                                      ? true
+                                      : false,
+                                  pathToImage: '',
+                                  isSender: message.sender == userId,
+                                  haveStories: true,
+                                  onTap: () {},
+                                ),
+                              );
+                            } else if (message.messageType == "sticker") {
+                              return Align(
+                                alignment: message.sender == userId
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: StickerContent(
+                                  onTap: () {},
+                                  url: message.content,
+                                  isCommentsPage: widget.typeOfChat == "chat_group"
+                                      ? true
+                                      : false,
+                                  isSender: message.sender == userId,
+                                  haveStories: true,
+                                  pathToImage: '',
+                                ),
+                              );
+                            } else {
+                              return SizedBox.shrink(); // Если тип не известен
+                            }
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 10);
+                          },
+                        ),
                 ),
+                MessageInputWidget(
+                  onSend: (dynamic content, ContentType contentType) {
+                    _sendMessage(content, contentType);
+                  },
+                ),
+                SizedBox(height: padding.bottom),
               ],
             ),
-            Expanded(
-              child: messages.isEmpty
-                  ? Center(
-                      child: Lottie.asset(
-                        'assets/json/empty_chat.json',
-                        fit: BoxFit.cover,
-                        width: 200,
-                        height: 150,
-                      ),
-                      // child: Image.asset(
-                      //   'assets/images/empty_chat.gif',
-                      //   width: 200,
-                      //   height: 150,
-                      //   fit: BoxFit.cover,
-                      // ),
-                    )
-                  : ListView.separated(
-                      controller: scrollController,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        final message = messages[index];
-                        if (message.messageType == "text") {
-                          return Align(
-                            alignment: message.sender == userId
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: TextContent(
-                              onTap: () {},
-                              text: message.content,
-                              isSender: message.sender == userId,
-                              isCommentsPage: widget.typeOfChat == "chat_group"
-                                  ? true
-                                  : false,
-                              pathToImage: '',
-                              haveStories: true,
-                            ),
-                          );
-                        } else if (message.messageType == "voice") {
-                          return Align(
-                            alignment: message.sender == userId
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: AudioContent(
-                              onTap: () {},
-                              isSender: message.sender == userId,
-                              url: message.content,
-                              isCommentsPage: widget.typeOfChat == "chat_group"
-                                  ? true
-                                  : false,
-                              haveStories: true,
-                              pathToImage: '',
-                            ),
-                          );
-                        } else if (message.messageType == "image") {
-                          return Align(
-                            alignment: message.sender == userId
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: ImageContent(
-                              onTap: () {},
-                              url: message.content,
-                              isCommentsPage: widget.typeOfChat == "chat_group"
-                                  ? true
-                                  : false,
-                              isSender: message.sender == userId,
-                              haveStories: true,
-                              pathToImage: '',
-                            ),
-                          );
-                        } else if (message.messageType == "video") {
-                          return Align(
-                            alignment: message.sender == userId
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: VideoContent(
-                              videoPath: message.content,
-                              isCommentsPage: widget.typeOfChat == "chat_group"
-                                  ? true
-                                  : false,
-                              pathToImage: '',
-                              isSender: message.sender == userId,
-                              haveStories: true,
-                              onTap: () {},
-                            ),
-                          );
-                        } else if (message.messageType == "sticker") {
-                          return Align(
-                            alignment: message.sender == userId
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: StickerContent(
-                              onTap: () {},
-                              url: message.content,
-                              isCommentsPage: widget.typeOfChat == "chat_group"
-                                  ? true
-                                  : false,
-                              isSender: message.sender == userId,
-                              haveStories: true,
-                              pathToImage: '',
-                            ),
-                          );
-                        } else {
-                          return SizedBox.shrink(); // Если тип не известен
-                        }
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: 10);
-                      },
-                    ),
-            ),
-            MessageInputWidget(
-              onSend: (dynamic content, ContentType contentType) {
-                _sendMessage(content, contentType);
-              },
-            ),
-            SizedBox(height: padding.bottom),
-          ],
+          ),
         ),
-      ),
+        if (_showBlur)
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+              child: Container(
+                color: Colors.black.withOpacity(0.2),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
