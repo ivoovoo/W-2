@@ -364,7 +364,7 @@ class _CustomFilterWidgetState extends State<CustomFilterWidget>
     return BlocBuilder<ProfileCubit, ProfileeState>(
       builder: (context, state) {
         return SizedBox(
-          height: 40.h,
+          height: 30.h,
           child: RepaintBoundary(
             // Оборачиваем в RepaintBoundary для уменьшения перерисовок
             child: ListView.builder(
@@ -378,7 +378,7 @@ class _CustomFilterWidgetState extends State<CustomFilterWidget>
                 return Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 8.w),
+                      padding: EdgeInsets.only(left: 4.w,right: 4.w),
                       child: BlurButton(
                         text: filter.name,
                         onTap: () {

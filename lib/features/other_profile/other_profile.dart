@@ -72,7 +72,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                     id: -1,
                     username: 'UNKNOWN',
                     email: '',
-                    city: '',
+                    city: null,
                     isOnline: false,
                     followYou: false,
                     followHim: false,

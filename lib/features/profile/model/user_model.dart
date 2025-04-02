@@ -10,7 +10,7 @@ class UserModel with _$UserModel {
     required int id,
     required String username,
     required String? email,
-    required String? city,
+    required int? city,
     @JsonKey(name: 'last_online') DateTime? lastOnline,
     @JsonKey(name: 'is_online') required bool? isOnline,
     @JsonKey(name: 'follow_you') required bool followYou,

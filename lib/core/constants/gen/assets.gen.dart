@@ -839,6 +839,12 @@ class $AssetsJsonGen {
   /// File path: assets/json/baza.json
   String get baza => 'assets/json/baza.json';
 
+  /// File path: assets/json/call-anim.json
+  String get callAnim => 'assets/json/call-anim.json';
+
+  /// File path: assets/json/call_back.json
+  String get callBack => 'assets/json/call_back.json';
+
   /// File path: assets/json/chats.json
   String get chats => 'assets/json/chats.json';
 
@@ -856,6 +862,12 @@ class $AssetsJsonGen {
 
   /// File path: assets/json/hello_animation.json
   String get helloAnimation => 'assets/json/hello_animation.json';
+
+  /// File path: assets/json/mic_anim.json
+  String get micAnim => 'assets/json/mic_anim.json';
+
+  /// File path: assets/json/new_mic_anim.json
+  String get newMicAnim => 'assets/json/new_mic_anim.json';
 
   /// File path: assets/json/onboarding_animation_1.json
   String get onboardingAnimation1 => 'assets/json/onboarding_animation_1.json';
@@ -876,12 +888,16 @@ class $AssetsJsonGen {
     apps,
     avatar,
     baza,
+    callAnim,
+    callBack,
     chats,
     checkMark,
     cupAnimation,
     emptyChat,
     emptyVideo,
     helloAnimation,
+    micAnim,
+    newMicAnim,
     onboardingAnimation1,
     onboardingAnimation2,
     onboardingAnimation3,

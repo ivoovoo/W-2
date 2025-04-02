@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -13,6 +15,7 @@ import 'package:story_view/story_view.dart';
 import 'package:social_network/data.dart';
 import '../../core/router/app_router_names.dart';
 import '../../generated/l10n.dart';
+import '../interests/widget/page/interests_page.dart';
 import '../profile/model/user_model.dart';
 import 'logic/users_bloc.dart';
 import 'widgets/widgets.dart';
@@ -47,7 +50,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
   }
 
   Future<void> _initializeBloc() async {
-    await getInterests(); // Ждём получения данных
+    // await getInterests(); // Ждём получения данных
     print(interests);
     print('IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
     setState(() {
@@ -70,7 +73,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
         .getInt(LocalStorageKeys.ageMaxOfCategoryVideo);
     ageMin = context
         .read<SharedPreferences>()
-        .getInt(LocalStorageKeys.ageMaxOfCategoryVideo);
+        .getInt(LocalStorageKeys.ageMinOfCategoryVideo);
     interests = context
         .read<SharedPreferences>()
         .getString(LocalStorageKeys.categoryVideo);
@@ -101,10 +104,11 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                       initial: () {},
                       loadInProgress: () {},
                       loadSuccess: (usersResponse) {
-                        print(usersResponse.listUser); // Пустой?
+                        print('Все пользователи: ${usersResponse.listUser.length}'); // Логируем общее количество
                         users = usersResponse.listUser
-                            .where((user) => user.userVideos.isNotEmpty)
+                            .where((user) => user.profilePictures != null && user.profilePictures!.isNotEmpty)
                             .toList();
+                        print('Пользователи с фото: ${users.length}'); // Логируем количество после фильтрации
                       },
                       loadFailure: (error) {},
                     );
@@ -141,8 +145,8 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                               itemCount: users.length,
                               onPageChanged: (indexPageUser) {
                                 setState(() {
-                                  /*print(currentPage);
-                    print(Categories.getData[0].name);*/
+                                  // /*print(currentPage);
+                    // print(Categories.getData[0].name);*/
                                   _currentPage = indexPageUser;
                                   /*username = userlist[currentPageUser]['name'];
                     userid = userlist[currentPageUser]['id'];
@@ -153,20 +157,20 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                               },
                               itemBuilder: (context, index) {
                                 var user = users[index];
-                                //   _storyItems = [
-                                //     /*StoryItem(
-                                // Image.asset(
-                                //     Assets.images.image1.path,
-                                //   width: MediaQuery.of(context).size.width,
-                                //   fit: BoxFit.fill,
-                                // ), duration: _storyDuration)*/
-                                //     StoryItem.pageProviderImage(
-                                //       AssetImage(Assets.images.image1.path),
-                                //     )
-                                //   ];
+                                  _storyItems = [
+                                    /*StoryItem(
+                                Image.asset(
+                                    Assets.images.image1.path,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.fill,
+                                ), duration: _storyDuration)*/
+                                    StoryItem.pageProviderImage(
+                                      AssetImage(Assets.images.image1.path),
+                                    )
+                                  ];
                                 return Stack(
                                   children: [
-                                    user.userVideos.isEmpty
+                                    user.profilePictures == null
                                         ? Center(
                                             child: Text(
                                               S
@@ -175,7 +179,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                                             ),
                                           )
                                         : PageView.builder(
-                                            itemCount: user.userVideos.length,
+                                            itemCount: user.profilePictures?.length ?? 0,
                                             // allowImplicitScrolling: true,
                                             controller:
                                                 horizontalPageController,
@@ -183,22 +187,32 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                                               return SizedBox(
                                                 height: double.infinity,
                                                 width: double.infinity,
-                                                child: CustomVideoPlayerWidget(
-                                                  idVideo:
-                                                      user.userVideos[index].id,
-                                                  videoPath: user
-                                                      .userVideos[index]
-                                                      .videoFile,
-                                                  thumbnail: user
-                                                      .userVideos[index]
-                                                      .videoPreview,
-                                                  viewsCountPlus: (i) {},
-                                                ),
+                                                child:
+                                                CachedNetworkImage(
+                                                  imageUrl: 'http://45.153.191.237/${user.profilePictures?[index].image}',
+                                                  // placeholder: (_, __) => Container(width: 40,
+                                                  //     height:40,child: CircularProgressIndicator()),
+                                                  errorWidget: (_, __, ___) => Icon(Icons.error),
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                )
+                                                // CustomVideoPlayerWidget(
+                                                //   idVideo:
+                                                //       user.userVideos[index].id,
+                                                //   videoPath: user
+                                                //       .userVideos[index]
+                                                //       .videoFile,
+                                                //   thumbnail: user
+                                                //       .userVideos[index]
+                                                //       .videoPreview,
+                                                //   viewsCountPlus: (i) {},
+                                                // ),
                                               );
                                             },
                                           ),
-                                    user.userVideos.isEmpty ||
-                                            user.userVideos.length == 1
+                                    user.profilePictures == null ||
+                                            user.profilePictures?.length == 1
                                         ? const SizedBox.shrink()
                                         : Positioned(
                                             top: 70,
@@ -232,10 +246,22 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                                     //   // indicatorOuterPadding: EdgeInsets.zero,
                                     // ),
                                     Positioned(
+                                      right: 20,
+                                      top: 60,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => InterestsPage()));
+                                        },
+                                        child: SvgPicture.asset(Assets.icons.menu),
+                                      ),
+                                    ),
+                                    Positioned(
                                       bottom: 80.0,
+                                      right: 10,
+                                      left: 10,
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           SizedBox(
                                             height: 50.h,
@@ -275,7 +301,7 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                                                                       .authPage);
                                                         },
                                                       ),
-                                                      // SvgPicture.asset('assets/icons/online.svg'),
+                                                      SvgPicture.asset('assets/icons/online.svg',height: 30,),
                                                       OnlineStatusWidget(
                                                           isOnline: users[index]
                                                                   .isOnline ??
@@ -283,15 +309,16 @@ class _DatingFeedScreenState extends State<DatingFeedScreen> {
                                                     ],
                                                   ),
                                                   GradientTelegramButton(
-                                                      onPressed: () {})
+                                                      onPressed: () {
+                                                      }),
                                                 ],
                                               ),
                                             ),
                                           ),
-                                          // SizedBox(height: 10.h),
-                                          // CustomFilterWidget(
-                                          //   user: BlocProvider.of<ProfileCubit>(context).user,
-                                          // ),
+                                          SizedBox(height: 10.h),
+                                          CustomFilterWidget(
+                                            user: BlocProvider.of<ProfileCubit>(context).user,
+                                          ),
                                         ],
                                       ),
                                     ),

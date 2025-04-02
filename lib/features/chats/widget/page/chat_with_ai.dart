@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:social_network/features/call_screen/call-screen.dart';
+import 'package:social_network/features/call_screen/call_screen.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:social_network/core/core.dart';
 import 'package:social_network/features/chats/data_providers/chat_with_ai_data_provider/chat_with_ai_data_provider.dart';
@@ -141,7 +141,7 @@ class _ChatWithAiScreenState extends State<ChatWithAiScreen> {
                           // ),
                         ],
                       ),
-                      InkWell(
+                      GestureDetector(
                         child: Lottie.asset(
                           'assets/json/ai_chat.json',
                           width: 50,

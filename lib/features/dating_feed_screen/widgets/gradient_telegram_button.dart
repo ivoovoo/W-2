@@ -28,7 +28,7 @@ class GradientTelegramButton extends StatelessWidget {
           splashColor: AppColors.kDeepPinkColor1.withOpacity(0.4),
           borderRadius: BorderRadius.circular(32.r),
           child: Padding(
-            padding: EdgeInsets.all(16.r),
+            padding: EdgeInsets.all(14.r),
             child: Center(
               child: SvgPicture.asset(Assets.icons.telegram),
             ),

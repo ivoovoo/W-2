@@ -12,7 +12,9 @@ import 'package:social_network/core/data/local_storage_keys.dart';
 import 'package:social_network/core/helpers/api_requester.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
-// import 'package:video_compress/video_compress.dart';
+import 'package:video_editor_2/domain/bloc/controller.dart';
+import 'package:video_player/video_player.dart';
+import 'package:video_compress/video_compress.dart';
 
 import '../../../../generated/l10n.dart';
 
@@ -28,6 +30,7 @@ class _CenterPageState extends State<CenterPage> {
   File? _videoFile;
   File? _thumbnailFile;
 
+
   Future<void> _pickVideo() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
@@ -36,8 +39,8 @@ class _CenterPageState extends State<CenterPage> {
     setState(() {
       _videoFile = File(pickedFile.path);
       _thumbnailFile = null;
-    });
 
+    });
     await _generateThumbnail();
     await uploadFile(
       _videoFile!,
@@ -46,31 +49,6 @@ class _CenterPageState extends State<CenterPage> {
     );
   }
 
-  // Future<void> _generateThumbnail() async {
-  //   if (_videoFile == null) return;
-  //
-  //   Directory tempDir = await getTemporaryDirectory();
-  //
-  //   // final thumbFile = await VideoCompress.getFileThumbnail(_videoFile!.path,
-  //   //     quality: 50, // default(100)
-  //   //     position: -1 // default(-1)
-  //   //     );
-  //
-  //   XFile thumbPath = await VideoThumbnail.thumbnailFile(
-  //     video: _videoFile!.path,
-  //     thumbnailPath: tempDir.path,
-  //     imageFormat: ImageFormat.JPEG,
-  //     maxHeight:
-  //         0, // 0 means keep original height, you can specify a height as needed.
-  //     quality: 75,
-  //   );
-  //
-  //   File thumbFile = File(thumbPath as String);
-  //   print('Thumbnail generated successfully.');
-  //   // setState(() {
-  //   //   _thumbnailFile = null;
-  //   // });
-  // }
 
   Future<void> _generateThumbnail() async {
     if (_videoFile == null) return;
@@ -156,7 +134,6 @@ class _CenterPageState extends State<CenterPage> {
     } catch (e) {
       print('Общая ошибка: $e');
     }
-
   }
 
   @override

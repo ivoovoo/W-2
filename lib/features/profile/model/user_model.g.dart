@@ -11,7 +11,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       username: json['username'] as String,
       email: json['email'] as String?,
-      city: json['city'] as String?,
+      city: (json['city'] as num?)?.toInt(),
       lastOnline: json['last_online'] == null
           ? null
           : DateTime.parse(json['last_online'] as String),

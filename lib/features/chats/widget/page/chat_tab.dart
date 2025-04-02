@@ -71,7 +71,7 @@ class _ChatTabState extends State<ChatTab> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: InkWell(
+                          child: GestureDetector(
                             onTap: () {
                               _pageController.animateToPage(
                                 0,
@@ -84,7 +84,7 @@ class _ChatTabState extends State<ChatTab> {
                           ),
                         ),
                         const SizedBox(width: 20),
-                        InkWell(
+                        GestureDetector(
                           onTap: () {
                             // context.pushNamed(
                             //   AppRouterNames.chatsDetail,
@@ -106,7 +106,7 @@ class _ChatTabState extends State<ChatTab> {
                         ),
                         const SizedBox(width: 20),
                         Expanded(
-                          child: InkWell(
+                          child: GestureDetector(
                             onTap: () {
                               _pageController.animateToPage(
                                 2,

@@ -53,9 +53,9 @@ class BlurButton extends StatelessWidget {
               ),
             ),
           ).frosted(
-            blur: 3,
-            frostColor: AppColors.kGreyColor3,
-            frostOpacity: 0.01,
+            blur: 1,
+            frostColor: AppColors.kGreyColor,
+            frostOpacity: 0.005,
             borderRadius: BorderRadius.circular(30),
           )
         : const SizedBox.shrink();

@@ -11,11 +11,11 @@ class CallScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           Column(
-
             children: [
-              const SizedBox(height: 200,),
+              const SizedBox(
+                height: 200,
+              ),
               Lottie.asset(
                 'assets/json/call-anim.json',
                 width: 400,
@@ -29,8 +29,7 @@ class CallScreen extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.
-    symmetric(vertical: 30.0),
+              padding: const EdgeInsets.symmetric(vertical: 30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -45,7 +44,9 @@ class CallScreen extends StatelessWidget {
                       frameRate: FrameRate.max,
                     ),
                   ),
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   InkWell(
                     onTap: () {},
                     child: Lottie.asset(

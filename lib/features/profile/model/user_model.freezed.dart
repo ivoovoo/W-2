@@ -23,7 +23,7 @@ mixin _$UserModel {
   int get id => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
-  String? get city => throw _privateConstructorUsedError;
+  int? get city => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_online')
   DateTime? get lastOnline => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_online')
@@ -62,7 +62,7 @@ abstract class $UserModelCopyWith<$Res> {
       {int id,
       String username,
       String? email,
-      String? city,
+      int? city,
       @JsonKey(name: 'last_online') DateTime? lastOnline,
       @JsonKey(name: 'is_online') bool? isOnline,
       @JsonKey(name: 'follow_you') bool followYou,
@@ -119,7 +119,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       lastOnline: freezed == lastOnline
           ? _value.lastOnline
           : lastOnline // ignore: cast_nullable_to_non_nullable
@@ -172,7 +172,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       {int id,
       String username,
       String? email,
-      String? city,
+      int? city,
       @JsonKey(name: 'last_online') DateTime? lastOnline,
       @JsonKey(name: 'is_online') bool? isOnline,
       @JsonKey(name: 'follow_you') bool followYou,
@@ -227,7 +227,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       lastOnline: freezed == lastOnline
           ? _value.lastOnline
           : lastOnline // ignore: cast_nullable_to_non_nullable
@@ -299,7 +299,7 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String? email;
   @override
-  final String? city;
+  final int? city;
   @override
   @JsonKey(name: 'last_online')
   final DateTime? lastOnline;
@@ -416,7 +416,7 @@ abstract class _UserModel implements UserModel {
       {required final int id,
       required final String username,
       required final String? email,
-      required final String? city,
+      required final int? city,
       @JsonKey(name: 'last_online') final DateTime? lastOnline,
       @JsonKey(name: 'is_online') required final bool? isOnline,
       @JsonKey(name: 'follow_you') required final bool followYou,
@@ -440,7 +440,7 @@ abstract class _UserModel implements UserModel {
   @override
   String? get email;
   @override
-  String? get city;
+  int? get city;
   @override
   @JsonKey(name: 'last_online')
   DateTime? get lastOnline;
