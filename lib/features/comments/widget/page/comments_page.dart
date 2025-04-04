@@ -178,7 +178,7 @@ class _CommentsPageState extends State<CommentsPage> {
         ),
         child: Column(
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -351,7 +351,11 @@ class _CommentsPageState extends State<CommentsPage> {
                 _sendMessage(content, contentType);
               },
             ),
+            SizedBox(
+              height: 20,
+            ),
           ],
+
         ),
       ),
     );

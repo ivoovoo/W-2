@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/constants/colors.dart';
 import 'package:social_network/core/router/app_router_names.dart';
@@ -65,6 +66,7 @@ class _VideoViewPageState extends State<VideoViewPage> {
           itemBuilder: (context, index) {
             return Stack(
               children: [
+
                 SizedBox(
                   height: double.infinity,
                   width: double.infinity,
@@ -137,6 +139,10 @@ class _VideoViewPageState extends State<VideoViewPage> {
                     ],
                   ),
                 ),
+                // Positioned(
+                //   right: 16,
+                //   top: 40,
+                //   child: SvgPicture.asset(asset.icon.trash),),
               ],
             );
           },

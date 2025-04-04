@@ -171,7 +171,7 @@ class _CenterPageState extends State<CenterPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  S.of(context).add_photos,
+                  S.of(context).add_video,
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,

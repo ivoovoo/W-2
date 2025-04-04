@@ -14,9 +14,9 @@ class ChatWithAiRepository {
   Future sendMessage(String message) {
     return chatWithAiDataProvider.sendMessage(
       message: message,
-      aitoken: localStorageDataProvider.getString(LocalStorageKeys.aiToken)!,
-      // csrfToken:
-      //     localStorageDataProvider.getString(LocalStorageKeys.csrfToken)!,
+      token: localStorageDataProvider.getString(LocalStorageKeys.authToken)!,
+      csrfToken:
+          localStorageDataProvider.getString(LocalStorageKeys.csrfToken)!,
     );
   }
 }

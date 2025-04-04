@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "account": MessageLookupByLibrary.simpleMessage("аккаунт"),
     "active_nickname": MessageLookupByLibrary.simpleMessage("никнейм"),
     "add_photos": MessageLookupByLibrary.simpleMessage("Добавить фотоснимки"),
+    "add_video": MessageLookupByLibrary.simpleMessage("Добавить новое видео"),
     "already_have_an_account": MessageLookupByLibrary.simpleMessage(
       "Уже есть аккаунт?",
     ),

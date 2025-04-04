@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_network/core/router/app_router_names.dart';
@@ -167,10 +168,10 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: Colors.black,
-                                            width: 1,
-                                          ),
+                                          // border: Border.all(
+                                          //   color: Colors.black,
+                                          //   width: 1,
+                                          // ),
                                           image: DecorationImage(
                                             fit: BoxFit.cover,
                                             image: NetworkImage(
@@ -179,6 +180,37 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                                       null
                                                   ? 'https://thumbs.dreamstime.com/b/%D0%B8%D0%B7%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B0-%D0%B8%D0%B3%D1%80%D1%8B-png-104743086.jpg'
                                                   : 'http://45.153.191.237${userModel.userVideos[index].videoPreview}',
+                                            ),
+                                          ),
+                                        ),
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical:8),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  Assets.icons.eye,
+                                                  width: 20,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  userModel.userVideos[index]
+                                                      .viewsCount
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Inter',
+                                                    fontSize: 12
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),

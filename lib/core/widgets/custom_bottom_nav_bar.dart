@@ -126,6 +126,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       onDoubleTap: () {
                         appNotifier.secondMenuOfMarket = false;
                         appNotifier.switchingToMarket();
+
                         widget.navigationShell.goBranch(2);
                         _updatePage(2);
                       },

@@ -205,7 +205,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     return InkWell(
                                       onLongPress: () {
                                         _showDeleteDialog(
-                                            user.userVideos[index].id);
+                                            user.userVideos[index].id
+                                        );
                                       },
                                       onTap: () {
                                         context.pushNamed(

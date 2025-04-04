@@ -31,6 +31,8 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
   final recorder = FlutterSoundRecorder();
   final picker = ImagePicker();
   bool isRecorderReady = false;
+  final FocusNode _focusNode = FocusNode();
+  int _minLines = 1;
 
   Color gradientStartColor = const Color(0xffb7b7b7);
   Color gradientEndColor = const Color(0xffefedee);
@@ -47,6 +49,7 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
     textEditingController.removeListener(_updateState); // Удаляем слушатель
     textEditingController.dispose();
     recorder.closeRecorder();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -110,11 +113,11 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
     final status = await Permission.microphone.request();
     final status2 = await Permission.camera.request();
 
-    if (status != PermissionStatus.granted ||
-        status2 != PermissionStatus.granted) {
-      _showPermissionError();
-      return;
-    }
+    // if (status != PermissionStatus.granted ||
+    //     status2 != PermissionStatus.granted) {
+      // _showPermissionError();
+      // return;
+    // }
 
     await recorder.openRecorder();
     isRecorderReady = true;
@@ -141,6 +144,7 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
   }
 
   Future record() async {
+    print('rec audio');
     if (!isRecorderReady) {
       return;
     }
@@ -204,188 +208,206 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Row(
-        children: [
-          InkWell(
-            onTap: pickImage,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 10,
-              ),
-              width: 46,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: const Color(0xffffffff),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    offset: const Offset(0, 0),
-                    blurRadius: 15,
-                  ),
-                ],
-              ),
-              child: Image.asset(
-                'assets/icons/left_icon_of_message_input_widget.png',
-                fit: BoxFit.cover,
-              ),
+    return Row(
+      children: [
+        InkWell(
+          onTap: pickImage,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 10,
+            ),
+            width: 46,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xffffffff),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  offset: const Offset(0, 0),
+                  blurRadius: 15,
+                ),
+              ],
+            ),
+            child: Image.asset(
+              'assets/icons/left_icon_of_message_input_widget.png',
+              fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 7),
-          Expanded(
-            child: Container(
-              alignment: isRecording ? Alignment.center : null,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    offset: const Offset(0, 0),
-                    blurRadius: 15,
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(37),
-              ),
-              child: isRecording
-                  ? StreamBuilder<RecordingDisposition>(
-                      stream: recorder.onProgress,
-                      builder: (context, shanshot) {
-                        final duration = shanshot.hasData
-                            ? shanshot.data!.duration
-                            : Duration.zero;
-                        String twoDigits(int n) => n.toString().padLeft(1);
-                        final twoDigitMinutes =
-                            twoDigits(duration.inMinutes.remainder(60));
-                        final twoDigitSeconds =
-                            twoDigits(duration.inSeconds.remainder(60));
-                        return Text('$twoDigitMinutes:$twoDigitSeconds');
-                      },
-                    )
-                  : TextField(
-                      controller: textEditingController,
-                      cursorColor: const Color(0xff171717),
-                      decoration: InputDecoration(
-                        constraints: const BoxConstraints(
-                          maxHeight: 40,
-                          minHeight: 40,
-                          minWidth: double.infinity,
-                        ),
-                        hintText: S.of(context).my_message,
-                        hintStyle: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff7c7c7c),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(37),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(37),
-                          borderSide: BorderSide.none,
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(37),
-                          borderSide: BorderSide.none,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(37),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
+        ),
+        const SizedBox(width: 7),
+        Expanded(
+          child: Container(
+            alignment: isRecording ? Alignment.center : null,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  offset: const Offset(0, 0),
+                  blurRadius: 15,
+                ),
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(37),
+            ),
+            child: isRecording
+                ? StreamBuilder<RecordingDisposition>(
+                    stream: recorder.onProgress,
+                    builder: (context, shanshot) {
+                      final duration = shanshot.hasData
+                          ? shanshot.data!.duration
+                          : Duration.zero;
+                      String twoDigits(int n) => n.toString().padLeft(1);
+                      final twoDigitMinutes =
+                          twoDigits(duration.inMinutes.remainder(60));
+                      final twoDigitSeconds =
+                          twoDigits(duration.inSeconds.remainder(60));
+                      return Text('$twoDigitMinutes:$twoDigitSeconds');
+                    },
+                  )
+                : TextField(
+                    controller: textEditingController,
+                    cursorColor: const Color(0xff171717),
+                    focusNode: _focusNode,
+                    maxLines: null,
+                    minLines: _minLines,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      constraints: const BoxConstraints(
+                        maxHeight: 140,
+                        minHeight: 40,
+                        // minWidth: double.infinity,
                       ),
+                      hintText: S.of(context).my_message,
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff7c7c7c),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(37),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(37),
+                        borderSide: BorderSide.none,
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(37),
+                        borderSide: BorderSide.none,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(37),
+                        borderSide: BorderSide.none,
+                      ),
+                      // contentPadding: const EdgeInsets.symmetric(
+                      //     horizontal: 20, vertical: 10),
                     ),
-            ),
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: Platform.isIOS
+                        ? TextInputAction.done
+                        : TextInputAction.newline,
+                    onChanged: (text) {
+                      // Автоматический перенос текста
+                      // final newValue = _autoWrapText(text);
+                      // if (newValue != text) {
+                      //   textEditingController.value = TextEditingValue(
+                      //     text: newValue,
+                      //     selection: TextSelection.collapsed(
+                      //       offset: newValue.length,
+                      //     ),
+                      //   );
+                      // }
+                      setState(() {});
+                    },
+                  ),
           ),
-          const SizedBox(width: 7),
-          InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onDoubleTap: () {
-              setState(() {
-                isAudio = !isAudio;
-              });
-            },
-            onTapDown: (_) async {
-              if (textEditingController.text.isNotEmpty) {
-                widget.onSend(textEditingController.text, ContentType.Text);
-                textEditingController.clear();
-              } else if (textEditingController.text.isEmpty) {
-                if (isAudio) {
-                  setState(() {
-                    gradientStartColor = const Color(0xff4285f4);
-                    gradientEndColor = const Color(0xff6bfa79);
-                  });
-                  await record();
-                  setState(() {
-                    isRecording = true;
-                  });
-                } else {
-                  await pickVideo();
-                }
-              }
-            },
-            onTapUp: (_) async {
-              if (isRecording) {
-                // Если мы находимся в режиме записи, останавливаем запись
-                await stop();
+        ),
+        const SizedBox(width: 7),
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onDoubleTap: () {
+            setState(() {
+              isAudio = !isAudio;
+            });
+          },
+          onTapDown: (_) async {
+            if (textEditingController.text.isNotEmpty) {
+              widget.onSend(textEditingController.text, ContentType.Text);
+              textEditingController.clear();
+            } else if (textEditingController.text.isEmpty) {
+              if (isAudio) {
                 setState(() {
-                  gradientStartColor = textEditingController.text.isEmpty
-                      ? const Color(0xffb7b7b7)
-                      : const Color(0xff4285f4);
-                  gradientEndColor = textEditingController.text.isEmpty
-                      ? const Color(0xffefedee)
-                      : const Color(0xff6bfa79);
-                  isRecording = false;
+                  gradientStartColor = const Color(0xff4285f4);
+                  gradientEndColor = const Color(0xff6bfa79);
                 });
+                await record();
+                setState(() {
+                  isRecording = true;
+                });
+              } else {
+                await pickVideo();
               }
-            },
-            onTapCancel: () {
+            }
+          },
+          onTapUp: (_) async {
+            if (isRecording) {
+              // Если мы находимся в режиме записи, останавливаем запись
+              await stop();
               setState(() {
-                // Возвращаем градиент, если нажатие отменено
                 gradientStartColor = textEditingController.text.isEmpty
                     ? const Color(0xffb7b7b7)
                     : const Color(0xff4285f4);
                 gradientEndColor = textEditingController.text.isEmpty
                     ? const Color(0xffefedee)
                     : const Color(0xff6bfa79);
+                isRecording = false;
               });
-            },
-            child: Container(
-              padding: const EdgeInsets.all(11),
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    gradientStartColor,
-                    gradientEndColor,
-                  ],
-                ),
+            }
+          },
+          onTapCancel: () {
+            setState(() {
+              // Возвращаем градиент, если нажатие отменено
+              gradientStartColor = textEditingController.text.isEmpty
+                  ? const Color(0xffb7b7b7)
+                  : const Color(0xff4285f4);
+              gradientEndColor = textEditingController.text.isEmpty
+                  ? const Color(0xffefedee)
+                  : const Color(0xff6bfa79);
+            });
+          },
+          child: Container(
+            padding: const EdgeInsets.all(11),
+            height: 40,
+            width: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  gradientStartColor,
+                  gradientEndColor,
+                ],
               ),
-              child: textEditingController.text.isEmpty
-                  ? Icon(
-                      isAudio ? Icons.mic : Icons.videocam,
-                      size: 18,
-                      color: Colors.white,
-                    )
-                  : Image.asset(
-                      'assets/icons/send_vector.png',
-                      fit: BoxFit.cover,
-                    ),
             ),
+            child: textEditingController.text.isEmpty
+                ? Icon(
+                    isAudio ? Icons.mic : Icons.videocam,
+                    size: 18,
+                    color: Colors.white,
+                  )
+                : Image.asset(
+                    'assets/icons/send_vector.png',
+                    fit: BoxFit.cover,
+                  ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

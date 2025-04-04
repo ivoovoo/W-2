@@ -40,8 +40,6 @@ class _ChatScreenState extends State<ChatScreen> {
   ChatPartner chatPartner = const ChatPartner(id: -1, username: '');
   late int userId;
   ScrollController scrollController = ScrollController();
-  final GlobalKey _messageKey = GlobalKey();
-  bool _showBlur = false;
 
 
   @override
@@ -285,7 +283,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ? Alignment.centerRight
                                     : Alignment.centerLeft,
                                 child: TextContent(
-                                  key: _messageKey,
                                   onTap: () {},
                                   text: message.content,
                                   isSender: message.sender == userId,
@@ -379,15 +376,15 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
         ),
-        if (_showBlur)
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-              child: Container(
-                color: Colors.black.withOpacity(0.2),
-              ),
-            ),
-          ),
+        // if (_showBlur)
+        //   Positioned.fill(
+        //     child: BackdropFilter(
+        //       filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+        //       child: Container(
+        //         color: Colors.black.withOpacity(0.2),
+        //       ),
+        //     ),
+        //   ),
       ],
     );
   }

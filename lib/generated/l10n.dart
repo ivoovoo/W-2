@@ -429,6 +429,11 @@ class S {
   String get answer {
     return Intl.message('Answer', name: 'answer', desc: '', args: []);
   }
+
+  /// `ADD NEW VIDEO`
+  String get add_video {
+    return Intl.message('ADD NEW VIDEO', name: 'add_video', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
