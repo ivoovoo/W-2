@@ -29,4 +29,22 @@ class AppRouterNames {
   static const videoView = 'videoView';
   static const infoPage = 'infoPage';
   static const navBarMusic = 'navBarMusic';
+  static const navBarChess = 'navBarChess';
+  static const navBarCloud = 'navBarCloud';
+  static const navBarMap = 'navBarMap';
+  static const navBarCourse = 'navBarCourse';
+  static const navBarCryptology = 'navBarCryptology';
+  static const navBarExchange = 'navBarExchange';
+  static const navBarFlight = 'navBarFlight';
+  static const navBarStart = 'navBarStart';
+  static const navBarLearning = 'navBarLearning';
+  static const navBarMarket = 'navBarMarket';
+  static const navBarMeditation = 'navBarMeditation';
+  static const navBarMovies = 'navBarMovies';
+  static const navBarBrowser = 'navBarBrowser';
+  static const navBarNwapp = 'navBarNwapp';
+  static const navBarTaxi = 'navBarTaxi';
+  static const navBarEditor = 'navBarEditor';
+  static const navBarVps = 'navBarVps';
+  static const navBarWallet = 'navBarWallet';
 }

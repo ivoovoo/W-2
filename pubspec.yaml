@@ -101,9 +101,41 @@ dependencies:
   video_compress: ^3.1.4
   get_thumbnail_video: ^0.7.3
 
+  #taxi
+  flutter_osm_plugin: ^1.3.6
+  fl_chart: ^0.70.2
+  equatable: ^2.0.7
+  flutter_swipe_button: ^2.1.3
+  flutter_markdown: ^0.7.6+2
+  timer_count_down: ^2.2.2
+  card_swiper: ^3.0.1
+  pointer_interceptor: ^0.10.1+2
+  flutter_hooks: ^0.21.2
+  video_trimmer: ^4.0.0
+  country_picker: ^2.0.27
+  flutter_localization: ^0.2.0
+  ffmpeg_wasm: ^1.0.3
+  calendar_date_picker2: ^1.1.9
+  animated_weight_picker: ^1.0.3
+  ffmpeg_kit_flutter: ^6.0.3
+  image_picker_ios: ^0.8.12+2
+  path_provider_foundation: ^2.4.1
+  video_thumbnail: ^0.5.3
+  osm_nominatim: ^3.0.1
+  printing: ^5.14.2
+  pdf: ^3.11.3
+  animated_bottom_navigation_bar: ^1.3.3
+  ssh2: ^2.2.3
+  contacts_service: ^0.6.3
+  percent_indicator: ^4.2.4
+  flutter_lints: ^4.0.0
+  syncfusion_flutter_sliders: ^28.2.12
+  flutter_typeahead: ^5.2.0
+
 
 dependency_overrides:
   get_thumbnail_video: ^0.7.3
+  uuid: ^4.4.2
 
 dev_dependencies:
   flutter_test:
@@ -145,6 +177,9 @@ flutter:
     # - assets/videos/
     - assets/images_of_market/
     - assets/music/
+    - assets/images/png/
+    - assets/images/svg/
+    - assets/images/svg/svg-figures/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -165,6 +200,35 @@ flutter:
     - family: Raleway
       fonts:
         - asset: assets/fonts/Raleway-Regular.ttf
+    - family: HelveticaNeue
+      fonts:
+        - asset: assets/fonts/HelveticaNeue-Bold.otf # w700
+        - asset: assets/fonts/HelveticaNeue-Regular.otf # w400
+        - asset: assets/fonts/HelveticaNeue-Light.otf # w300
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-Medium.ttf
+        - asset: assets/fonts/Inter_18pt-Regular.ttf
+
+    - family: BakbakOne
+      fonts:
+        - asset: assets/fonts/BakbakOne-Regular.ttf
+
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-VariableFont_opsz,wght.ttf
+    - family: Montserrat Alternates
+      fonts:
+        - asset: assets/fonts/MontserratAlternates-Regular.ttf
+    - family: Source Sans
+      fonts:
+        - asset: assets/fonts/SourceSans3-Regular.ttf
+    - family: Prompt
+      fonts:
+        - asset: assets/fonts/Prompt-Regular.ttf
+    - family: GROBOLD
+      fonts:
+        - asset: assets/fonts/GROBOLD.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

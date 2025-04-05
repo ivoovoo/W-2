@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_network/CLOUD/models/main_bar.dart';
+import 'package:social_network/Chess/app.dart';
+import 'package:social_network/Concert/Screens/map_view.dart';
+import 'package:social_network/Course/OnBoarding/onboarding.dart';
+import 'package:social_network/Cryptology/screen/onboarding.dart';
+import 'package:social_network/Excahnge/widgets/main_bar.dart';
+import 'package:social_network/Flight/Navigation/nav_bar.dart';
+import 'package:social_network/Island/screens/start_screen.dart';
+import 'package:social_network/Learning%20app/Screens/onboarding.dart';
+import 'package:social_network/MOVIES/App.dart';
+import 'package:social_network/Market%20app/widgets/main_bar.dart';
+import 'package:social_network/Meditation/main.dart';
+import 'package:social_network/New%20Project/widgets/main_bar.dart';
+import 'package:social_network/New%20Wallet/app.dart';
+import 'package:social_network/TAXI/Screen/login_page.dart';
+import 'package:social_network/VPS/app.dart';
+import 'package:social_network/Video%20Editor/app.dart';
+import 'package:social_network/Wallet/Screens/onboarding.dart';
 import 'package:social_network/core/core.dart';
 import 'package:social_network/core/models/video_model.dart';
 import 'package:social_network/core/widgets/unauthorized_dialog_box.dart';
@@ -295,8 +313,8 @@ final GoRouter router = GoRouter(
               child: child,
             );
           },
-          transitionDuration: Duration(milliseconds: 600),
-          reverseTransitionDuration: Duration(milliseconds: 600),
+          transitionDuration: const Duration(milliseconds: 600),
+          reverseTransitionDuration: const Duration(milliseconds: 600),
         );
       },
     ),
@@ -343,7 +361,7 @@ final GoRouter router = GoRouter(
       path: '/registrationPage',
       name: AppRouterNames.registrationPage,
       builder: (BuildContext context, GoRouterState state) =>
-          RegistrationScreen(),
+          const RegistrationScreen(),
       routes: [
         GoRoute(
           path: 'authPage',
@@ -423,6 +441,96 @@ final GoRouter router = GoRouter(
       name: AppRouterNames.navBarMusic,
       path: '/music',
       builder: (context, state) => MainMusicScreen(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarChess,
+      path: '/chess',
+      builder: (context, state) => const ChessApp(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarCloud,
+      path: '/cloud',
+      builder: (context, state) => const MainScreenCloud(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarMap,
+      path: '/map',
+      builder: (context, state) => const MapView(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarCourse,
+      path: '/course',
+      builder: (context, state) => OnboardingCourseScreen(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarCryptology,
+      path: '/cryptology',
+      builder: (context, state) => const OnboardingCryptology(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarExchange,
+      path: '/exchange',
+      builder: (context, state) => const MainScreenExchange(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarFlight,
+      path: '/flight',
+      builder: (context, state) => MainMenuScreenFlight(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarStart,
+      path: '/start',
+      builder: (context, state) => const StartScreen(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarLearning,
+      path: '/learning',
+      builder: (context, state) => const OnboardingLearning(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarMarket,
+      path: '/market',
+      builder: (context, state) => const MainScreenMarket(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarMeditation,
+      path: '/meditation',
+      builder: (context, state) => const MeditationApp(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarMovies,
+      path: '/movies',
+      builder: (context, state) => const AppMovies(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarBrowser,
+      path: '/browser',
+      builder: (context, state) => const MainScreenBrowser(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarNwapp,
+      path: '/nw',
+      builder: (context, state) => const NWApp(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarTaxi,
+      path: '/taxi',
+      builder: (context, state) => const Login(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarEditor,
+      path: '/editor',
+      builder: (context, state) => const EditorApp(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarVps,
+      path: '/vps',
+      builder: (context, state) => const AppVps(),
+    ),
+    GoRoute(
+      name: AppRouterNames.navBarWallet,
+      path: '/wallet',
+      builder: (context, state) => const OnboardingScreenWallet(),
     ),
   ],
 );
