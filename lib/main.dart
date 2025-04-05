@@ -19,7 +19,6 @@ Future<void> main() async {
   final issAuthenticated = await isAuthenticated();
   appNotifier = AppNotifier(issAuthenticated, false);
   return runApp(TranslationProvider(child: const MyApp()));
-
 }
 
 class MyApp extends StatelessWidget {

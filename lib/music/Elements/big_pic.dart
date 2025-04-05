@@ -14,7 +14,7 @@ class BigPicElement extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           image: DecorationImage(
-            image: AssetImage('assets/bigpic.png'), // Используем AssetImage вместо Image.asset
+            image: AssetImage('assets/music/bigpic.png'), // Используем AssetImage вместо Image.asset
             fit: BoxFit.contain, // Устанавливаем режим отображения изображения
           ),
         ),

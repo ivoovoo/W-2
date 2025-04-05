@@ -105,7 +105,7 @@ SizedBox(height: 50,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: SvgPicture.asset('assets/p1.svg'),
+                        child: SvgPicture.asset('assets/music/p1.svg'),
                       ),
                     ],
                   ),
@@ -113,7 +113,7 @@ SizedBox(height: 50,),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
-                    'assets/Album Cover.png',
+                    'assets/music/Album Cover.png',
                     // height: 350,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -144,9 +144,9 @@ SizedBox(height: 50,),
                       ),
                       Row(
                         children: [
-                          SvgPicture.asset('assets/p2.svg'),
+                          SvgPicture.asset('assets/music/p2.svg'),
                           SizedBox(width: 10,),
-                          SvgPicture.asset('assets/p3.svg'),
+                          SvgPicture.asset('assets/music/p3.svg'),
                         ],
                       ),
                     ],
@@ -205,7 +205,7 @@ SizedBox(height: 50,),
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(width: 10),
-                    SvgPicture.asset('assets/p4.svg'),
+                    SvgPicture.asset('assets/music/p4.svg'),
                     IconButton(
                       onPressed:
                           loaded
@@ -261,7 +261,7 @@ SizedBox(height: 50,),
                               : null,
                       icon: const Icon(Icons.fast_forward_rounded,color: Colors.white,),
                     ),
-                    SvgPicture.asset('assets/p5.svg'),
+                    SvgPicture.asset('assets/music/p5.svg'),
                     const SizedBox(width: 10),
                   ],
                 ),

@@ -11,6 +11,7 @@ import 'package:social_network/data.dart';
 import 'package:social_network/market/create_advertisement/notifiers/notifier_of_menu.dart';
 import 'package:vibration/vibration.dart';
 
+
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
     super.key,
@@ -126,7 +127,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       onDoubleTap: () {
                         appNotifier.secondMenuOfMarket = false;
                         appNotifier.switchingToMarket();
-
+                        openFullScreenModal(context);
                         widget.navigationShell.goBranch(2);
                         _updatePage(2);
                       },

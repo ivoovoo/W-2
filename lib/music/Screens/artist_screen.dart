@@ -1,11 +1,9 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../Elements/album_element.dart';
 import '../Elements/col_home.dart';
-
 
 class ArtistScreen extends StatefulWidget {
   const ArtistScreen({super.key});
@@ -66,21 +64,19 @@ class _ArtistScreenState extends State<ArtistScreen>
     await player.pause();
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        Color interpolatedColor1 = Color.lerp(Color.fromRGBO(34, 77, 129, 1.0), Color.fromRGBO(4, 31, 66, 1.0), _animation.value)!;
-        Color interpolatedColor2 = Color.lerp(Color.fromRGBO(4, 31, 66, 1.0), Color.fromRGBO(34, 77, 129, 1.0), _animation.value)!;
+        Color interpolatedColor1 = Color.lerp(const Color.fromRGBO(34, 77, 129, 1.0),
+            const Color.fromRGBO(4, 31, 66, 1.0), _animation.value)!;
+        Color interpolatedColor2 = Color.lerp(const Color.fromRGBO(4, 31, 66, 1.0),
+            const Color.fromRGBO(34, 77, 129, 1.0), _animation.value)!;
 
         return Container(
           decoration: BoxDecoration(
-            color: Color.fromRGBO(21, 49, 83, 1),
+            color: const Color.fromRGBO(21, 49, 83, 1),
             gradient: LinearGradient(
               colors: [
                 interpolatedColor1,
@@ -93,14 +89,14 @@ class _ArtistScreenState extends State<ArtistScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 70),
+              const SizedBox(height: 70),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: [
                     InkWell(
                       onTap: () {},
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back_ios_new,
                         color: Colors.white,
                       ),
@@ -108,9 +104,9 @@ class _ArtistScreenState extends State<ArtistScreen>
                   ],
                 ),
               ),
-              SizedBox(height: 160),
-              Padding(
-                padding: const EdgeInsets.symmetric(
+              const SizedBox(height: 120),
+              const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: 20.0,
                   vertical: 10,
                 ),
@@ -140,22 +136,22 @@ class _ArtistScreenState extends State<ArtistScreen>
                   padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
                   children: [
-                    AlbumElement(
-                      imgPath: 'assets/Album 1.png',
+                    const AlbumElement(
+                      imgPath: 'assets/music/Album 1.png',
                       name: 'Awaken, My Love',
                       description: 'Album • 2016 ',
                       color1: Colors.blueAccent,
                       color2: Colors.greenAccent,
                     ),
-                    AlbumElement(
-                      imgPath: 'assets/Album 2.png',
+                    const AlbumElement(
+                      imgPath: 'assets/music/Album 2.png',
                       name: 'Awaken, My Love',
                       description: 'Album • 2016  ',
                       color2: Colors.pink,
                       color1: Colors.purple,
                     ),
-                    AlbumElement(
-                      imgPath: 'assets/Album 3.png',
+                    const AlbumElement(
+                      imgPath: 'assets/music/Album 3.png',
                       name: 'Feels Like Summer',
                       description: 'Album • 2016 ',
                       color1: Colors.yellow,
@@ -165,184 +161,187 @@ class _ArtistScreenState extends State<ArtistScreen>
                 ),
               ),
               Container(
-                height: 198,
+                height: 215,
                 child: PageView(
                   scrollDirection: Axis.horizontal,
-                  children: [ColumElement(), ColumElement(), ColumElement()],
+                  children: [const ColumElement(), const ColumElement(), const ColumElement()],
                 ),
               ),
-              Container(
-                height: 65,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 16,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 43,
-                            width: 43,
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey,
-                              borderRadius: BorderRadius.circular(10),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  height: 85,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 43,
+                                  width: 43,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Redbone',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Childish Gambino',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white.withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Redbone',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  onPressed: loaded
+                                      ? () async {
+                                          if (player.position.inSeconds >= 10) {
+                                            await player.seek(
+                                              Duration(
+                                                seconds:
+                                                    player.position.inSeconds - 10,
+                                              ),
+                                            );
+                                          } else {
+                                            await player.seek(
+                                              const Duration(seconds: 0),
+                                            );
+                                          }
+                                        }
+                                      : null,
+                                  icon: const Icon(
+                                    Icons.fast_rewind_rounded,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                'Childish Gambino',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white.withOpacity(0.5),
+                                IconButton(
+                                  onPressed: loaded
+                                      ? () {
+                                          if (playing) {
+                                            pauseMusic();
+                                          } else {
+                                            playMusic();
+                                          }
+                                        }
+                                      : null,
+                                  icon: Icon(
+                                    playing ? Icons.pause : Icons.play_arrow,
+                                    color: playing
+                                        ? const Color.fromRGBO(0, 149, 233, 1)
+                                        : Colors.white,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                IconButton(
+                                  onPressed: loaded
+                                      ? () async {
+                                          if (player.position.inSeconds + 10 <=
+                                              player.duration!.inSeconds) {
+                                            await player.seek(
+                                              Duration(
+                                                seconds:
+                                                    player.position.inSeconds + 10,
+                                              ),
+                                            );
+                                          } else {
+                                            await player.seek(
+                                              const Duration(seconds: 0),
+                                            );
+                                          }
+                                        }
+                                      : null,
+                                  icon: const Icon(
+                                    Icons.fast_forward_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                            onPressed:
-                                loaded
-                                    ? () async {
-                                      if (player.position.inSeconds >= 10) {
-                                        await player.seek(
-                                          Duration(
-                                            seconds:
-                                                player.position.inSeconds - 10,
-                                          ),
-                                        );
-                                      } else {
-                                        await player.seek(
-                                          const Duration(seconds: 0),
-                                        );
-                                      }
-                                    }
-                                    : null,
-                            icon: const Icon(
-                              Icons.fast_rewind_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed:
-                                loaded
-                                    ? () {
-                                      if (playing) {
-                                        pauseMusic();
-                                      } else {
-                                        playMusic();
-                                      }
-                                    }
-                                    : null,
-                            icon: Icon(
-                              playing ? Icons.pause : Icons.play_arrow,
-                              color:
-                                  playing
-                                      ? Color.fromRGBO(0, 149, 233, 1)
-                                      : Colors.white,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed:
-                                loaded
-                                    ? () async {
-                                      if (player.position.inSeconds + 10 <=
-                                          player.duration!.inSeconds) {
-                                        await player.seek(
-                                          Duration(
-                                            seconds:
-                                                player.position.inSeconds + 10,
-                                          ),
-                                        );
-                                      } else {
-                                        await player.seek(
-                                          const Duration(seconds: 0),
-                                        );
-                                      }
-                                    }
-                                    : null,
-                            icon: const Icon(
-                              Icons.fast_forward_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: StreamBuilder(
-                  stream: player.positionStream,
-                  builder: (context, snapshot1) {
-                    final Duration duration =
-                        loaded
-                            ? snapshot1.data as Duration
-                            : const Duration(seconds: 0);
-                    return StreamBuilder(
-                      stream: player.bufferedPositionStream,
-                      builder: (context, snapshot2) {
-                        final Duration bufferedDuration =
-                            loaded
-                                ? snapshot2.data as Duration
+                          ],
+                        ),
+                        const SizedBox(height: 10,),
+                        StreamBuilder(
+                          stream: player.positionStream,
+                          builder: (context, snapshot1) {
+                            final Duration duration = loaded
+                                ? snapshot1.data as Duration
                                 : const Duration(seconds: 0);
-                        return SizedBox(
-                          height: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: ProgressBar(
-                              progress: duration,
-                              total:
-                                  player.duration ?? const Duration(seconds: 0),
-                              buffered: bufferedDuration,
-                              timeLabelPadding: 0,
-                              barHeight: 4,
-                              thumbRadius: 2,
-                              timeLabelTextStyle: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.transparent,
-                              ),
-                              progressBarColor: Color.fromRGBO(54, 196, 245, 1),
-                              baseBarColor: Color.fromRGBO(54, 196, 245, 1),
-                              bufferedBarColor: Color.fromRGBO(54, 196, 245, 1),
-                              thumbColor: Color.fromRGBO(54, 196, 245, 1),
-                              onSeek:
-                                  loaded
-                                      ? (duration) async {
+                            return StreamBuilder(
+                              stream: player.bufferedPositionStream,
+                              builder: (context, snapshot2) {
+                                final Duration bufferedDuration = loaded
+                                    ? snapshot2.data as Duration
+                                    : const Duration(seconds: 0);
+                                return SizedBox(
+                                  height: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: ProgressBar(
+                                      progress: duration,
+                                      total: player.duration ??
+                                          const Duration(seconds: 0),
+                                      buffered: bufferedDuration,
+                                      timeLabelPadding: 0,
+                                      barHeight: 4,
+                                      thumbRadius: 2,
+                                      timeLabelTextStyle: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.transparent,
+                                      ),
+                                      progressBarColor:
+                                      const Color.fromRGBO(54, 196, 245, 1),
+                                      baseBarColor:
+                                      const Color.fromRGBO(54, 196, 245, 1),
+                                      bufferedBarColor:
+                                      const Color.fromRGBO(54, 196, 245, 1),
+                                      thumbColor:
+                                      const Color.fromRGBO(54, 196, 245, 1),
+                                      onSeek: loaded
+                                          ? (duration) async {
                                         await player.seek(duration);
                                       }
-                                      : null,
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                                          : null,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

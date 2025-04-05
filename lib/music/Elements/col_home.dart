@@ -14,19 +14,19 @@ class ColumElement extends StatelessWidget {
         children: [
           RowElement(
             name: 'Redbone',
-            svgPath: 'assets/m1.png',
+            svgPath: 'assets/music/m1.png',
             time: '6:19',
             number: '1',
           ),
           RowElement(
             name: '3005',
-            svgPath: 'assets/m2.png',
+            svgPath: 'assets/music/m2.png',
             time: '3:54',
             number: '2',
           ),
           RowElement(
             name: 'Les',
-            svgPath: 'assets/m3.png',
+            svgPath: 'assets/music/m3.png',
             time: '5:17',
             number: '3',
           ),

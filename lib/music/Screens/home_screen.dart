@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                SvgPicture.asset('assets/h11.svg'),
+                                SvgPicture.asset('assets/music/h11.svg'),
                                 SizedBox(height: 10),
                                 Text(
                                   'MY VIBE',
@@ -244,21 +244,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       scrollDirection: Axis.horizontal,
                       children: [
                         AlbumElement(
-                          imgPath: 'assets/Album 1.png',
+                          imgPath: 'assets/music/Album 1.png',
                           name: 'Awaken, My Love',
                           description: 'Album • 2016 ',
                           color1: Colors.yellow,
                           color2: Colors.yellowAccent,
                         ),
                         AlbumElement(
-                          imgPath: 'assets/Album 2.png',
+                          imgPath: 'assets/music/Album 2.png',
                           name: 'Because of The ...',
                           description: 'Album • 2016  ',
                           color2: Colors.pink,
                           color1: Colors.purple,
                         ),
                         AlbumElement(
-                          imgPath: 'assets/Album 3.png',
+                          imgPath: 'assets/music/Album 3.png',
                           name: 'Feels Like Summer',
                           description: 'Album • 2016 ',
                           color1: Colors.blueAccent,

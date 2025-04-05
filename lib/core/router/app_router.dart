@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_network/core/core.dart';
 import 'package:social_network/core/models/video_model.dart';
@@ -32,6 +33,7 @@ import 'package:social_network/features/profile/widgets/page/avatars_page.dart';
 import 'package:social_network/features/site_categories/widget/page/site_categories_page.dart';
 
 import '../../features/home_page/home_page.dart';
+import '../../music/NavBar/main_menu.dart';
 import 'app_router_names.dart';
 
 class AppNotifier extends ChangeNotifier {
@@ -194,6 +196,12 @@ final GoRouter router = GoRouter(
                   builder: (BuildContext context, GoRouterState state) =>
                       const CenterPage(),
                 ),
+                // GoRoute(
+                //   path: 'addVideo',
+                //   name: AppRouterNames.addVideo,
+                //   builder: (BuildContext context, GoRouterState state) =>
+                //   const CenterPage(),
+                // ),
               ],
             ),
           ],
@@ -411,5 +419,200 @@ final GoRouter router = GoRouter(
         );
       },
     ),
+    GoRoute(
+      name: AppRouterNames.navBarMusic,
+      path: '/music',
+      builder: (context, state) => MainMusicScreen(),
+    ),
   ],
 );
+
+
+final List<String> buttonTitles = [
+  'Music',
+  'Chess',
+  'Cloud',
+  'Concert',
+  'Course',
+  'Cryptology',
+  'Exchange',
+  'Flight',
+  'Island',
+  'Learning',
+  'Market',
+  'Meditation',
+  'Movies',
+  'NP',
+  'NW',
+  'Taxi',
+  'Editor',
+  'VPS',
+  'Wallet'
+];
+
+// 2. Список путей для навигации
+final List<String> screensPaths = [
+  '/music',
+  '/chess',
+  '/cloud',
+  '/map',
+  '/course',
+  '/cryptology',
+  '/exchange',
+  '/flight',
+  '/start',
+  '/learning',
+  '/market',
+  '/meditation',
+  '/movies',
+  '/browser',
+  '/nwapp',
+  '/taxi',
+  '/editor',
+  '/vps',
+  '/wallet',
+];
+
+// final List<Widget> screensWidget = [
+//   // ChessApp(),
+//   // MainScreenCloud(),
+//   // MapView(),
+//   // OnboardingCourseScreen(),
+//   // OnboardingCryptology(),
+//   // MainScreenExchange(),
+//   // MainMenuScreenFlight(),
+//   // StartScreen(),
+//   // OnboardingLearning(),
+//   // MainScreenMarket(),
+//   // MeditationApp(),
+//   // AppMovies(),
+//   // MainScreenBrowser(),
+//   // NWApp(),
+//   // TaxiApp(),
+//   // EditorApp(),
+//   // AppVps(),
+//   // OnboardingScreenWallet(),
+//
+// ];
+
+final List<List<Color>> gradientColors = [
+  [Colors.red, Colors.orange],
+  [Colors.blue, Colors.green],
+  [Colors.purple, Colors.pink],
+  [Colors.teal, Colors.cyan],
+  [Colors.amber, Colors.deepOrange],
+  [Colors.indigo, Colors.blueAccent],
+  [Colors.lightGreen, Colors.lime],
+  [Colors.deepPurple, Colors.purpleAccent],
+  [Colors.blueGrey, Colors.grey],
+  [Colors.brown, Colors.orange],
+  [Colors.green, Colors.lightGreen],
+  [Colors.pink, Colors.redAccent],
+  [Colors.cyan, Colors.tealAccent],
+  [Colors.orange, Colors.amber],
+  [Colors.purple, Colors.deepPurple],
+  [Colors.lime, Colors.yellow],
+  [Colors.teal, Colors.blue],
+  [Colors.red, Colors.pink],
+  [Colors.red, Colors.orange],
+];
+
+
+
+
+void openFullScreenModal(BuildContext context) {
+  final router = GoRouter.of(context);
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) {
+      return StatefulBuilder(builder: (context, setState) {
+        return DraggableScrollableSheet(
+            initialChildSize: 0.5,
+            minChildSize: 0.3,
+            maxChildSize: 0.9,
+            snap: true,
+            snapSizes: const [0.3, 0.5, 0.9],
+            builder: (context, scrollController) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 16.0,
+                    left: 16,
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 5,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      Expanded(
+                        child: GridView.builder(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.8,
+                          ),
+                          itemCount: screensPaths.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                HapticFeedback.lightImpact();
+                                router.pushReplacement(
+                                  screensPaths[index], // Ваши пути из GoRouter
+                                  // extra: {            // Дополнительные параметры если нужно
+                                  //   'index': index,
+                                  //   'title': buttonTitles[index],
+                                  // },
+                                );
+                                Navigator.pop(context);
+                              },
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        gradient: LinearGradient(
+                                          colors: gradientColors[index],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    buttonTitles[index],
+                                    style: const TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            });
+      });
+    },
+  );
+}

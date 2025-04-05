@@ -24,7 +24,7 @@ class FirstMenuRepository {
     {
       'name': 'Sunset Villa',
       'cost': 'Rp. 3.000.000.000 / Прямо сейчас',
-      'imgPath': 'assets/images_of_market/hotel_2.png',
+      'imgPath': 'assets/images_of_market/hotel_1.png',
       'description1': '5 Bedroom',
       'description2': '3 Bathroom',
       'svgPath1': 'assets/images_of_market/bed_icon.svg',

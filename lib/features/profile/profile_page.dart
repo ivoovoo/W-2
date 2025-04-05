@@ -44,20 +44,19 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showDeleteDialog(int idVideo) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
+      backgroundColor: Colors.transparent,
+      isScrollControlled: false,
+      builder: (context) =>  Container(
+        height: 200,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(30),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            // mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 "Delete this video?",
@@ -65,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 26),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
@@ -111,8 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   @override

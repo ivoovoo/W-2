@@ -58,7 +58,7 @@ class RowElement extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 10,),
-              SvgPicture.asset('assets/Icon_Dots.svg'),
+              SvgPicture.asset('assets/music/Icon_Dots.svg'),
             ],
           ),
         ],

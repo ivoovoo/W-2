@@ -9,12 +9,12 @@ import '../Screens/artist_screen.dart';
 import '../Screens/home_screen.dart';
 import '../Screens/search_screen.dart';
 
-class MainMenuScreen extends StatefulWidget {
+class MainMusicScreen extends StatefulWidget {
   @override
-  _MainMenuScreenState createState() => _MainMenuScreenState();
+  _MainMusicScreenState createState() => _MainMusicScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen> {
+class _MainMusicScreenState extends State<MainMusicScreen> {
   int _selectedIndex = 0;
 
   // Список виджетов для каждой вкладки
@@ -71,7 +71,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           _onItemTapped(0);
                         },
                         child: SvgPicture.asset(
-                          'assets/home.svg',
+                          'assets/music/home.svg',
                           color:
                               _selectedIndex == 0
                                   ? Colors.white
@@ -84,7 +84,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           _onItemTapped(1);
                         },
                         child: SvgPicture.asset(
-                          'assets/search.svg',
+                          'assets/music/search.svg',
                           color:
                               _selectedIndex == 1
                                   ? Colors.white
@@ -97,7 +97,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           _onItemTapped(2);
                         },
                         child: SvgPicture.asset(
-                          'assets/library.svg',
+                          'assets/music/library.svg',
                           color:
                               _selectedIndex == 2
                                   ? Colors.white

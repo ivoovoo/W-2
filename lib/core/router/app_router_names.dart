@@ -28,4 +28,5 @@ class AppRouterNames {
   static const chatWithAi = 'chatWithAi';
   static const videoView = 'videoView';
   static const infoPage = 'infoPage';
+  static const navBarMusic = 'navBarMusic';
 }
