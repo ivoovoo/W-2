@@ -111,16 +111,14 @@ dependencies:
   card_swiper: ^3.0.1
   pointer_interceptor: ^0.10.1+2
   flutter_hooks: ^0.21.2
-  video_trimmer: ^4.0.0
+#  video_trimmer: ^4.0.0
   country_picker: ^2.0.27
   flutter_localization: ^0.2.0
-  ffmpeg_wasm: ^1.0.3
   calendar_date_picker2: ^1.1.9
   animated_weight_picker: ^1.0.3
-  ffmpeg_kit_flutter: ^6.0.3
   image_picker_ios: ^0.8.12+2
-  path_provider_foundation: ^2.4.1
-  video_thumbnail: ^0.5.3
+#  path_provider_foundation: ^2.4.1
+#  video_thumbnail: ^0.5.3
   osm_nominatim: ^3.0.1
   printing: ^5.14.2
   pdf: ^3.11.3
@@ -132,6 +130,12 @@ dependencies:
   syncfusion_flutter_sliders: ^28.2.12
   flutter_typeahead: ^5.2.0
 
+  #swap
+  mobile_scanner: ^6.0.7
+  another_flushbar: ^1.12.30
+  share_plus: ^10.1.4
+  flutter_animated_button: ^2.0.4
+  http_parser: ^4.0.2
 
 dependency_overrides:
   get_thumbnail_video: ^0.7.3
@@ -229,6 +233,18 @@ flutter:
     - family: GROBOLD
       fonts:
         - asset: assets/fonts/GROBOLD.ttf
+    - family: Gotham
+      fonts:
+        - asset: assets/fonts/gotham_medium.otf
+        - asset: assets/fonts/gotham_bold.otf
+    - family: Space Mono
+      fonts:
+        - asset: assets/fonts/SpaceMono-Bold.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

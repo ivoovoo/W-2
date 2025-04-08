@@ -40,7 +40,7 @@ class _AlbumElementState extends State<AlbumElement>
     _controller.dispose();
     super.dispose();
   }
-
+  bool _isPlaying = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,24 +49,38 @@ class _AlbumElementState extends State<AlbumElement>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              Color interpolatedColor1 =
-                  Color.lerp(widget.color1, widget.color2, _animation.value)!;
-              Color interpolatedColor2 =
-                  Color.lerp(widget.color2, widget.color1, _animation.value)!;
-              return Container(
-                width: 132,
-                height: 132,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: LinearGradient(
-                    colors: [interpolatedColor1, interpolatedColor2],
-                  ),
-                ),
-              );
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isPlaying = !_isPlaying;
+              });
             },
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                Color interpolatedColor1 =
+                    Color.lerp(widget.color1, widget.color2, _animation.value)!;
+                Color interpolatedColor2 =
+                    Color.lerp(widget.color2, widget.color1, _animation.value)!;
+                return Container(
+                  width: 132,
+                  height: 132,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: LinearGradient(
+                      colors: [interpolatedColor1, interpolatedColor2],
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      _isPlaying ? Icons.pause : Icons.play_arrow,
+                      size: 48,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
           SizedBox(height: 10),
           Text(

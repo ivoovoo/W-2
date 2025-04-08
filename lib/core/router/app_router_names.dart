@@ -47,4 +47,7 @@ class AppRouterNames {
   static const navBarEditor = 'navBarEditor';
   static const navBarVps = 'navBarVps';
   static const navBarWallet = 'navBarWallet';
+  static const swapScreen = 'swapScreen';
+  static const crypto = 'crypto';
+  static const cryptoHome = 'cryptoHome';
 }

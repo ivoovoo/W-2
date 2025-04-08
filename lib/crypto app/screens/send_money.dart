@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 
-import '../Elements/custom_keyboard.dart';
+import '../../New Wallet/Elements/custom_keyboard.dart';
 
 class SendMoney extends StatefulWidget {
   const SendMoney({super.key});

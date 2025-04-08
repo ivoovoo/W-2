@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  final int tab;
+class HomeScreenCrypto extends StatefulWidget {
 
-  const HomeScreen({super.key, required this.tab});
+  const HomeScreenCrypto({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreenCrypto> createState() => _HomeScreenCryptoState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
+class _HomeScreenCryptoState extends State<HomeScreenCrypto>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation1;

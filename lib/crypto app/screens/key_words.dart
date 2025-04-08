@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/router/app_router_names.dart';
 
 class KeyWords extends StatefulWidget {
-  final int tab;
-  const KeyWords({super.key, required this.tab});
+  const KeyWords({super.key});
 
   @override
   State<KeyWords> createState() => _KeyWordsState();
@@ -38,7 +40,7 @@ class _KeyWordsState extends State<KeyWords> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(31, 12, 191, 1.0),
@@ -51,11 +53,11 @@ class _KeyWordsState extends State<KeyWords> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 55,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
+            const Padding(
+              padding: EdgeInsets.all(20.0),
               child: Text(
                 'KEY WORDS',
                 style: TextStyle(
@@ -69,7 +71,7 @@ class _KeyWordsState extends State<KeyWords> {
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
@@ -81,7 +83,7 @@ class _KeyWordsState extends State<KeyWords> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Write Seed Phrase',
                         style: TextStyle(
                           fontSize: 24,
@@ -90,7 +92,7 @@ class _KeyWordsState extends State<KeyWords> {
                         ),
                       ),
 
-                      Text(
+                      const Text(
                         'Hello there, sign in to continue',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -98,17 +100,17 @@ class _KeyWordsState extends State<KeyWords> {
                           color: Color.fromRGBO(52, 52, 52, 1),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       if (showSelectedContainer)
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           color: Colors.white,
                           child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 'Select each word in the order it was presented to you',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w400,
@@ -116,7 +118,7 @@ class _KeyWordsState extends State<KeyWords> {
                                 ),
                                 overflow: TextOverflow.visible,
                               ),
-                              SizedBox(height: 20,),
+                              const SizedBox(height: 20,),
                               Wrap(
                                 spacing: 10,
                                 runSpacing: 10,
@@ -124,17 +126,17 @@ class _KeyWordsState extends State<KeyWords> {
                                     .map((word) => Container(
                                           width: 88,
                                           height: 40,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 10, vertical: 5),
                                           decoration: BoxDecoration(
-                                            color: Color.fromRGBO(205, 249, 208, 1),
+                                            color: const Color.fromRGBO(205, 249, 208, 1),
                                             borderRadius:
                                                 BorderRadius.circular(50),
                                           ),
                                           child: Center(
                                             child: Text(
                                               word,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color.fromRGBO(
                                                     16, 140, 74, 1),
                                               ),
@@ -146,13 +148,13 @@ class _KeyWordsState extends State<KeyWords> {
                             ],
                           ),
                         ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       // Сетка с 12 контейнерами
                       Expanded(
                         child: GridView.builder(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3, // 3 контейнера в строке
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
@@ -179,7 +181,7 @@ class _KeyWordsState extends State<KeyWords> {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: isSelected[index]
-                                      ? Color.fromRGBO(244, 244, 246, 1)// Серый цвет для выбранных контейнеров
+                                      ? const Color.fromRGBO(244, 244, 246, 1)// Серый цвет для выбранных контейнеров
                                       : Colors.white,
                                   // Синий цвет для доступных контейнеров
                                   borderRadius: BorderRadius.circular(50),
@@ -207,18 +209,24 @@ class _KeyWordsState extends State<KeyWords> {
                                 height: 47,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: Color.fromRGBO(244, 244, 246, 1),
+                                  color: const Color.fromRGBO(244, 244, 246, 1),
                                 ),
-                                child: Center(
+                                child: const Center(
                                   child: Icon(Icons.arrow_back_ios,color: Colors.white,),
                                 ),
                               ),
-                              Image.asset('assets/Fingerprint.png'),
-                              SizedBox(width: 47,),
+                              InkWell(
+                                onTap: () {
+                                  context.pushNamed(
+                                    AppRouterNames.cryptoHome,
+                                  );
+                                },
+                                  child: Image.asset('assets/Fingerprint.png')),
+                              const SizedBox(width: 47,),
                             ],
                           ),
-                          SizedBox(height: 20,),
-                          Row(
+                          const SizedBox(height: 20,),
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('Agree with W and our ',style: TextStyle(

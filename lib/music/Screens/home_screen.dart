@@ -234,7 +234,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                     height: 220,
                     child: PageView(
                       scrollDirection: Axis.horizontal,
-                      children: [ColumElement(), ColumElement(), ColumElement()],
+                      children: [
+                        ColumElement(),
+                        ColumElement(),
+                        ColumElement()
+                      ],
                     ),
                   ),
                   Container(

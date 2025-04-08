@@ -6,7 +6,7 @@ import 'package:social_network/Chess/app.dart';
 import 'package:social_network/Concert/Screens/map_view.dart';
 import 'package:social_network/Course/OnBoarding/onboarding.dart';
 import 'package:social_network/Cryptology/screen/onboarding.dart';
-import 'package:social_network/Excahnge/widgets/main_bar.dart';
+import 'package:social_network/crypto%20app/navigation/main_bar.dart';
 import 'package:social_network/Flight/Navigation/nav_bar.dart';
 import 'package:social_network/Island/screens/start_screen.dart';
 import 'package:social_network/Learning%20app/Screens/onboarding.dart';
@@ -22,6 +22,7 @@ import 'package:social_network/Wallet/Screens/onboarding.dart';
 import 'package:social_network/core/core.dart';
 import 'package:social_network/core/models/video_model.dart';
 import 'package:social_network/core/widgets/unauthorized_dialog_box.dart';
+import 'package:social_network/crypto%20app/screens/key_words.dart';
 import 'package:social_network/features/auth_screen/auth_screen.dart';
 import 'package:social_network/features/auth_screen/widgets/page/registration_screen.dart';
 import 'package:social_network/features/center/widgets/page/center_page.dart';
@@ -50,6 +51,8 @@ import 'package:social_network/features/profile/profile_page.dart';
 import 'package:social_network/features/profile/widgets/page/avatars_page.dart';
 import 'package:social_network/features/site_categories/widget/page/site_categories_page.dart';
 
+import '../../crypto app/screens/home.dart';
+import '../../crypto app/screens/swap_screen.dart';
 import '../../features/home_page/home_page.dart';
 import '../../music/NavBar/main_menu.dart';
 import 'app_router_names.dart';
@@ -176,15 +179,17 @@ final GoRouter router = GoRouter(
               name: AppRouterNames.centerTab,
               path: '/centerTab',
               redirect: (BuildContext context, GoRouterState state) {
-                if (appNotifier.isMarketPage) {
-                  if (appNotifier.secondMenuOfMarket) {
-                    return '/centerTab/secondMenuOfMarket';
-                  }
-                  return '/centerTab/marketPage';
-                } else if (appNotifier.isCenterPage) {
-                  return '/centerTab/addVideo';
-                }
-                return null;
+                // if (appNotifier.isMarketPage) {
+                  // if (appNotifier.secondMenuOfMarket) {
+                  //   return '/centerTab/secondMenuOfMarket';
+                  // }
+                  // return '/centerTab/marketPage';
+                // }else if
+                // (appNotifier.isCenterPage)
+                // {
+                //   return '/centerTab/addVideo';
+                // }
+                return '/centerTab/addVideo';
               },
               builder: (BuildContext context, GoRouterState state) {
                 return isAuthenticated
@@ -470,7 +475,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       name: AppRouterNames.navBarExchange,
       path: '/exchange',
-      builder: (context, state) => const MainScreenExchange(),
+      builder: (context, state) =>  MainScreenExchange(),
     ),
     GoRoute(
       name: AppRouterNames.navBarFlight,
@@ -502,11 +507,11 @@ final GoRouter router = GoRouter(
       path: '/movies',
       builder: (context, state) => const AppMovies(),
     ),
-    GoRoute(
-      name: AppRouterNames.navBarBrowser,
-      path: '/browser',
-      builder: (context, state) => const MainScreenBrowser(),
-    ),
+    // GoRoute(
+    //   name: AppRouterNames.navBarBrowser,
+    //   path: '/browser',
+    //   builder: (context, state) => const MainScreenBrowser(),
+    // ),
     GoRoute(
       name: AppRouterNames.navBarNwapp,
       path: '/nw',
@@ -532,53 +537,82 @@ final GoRouter router = GoRouter(
       path: '/wallet',
       builder: (context, state) => const OnboardingScreenWallet(),
     ),
+    GoRoute(
+      name: AppRouterNames.swapScreen,
+      path: '/swapScreen',
+      builder: (context, state) => const SwapScreen(),
+    ),
+
+    // CRYPTO
+
+    GoRoute(
+      name: AppRouterNames.crypto,
+      path: '/crypto',
+      builder: (context, state) => const KeyWords(),
+    ),
+    GoRoute(
+      name: AppRouterNames.cryptoHome,
+      path: '/cryptoHome',
+      builder: (context, state) =>  MainScreenExchange(),
+    ),
+    // GoRoute(
+    //   name: AppRouterNames.marketPage,
+    //   path: '/marketPage',
+    //   builder: (context, state) =>  HomeScreenOfMarket(),
+    // ),
   ],
 );
 
 
 final List<String> buttonTitles = [
+  // 'Swap'
   'Music',
   'Chess',
-  'Cloud',
-  'Concert',
-  'Course',
-  'Cryptology',
-  'Exchange',
-  'Flight',
-  'Island',
-  'Learning',
-  'Market',
+  // 'Cloud',
+  // 'Concert',
+  // 'Course',
+  // 'Cryptology',
+  // 'Exchange',
+  // 'Flight',
+  // 'Island',
+  // 'Learning',
+  // 'Market',
+  'Crypto',
   'Meditation',
-  'Movies',
-  'NP',
-  'NW',
+  // 'Movies',
+  // 'NP',
+  // 'NW',
   'Taxi',
-  'Editor',
-  'VPS',
-  'Wallet'
+  'Market'
+  // 'Editor',
+  // 'VPS',
+  // 'Wallet'
 ];
 
 // 2. Список путей для навигации
 final List<String> screensPaths = [
+  // '/swapScreen',
   '/music',
   '/chess',
-  '/cloud',
-  '/map',
-  '/course',
-  '/cryptology',
-  '/exchange',
-  '/flight',
-  '/start',
-  '/learning',
-  '/market',
+  '/crypto',
+  // '/cloud',
+  // '/map',
+  // '/course',
+  // '/cryptology',
+  // '/exchange',
+  // '/flight',
+  // '/start',
+  // '/learning',
+  // '/market',
   '/meditation',
-  '/movies',
-  '/browser',
-  '/nwapp',
+  // '/movies',
+  // '/browser',
+  // '/nwapp',
   '/taxi',
-  '/editor',
-  '/vps',
-  '/wallet',
+  '/marketPage',
+  // '/editor',
+  // '/vps',
+  // '/wallet',
 ];
 
 // final List<Widget> screensWidget = [
@@ -608,21 +642,22 @@ final List<List<Color>> gradientColors = [
   [Colors.blue, Colors.green],
   [Colors.purple, Colors.pink],
   [Colors.teal, Colors.cyan],
-  [Colors.amber, Colors.deepOrange],
-  [Colors.indigo, Colors.blueAccent],
-  [Colors.lightGreen, Colors.lime],
-  [Colors.deepPurple, Colors.purpleAccent],
-  [Colors.blueGrey, Colors.grey],
-  [Colors.brown, Colors.orange],
-  [Colors.green, Colors.lightGreen],
-  [Colors.pink, Colors.redAccent],
-  [Colors.cyan, Colors.tealAccent],
-  [Colors.orange, Colors.amber],
-  [Colors.purple, Colors.deepPurple],
-  [Colors.lime, Colors.yellow],
-  [Colors.teal, Colors.blue],
   [Colors.red, Colors.pink],
-  [Colors.red, Colors.orange],
+  [Colors.amber, Colors.deepOrange],
+  // [Colors.indigo, Colors.blueAccent],
+  // [Colors.lightGreen, Colors.lime],
+  // [Colors.deepPurple, Colors.purpleAccent],
+  // [Colors.blueGrey, Colors.grey],
+  // [Colors.brown, Colors.orange],
+  // [Colors.green, Colors.lightGreen],
+  // [Colors.pink, Colors.redAccent],
+  // [Colors.cyan, Colors.tealAccent],
+  // [Colors.orange, Colors.amber],
+  // [Colors.purple, Colors.deepPurple],
+  // [Colors.lime, Colors.yellow],
+  // [Colors.teal, Colors.blue],
+  // [Colors.red, Colors.pink],
+  // [Colors.red, Colors.orange],
 ];
 
 

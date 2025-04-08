@@ -17,6 +17,7 @@ class ColumElement extends StatelessWidget {
             svgPath: 'assets/music/m1.png',
             time: '6:19',
             number: '1',
+
           ),
           RowElement(
             name: '3005',

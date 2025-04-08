@@ -24,7 +24,8 @@ class _ArtistScreenState extends State<ArtistScreen>
     _controller = AnimationController(
       duration: const Duration(seconds: 4), // Duration for the animation
       vsync: this,
-    )..repeat(reverse: true); // Repeat the animation in reverse
+    )
+      ..repeat(reverse: true); // Repeat the animation in reverse
 
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
@@ -69,10 +70,14 @@ class _ArtistScreenState extends State<ArtistScreen>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        Color interpolatedColor1 = Color.lerp(const Color.fromRGBO(34, 77, 129, 1.0),
-            const Color.fromRGBO(4, 31, 66, 1.0), _animation.value)!;
-        Color interpolatedColor2 = Color.lerp(const Color.fromRGBO(4, 31, 66, 1.0),
-            const Color.fromRGBO(34, 77, 129, 1.0), _animation.value)!;
+        Color interpolatedColor1 = Color.lerp(
+            const Color.fromRGBO(34, 77, 129, 1.0),
+            const Color.fromRGBO(4, 31, 66, 1.0),
+            _animation.value)!;
+        Color interpolatedColor2 = Color.lerp(
+            const Color.fromRGBO(4, 31, 66, 1.0),
+            const Color.fromRGBO(34, 77, 129, 1.0),
+            _animation.value)!;
 
         return Container(
           decoration: BoxDecoration(
@@ -90,48 +95,48 @@ class _ArtistScreenState extends State<ArtistScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 70),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 120),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10,
-                ),
-                child: Text(
-                  'Childish Gambino',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 26,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  'Donald McKinley Glover Jr. (born September 25, 1983),\nalso known by the stage name Childish Gambino, is an Ame...',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: Colors.white.withOpacity(0.5),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(20.0),
+              //   child: Row(
+              //     children: [
+              //       // InkWell(
+              //       //   onTap: () {},
+              //       //   child: const Icon(
+              //       //     Icons.arrow_back_ios_new,
+              //       //     color: Colors.white,
+              //       //   ),
+              //       // ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 120),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: 20.0,
+              //     vertical: 10,
+              //   ),
+              //   child: Text(
+              //     'Childish Gambino',
+              //     style: TextStyle(
+              //       fontWeight: FontWeight.w800,
+              //       fontSize: 26,
+              //       color: Colors.white,
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              //   child: Text(
+              //     'Donald McKinley Glover Jr. (born September 25, 1983),\nalso known by the stage name Childish Gambino, is an Ame...',
+              //     style: TextStyle(
+              //       fontWeight: FontWeight.w400,
+              //       fontSize: 13,
+              //       color: Colors.white.withOpacity(0.5),
+              //     ),
+              //   ),
+              // ),
               Container(
-                height: 208,
+                height: 220,
                 child: ListView(
                   padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
@@ -139,21 +144,21 @@ class _ArtistScreenState extends State<ArtistScreen>
                     const AlbumElement(
                       imgPath: 'assets/music/Album 1.png',
                       name: 'Awaken, My Love',
-                      description: 'Album • 2016 ',
+                      description: 'Song • 2016 ',
                       color1: Colors.blueAccent,
                       color2: Colors.greenAccent,
                     ),
                     const AlbumElement(
                       imgPath: 'assets/music/Album 2.png',
                       name: 'Awaken, My Love',
-                      description: 'Album • 2016  ',
+                      description: 'Song • 2016  ',
                       color2: Colors.pink,
                       color1: Colors.purple,
                     ),
                     const AlbumElement(
                       imgPath: 'assets/music/Album 3.png',
                       name: 'Feels Like Summer',
-                      description: 'Album • 2016 ',
+                      description: 'Song • 2016 ',
                       color1: Colors.yellow,
                       color2: Colors.yellowAccent,
                     ),
@@ -164,183 +169,192 @@ class _ArtistScreenState extends State<ArtistScreen>
                 height: 215,
                 child: PageView(
                   scrollDirection: Axis.horizontal,
-                  children: [const ColumElement(), const ColumElement(), const ColumElement()],
+                  children: [
+                    const ColumElement(),
+                    const ColumElement(),
+                    const ColumElement()
+                  ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  height: 85,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16,
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 43,
-                                  width: 43,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blueGrey,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Redbone',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'Childish Gambino',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white.withOpacity(0.5),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
-                                  onPressed: loaded
-                                      ? () async {
-                                          if (player.position.inSeconds >= 10) {
-                                            await player.seek(
-                                              Duration(
-                                                seconds:
-                                                    player.position.inSeconds - 10,
-                                              ),
-                                            );
-                                          } else {
-                                            await player.seek(
-                                              const Duration(seconds: 0),
-                                            );
-                                          }
-                                        }
-                                      : null,
-                                  icon: const Icon(
-                                    Icons.fast_rewind_rounded,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: loaded
-                                      ? () {
-                                          if (playing) {
-                                            pauseMusic();
-                                          } else {
-                                            playMusic();
-                                          }
-                                        }
-                                      : null,
-                                  icon: Icon(
-                                    playing ? Icons.pause : Icons.play_arrow,
-                                    color: playing
-                                        ? const Color.fromRGBO(0, 149, 233, 1)
-                                        : Colors.white,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: loaded
-                                      ? () async {
-                                          if (player.position.inSeconds + 10 <=
-                                              player.duration!.inSeconds) {
-                                            await player.seek(
-                                              Duration(
-                                                seconds:
-                                                    player.position.inSeconds + 10,
-                                              ),
-                                            );
-                                          } else {
-                                            await player.seek(
-                                              const Duration(seconds: 0),
-                                            );
-                                          }
-                                        }
-                                      : null,
-                                  icon: const Icon(
-                                    Icons.fast_forward_rounded,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+              const Spacer(),
+              SizedBox(
+                height:180,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
 
-                          ],
-                        ),
-                        const SizedBox(height: 10,),
-                        StreamBuilder(
-                          stream: player.positionStream,
-                          builder: (context, snapshot1) {
-                            final Duration duration = loaded
-                                ? snapshot1.data as Duration
-                                : const Duration(seconds: 0);
-                            return StreamBuilder(
-                              stream: player.bufferedPositionStream,
-                              builder: (context, snapshot2) {
-                                final Duration bufferedDuration = loaded
-                                    ? snapshot2.data as Duration
-                                    : const Duration(seconds: 0);
-                                return SizedBox(
-                                  height: 10,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: ProgressBar(
-                                      progress: duration,
-                                      total: player.duration ??
-                                          const Duration(seconds: 0),
-                                      buffered: bufferedDuration,
-                                      timeLabelPadding: 0,
-                                      barHeight: 4,
-                                      thumbRadius: 2,
-                                      timeLabelTextStyle: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.transparent,
-                                      ),
-                                      progressBarColor:
-                                      const Color.fromRGBO(54, 196, 245, 1),
-                                      baseBarColor:
-                                      const Color.fromRGBO(54, 196, 245, 1),
-                                      bufferedBarColor:
-                                      const Color.fromRGBO(54, 196, 245, 1),
-                                      thumbColor:
-                                      const Color.fromRGBO(54, 196, 245, 1),
-                                      onSeek: loaded
-                                          ? (duration) async {
-                                        await player.seek(duration);
-                                      }
-                                          : null,
+                    horizontal: 16,
+                    vertical: 8,
+
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 43,
+                                width: 43,
+                                decoration: BoxDecoration(
+                                  color: Colors.blueGrey,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Redbone',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Childish Gambino',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white.withOpacity(0.5),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                onPressed: loaded
+                                    ? () async {
+                                  if (player.position.inSeconds >= 10) {
+                                    await player.seek(
+                                      Duration(
+                                        seconds:
+                                        player.position.inSeconds -
+                                            10,
+                                      ),
+                                    );
+                                  } else {
+                                    await player.seek(
+                                      const Duration(seconds: 0),
+                                    );
+                                  }
+                                }
+                                    : null,
+                                icon: const Icon(
+                                  Icons.fast_rewind_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: loaded
+                                    ? () {
+                                  if (playing) {
+                                    pauseMusic();
+                                  } else {
+                                    playMusic();
+                                  }
+                                }
+                                    : null,
+                                icon: Icon(
+                                  playing ? Icons.pause_circle_outline : Icons.play_arrow_rounded,
+                                  color: playing
+                                      ? const Color.fromRGBO(0, 149, 233, 1)
+                                      : Colors.white,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: loaded
+                                    ? () async {
+                                  if (player.position.inSeconds + 10 <=
+                                      player.duration!.inSeconds) {
+                                    await player.seek(
+                                      Duration(
+                                        seconds:
+                                        player.position.inSeconds +
+                                            10,
+                                      ),
+                                    );
+                                  } else {
+                                    await player.seek(
+                                      const Duration(seconds: 0),
+                                    );
+                                  }
+                                }
+                                    : null,
+                                icon: const Icon(
+                                  Icons.fast_forward_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      StreamBuilder(
+                        stream: player.positionStream,
+                        builder: (context, snapshot1) {
+                          final Duration duration = loaded
+                              ? snapshot1.data as Duration
+                              : const Duration(seconds: 0);
+                          return StreamBuilder(
+                            stream: player.bufferedPositionStream,
+                            builder: (context, snapshot2) {
+                              final Duration bufferedDuration = loaded
+                                  ? snapshot2.data as Duration
+                                  : const Duration(seconds: 0);
+                              return SizedBox(
+                                height: 10,
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.symmetric(horizontal: 0),
+                                  child: ProgressBar(
+                                    progress: duration,
+                                    total: player.duration ??
+                                        const Duration(seconds: 0),
+                                    buffered: bufferedDuration,
+                                    timeLabelPadding: 0,
+                                    barHeight: 4,
+                                    thumbRadius: 0.5,
+                                    thumbGlowRadius: 8,
+                                    thumbGlowColor: Color.fromRGBO(54, 196, 245, 0.8),
+                                    timeLabelTextStyle: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.transparent,
+                                    ),
+                                    progressBarColor:
+                                    const Color.fromRGBO(54, 196, 245, 1),
+                                    baseBarColor:
+                                    const Color.fromRGBO(2, 16, 21, 1.0),
+                                    bufferedBarColor:
+                                    const Color.fromRGBO(197, 208, 213, 1.0),
+                                    thumbColor:
+                                    const Color.fromRGBO(37, 98, 119, 1.0),
+                                    onSeek: loaded
+                                        ? (duration) async {
+                                      await player.seek(duration);
+                                    }
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),

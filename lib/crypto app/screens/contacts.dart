@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../Elements/contact_widget.dart';
+import '../../New Wallet/Elements/contact_widget.dart';
 
 class Contacts extends StatelessWidget {
   final int tab;

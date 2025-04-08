@@ -1,7 +1,7 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/custom_keyboard.dart';
+import '../../Excahnge/widgets/custom_keyboard.dart';
 
 class ExchangeScreen extends StatefulWidget {
   final int tab;

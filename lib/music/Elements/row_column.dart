@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class RowElement extends StatelessWidget {
+class RowElement extends StatefulWidget {
   final String name;
   final String svgPath;
   final String time;
   final String number;
+
 
   const RowElement({
     super.key,
@@ -13,55 +14,80 @@ class RowElement extends StatelessWidget {
     required this.svgPath,
     required this.time,
     required this.number,
+
   });
 
   @override
+  State<RowElement> createState() => _RowElementState();
+}
+
+class _RowElementState extends State<RowElement> {
+  bool isPressed =false;
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                number,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                  color: Colors.white,
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isPressed =! isPressed;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                isPressed?
+                SizedBox(
+                  height: 20,
+                    width: 20,
+                    child: Center(child: Icon(Icons.pause,color: Colors.white,size: 20,))) :
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Center(
+                    child: Text(
+                      widget.number,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(width: 10,),
-              Container(height:34,width:34,child: Image.asset(svgPath)),
-              SizedBox(width: 10,),
-              Text(
-                name,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                  color: Colors.white,
+                SizedBox(width: 10,),
+                // Container(height:34,width:34,child: Image.asset(svgPath)),
+                // SizedBox(width: 10,),
+                Text(
+                  widget.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                time,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                  color: Colors.white,
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  widget.time,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              SizedBox(width: 10,),
-              SvgPicture.asset('assets/music/Icon_Dots.svg'),
-            ],
-          ),
-        ],
+                SizedBox(width: 10,),
+                SvgPicture.asset('assets/music/Icon_Dots.svg'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

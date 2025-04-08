@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../Cryptology/widgets/main_bar.dart';
-import '../../Excahnge/widgets/main_bar.dart';
+import '../../crypto app/navigation/main_bar.dart';
 import '../../MOVIES/App.dart';
 import '../../Video Editor/UI/home.dart';
 import '../../Wallet/Screens/wallet.dart';

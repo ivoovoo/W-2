@@ -1,10 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_network/Chess/Components/size_model.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
+import '../../core/data/local_storage_keys.dart';
+import '../../core/helpers/api_requester.dart';
 import '../../core/router/app_router.dart';
+import '../../features/profile/logic/profile_bloc.dart';
+import '../../features/profile/model/user_model.dart';
 import '../screen/swiper.dart';
 import 'dead_piece.dart';
 import 'helping_methods.dart';
@@ -20,6 +27,22 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
+  late ProfileBloc profileBloc;
+  // final ProfileBloc profileBloc = ProfileBloc();
+  ApiRequester apiRequester = ApiRequester();
+  late UserModel user;
+
+  @override
+  void initState() {
+    profileBloc = context.read<ProfileBloc>()
+      ..add(
+        ProfileEvent.init(
+            context.read<SharedPreferences>().getInt(LocalStorageKeys.userId)!),
+      );
+    super.initState();
+    _initializeBoard();
+    _startTimer();
+  }
   late List<List<ChessPiece?>> board;
 
   ChessPiece? selectedPiece;
@@ -40,12 +63,6 @@ class _GameBoardState extends State<GameBoard> {
   int _seconds = 45; // Начальное значение таймера
   Timer? _timer;
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeBoard();
-    _startTimer();
-  }
   @override
   void dispose() {
     // TODO: implement dispose
@@ -548,115 +565,109 @@ class _GameBoardState extends State<GameBoard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.center,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color.fromRGBO(12, 8, 19, 0.9),
-            Color.fromRGBO(56, 52, 63, 0),
-          ],
-        ),
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+        overlays: [SystemUiOverlay.top]);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: CustomPaint(
-          painter: X1Painter(),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: getWidth(context, 20),
-                    top: getHeight(context, 50),
-                  ),
-                  child: InkWell(
-                    onTap: () => openFullScreenModal(context),
-                    child: SvgPicture.asset('assets/images/svg/arrow-left.svg'),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: getHeight(context, 10),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: getHeight(context, 66),
-                          width: getWidth(context, 66),
-                          child: const CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/png/aishwarya.png'),
-                            radius: 33,
-                          ),
-                        ),
-                        const Text(
-                          'Aishwarya',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            fontFamily: 'Inter',
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                          ),
-                        ),
-                        const Text(
-                          'Level 2',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                          ),
-                        ),
-                      ],
+    );
+    return BlocBuilder<ProfileBloc, ProfileState>(
+        bloc: profileBloc,
+        builder: (context, state) {
+          state.when(
+            initial: () {},
+            loadInProgress: () {},
+            loadSuccess: (response) {
+              user = response;
+            },
+            signOutSuccess: () {},
+            loadFailure: (error) {},
+            enabledChatGpt: () {},
+          );
+          if (state is ProfileInitialState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ProfileLoadFailureState) {
+            return Center(child: Text(state.error.toString()));
+          } else if (state is ProfileLoadInProgressState) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+        return Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromRGBO(12, 8, 19, 0.9),
+                Color.fromRGBO(56, 52, 63, 0),
+              ],
+            ),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: CustomPaint(
+              painter: X1Painter(),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: getWidth(context, 20),
+                        top: getHeight(context, 50),
+                      ),
+                      child: InkWell(
+                        onTap: () => openFullScreenModal(context),
+                        child: SvgPicture.asset('assets/images/svg/arrow-left.svg'),
+                      ),
                     ),
-                    Column(
+                  ),
+                  SizedBox(
+                    height: getHeight(context, 10),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: getWidth(context, 50),
-                          height: getHeight(context, 50),
-                          child: SvgPicture.asset(
-                            'assets/images/svg/timer.svg',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(
-                          height: getHeight(context, 3),
-                        ),
-                        Countdown(
-                          seconds: 45,
-                          build: (BuildContext context, double time) => Text(
-                            '00:${_seconds.toString().padLeft(2, '0')}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: 'Inter',
-                              color: Color.fromRGBO(255, 255, 255, 1),
+                        Column(
+                          children: [
+                            // SizedBox(
+                            //   height: getHeight(context, 66),
+                            //   width: getWidth(context, 66),
+                            //   child: const CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/images/png/aishwarya.png'),
+                            //     radius: 33,
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: getHeight(context, 66),
+                              width: getWidth(context, 66),
+                              child: ClipOval(
+                                child: Image.network(
+                                    user.profilePictures != null && user.profilePictures!.isNotEmpty
+                                        ? user.profilePictures!.first.image
+                                        : '',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                          interval: const Duration(milliseconds: 1000),
-                          onFinished: _resetTimer,
-                        ),
-                        SizedBox(
-                          height: getHeight(context, 10),
-                        ),
-                        Container(
-                          width: getWidth(context, 94),
-                          height: getHeight(context, 25),
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(255, 255, 255, 0.2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Vineeta move',
+                            Text(
+                              user.username,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                                color: Color.fromRGBO(255, 255, 255, 1),
+                              ),
+                            ),
+                            const Text(
+                              'Level 2',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
@@ -664,135 +675,186 @@ class _GameBoardState extends State<GameBoard> {
                                 color: Color.fromRGBO(255, 255, 255, 1),
                               ),
                             ),
-                          ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: getWidth(context, 50),
+                              height: getHeight(context, 50),
+                              child: SvgPicture.asset(
+                                'assets/images/svg/timer.svg',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            SizedBox(
+                              height: getHeight(context, 3),
+                            ),
+                            Countdown(
+                              seconds: 45,
+                              build: (BuildContext context, double time) => Text(
+                                '00:${_seconds.toString().padLeft(2, '0')}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  fontFamily: 'Inter',
+                                  color: Color.fromRGBO(255, 255, 255, 1),
+                                ),
+                              ),
+                              interval: const Duration(milliseconds: 1000),
+                              onFinished: _resetTimer,
+                            ),
+                            SizedBox(
+                              height: getHeight(context, 10),
+                            ),
+                            Container(
+                              width: getWidth(context, 94),
+                              height: getHeight(context, 25),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(255, 255, 255, 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Time',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12,
+                                    fontFamily: 'Inter',
+                                    color: Color.fromRGBO(255, 255, 255, 1),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: getHeight(context, 64),
+                              width: getWidth(context, 64),
+                              child: const CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/images/png/vineeta.png'),
+                                radius: 33,
+                              ),
+                            ),
+                            const Text(
+                              'Player',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                                color: Color.fromRGBO(255, 255, 255, 1),
+                              ),
+                            ),
+                            const Text(
+                              'Level 2',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                fontFamily: 'Inter',
+                                color: Color.fromRGBO(255, 255, 255, 1),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: getHeight(context, 64),
-                          width: getWidth(context, 64),
-                          child: const CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/png/vineeta.png'),
-                            radius: 33,
-                          ),
-                        ),
-                        const Text(
-                          'Vineeta',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            fontFamily: 'Inter',
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                          ),
-                        ),
-                        const Text(
-                          'Level 2',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              // мертвые белые
-
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SwiperExample()),
-                    );
-                  },
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero, // Убираем внутренние отступы
-                    itemCount: whitePieceTaken.length, // Количество элементов
-                    physics: const NeverScrollableScrollPhysics(), // Отключаем прокрутку
-                    scrollDirection: Axis.horizontal, // Горизонтальная прокрутка
-                    itemBuilder: (context, index) => DeadPiece(
-                      imagePath: whitePieceTaken[index].imagePath,
-                      isWhite: true,
-                    ),
-                  )
-                ),
-              ),
-
-              Text(
-                checkStatus ? 'CHECK' : '',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-
-              Expanded(
-                flex: 7,
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: 8 * 8,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 8),
-                  itemBuilder: (context, index) {
-                    int row = index ~/ 8;
-                    int col = index % 8;
-
-                    bool isSelected = selectedRow == row && selectedCol == col;
-
-                    bool isValidMove = false;
-                    for (var position in validMoves) {
-                      if (position[0] == row && position[1] == col) {
-                        isValidMove = true;
-                      }
-                    }
-                    return Square(
-                      isWhite: isWhite(index),
-                      piece: board[row][col],
-                      isSelected: isSelected,
-                      isValidMove: isValidMove,
-                      onTap: () => pieceSelected(row, col),
-                    );
-                  },
-                ),
-              ),
-
-              // мертвые черные
-
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SwiperExample()),
-                    );
-                  },
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero, // Убираем внутренние отступы
-                    itemCount: blackPieceTaken.length, // Количество элементов
-                    physics: const NeverScrollableScrollPhysics(), // Отключаем прокрутку
-                    scrollDirection: Axis.horizontal, // Горизонтальная прокрутка
-                    itemBuilder: (context, index) => DeadPiece(
-                      imagePath: blackPieceTaken[index].imagePath,
-                      isWhite: false,
                     ),
                   ),
-                ),
+                  // мертвые белые
+
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SwiperExample()),
+                        );
+                      },
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero, // Убираем внутренние отступы
+                        itemCount: whitePieceTaken.length, // Количество элементов
+                        physics: const NeverScrollableScrollPhysics(), // Отключаем прокрутку
+                        scrollDirection: Axis.horizontal, // Горизонтальная прокрутка
+                        itemBuilder: (context, index) => DeadPiece(
+                          imagePath: whitePieceTaken[index].imagePath,
+                          isWhite: true,
+                        ),
+                      )
+                    ),
+                  ),
+
+                  Text(
+                    checkStatus ? 'CHECK' : '',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  Expanded(
+                    flex: 7,
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: 8 * 8,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 8),
+                      itemBuilder: (context, index) {
+                        int row = index ~/ 8;
+                        int col = index % 8;
+
+                        bool isSelected = selectedRow == row && selectedCol == col;
+
+                        bool isValidMove = false;
+                        for (var position in validMoves) {
+                          if (position[0] == row && position[1] == col) {
+                            isValidMove = true;
+                          }
+                        }
+                        return Square(
+                          isWhite: isWhite(index),
+                          piece: board[row][col],
+                          isSelected: isSelected,
+                          isValidMove: isValidMove,
+                          onTap: () => pieceSelected(row, col),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // мертвые черные
+
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SwiperExample()),
+                        );
+                      },
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero, // Убираем внутренние отступы
+                        itemCount: blackPieceTaken.length, // Количество элементов
+                        physics: const NeverScrollableScrollPhysics(), // Отключаем прокрутку
+                        scrollDirection: Axis.horizontal, // Горизонтальная прокрутка
+                        itemBuilder: (context, index) => DeadPiece(
+                          imagePath: blackPieceTaken[index].imagePath,
+                          isWhite: false,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 

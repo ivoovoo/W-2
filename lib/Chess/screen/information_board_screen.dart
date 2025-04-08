@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:social_network/Chess/Components/game_board.dart';
 
 import '../Components/painter.dart';
 import '../Components/size_model.dart';
@@ -47,7 +48,7 @@ class InformationBoard extends StatelessWidget {
                   child: InkWell(
                     onTap: () {Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const GameplayScreen()),
+                      MaterialPageRoute(builder: (context) => const GameBoard()),
                     );},
                     child: SvgPicture.asset('assets/images/svg/arrow-left.svg'),
                   ),

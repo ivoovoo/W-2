@@ -14,8 +14,8 @@ class ColumnWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SvgPicture.asset(path),
-        SizedBox(height: 10,),
-        Text(text,style: TextStyle(
+        const SizedBox(height: 10,),
+        Text(text,style: const TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 13,
           color: Colors.black,

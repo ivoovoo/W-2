@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../Excahnge/widgets/main_bar.dart';
+import '../../crypto app/navigation/main_bar.dart';
 import '../../Learning app/widgets/main_bar.dart';
 import '../../MOVIES/App.dart';
 import '../../Market app/widgets/main_bar.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 
-import '../Elements/custom_keyboard.dart';
+import '../../New Wallet/Elements/custom_keyboard.dart';
 
 class PaymantSummery extends StatelessWidget {
   const PaymantSummery({super.key});

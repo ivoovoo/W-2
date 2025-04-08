@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 
+import '../../core/router/app_router.dart';
 import '../Screens/artist_screen.dart';
 import '../Screens/home_screen.dart';
 import '../Screens/search_screen.dart';
@@ -77,6 +78,7 @@ class _MainMusicScreenState extends State<MainMusicScreen> {
                                   ? Colors.white
                                   : Colors.white.withOpacity(0.5),
                         ),
+                        onLongPress:() => openFullScreenModal(context),
                       ),
                       InkWell(
                         onTap: () {

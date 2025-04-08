@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Screens/MainScreens/balance.dart';
-import '../Screens/MainScreens/contacts.dart';
+import '../../crypto app/screens/balance.dart';
+import '../../crypto app/screens/contacts.dart';
 import '../Screens/MainScreens/int_data.dart';
 import '../Screens/MainScreens/menu.dart';
 import 'bar_model.dart';

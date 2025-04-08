@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../Elements/row_widget_balance.dart';
-import '../electrisity_bill.dart';
-import '../paymant_summery.dart';
-import '../send_money.dart';
-import '../withdraw.dart';
+import '../../New Wallet/Elements/row_widget_balance.dart';
+import '../../New Wallet/Screens/electrisity_bill.dart';
+import 'paymant_summery.dart';
+import 'send_money.dart';
+import '../../New Wallet/Screens/withdraw.dart';
 
 class Balance extends StatelessWidget {
   final int tab;
