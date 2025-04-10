@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
   }
 
   int value = 4;
+  bool isVibePressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +67,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
               Column(
                 children: [
                   // SizedBox(height: 50,),
-                  Container(
+                  SizedBox(
                     height: 238,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: [BigPicElement(), BigPicElement(), BigPicElement()],
+                      children: const [BigPicElement(), BigPicElement(), BigPicElement()],
                     ),
                   ),
                   Padding(
@@ -80,173 +81,181 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                         builder: (context,child) {
                           Color color1 = Color.lerp(Colors.white, Color.fromRGBO(66, 0, 152, 1), _animation.value)!;
                           Color color2 = Color.lerp(Color.fromRGBO(66, 0, 152, 1), Color.fromRGBO(18, 41, 71, 1), _animation.value)!;
-                        return Container(
-                          width: double.infinity,
-                          height: 212,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            gradient: LinearGradient(
-                              colors: [
-                                color1,
-                                color2,
-                                // Color.fromRGBO(18, 41, 71, 1),
+                        return GestureDetector(
+                          onTap:  () {
+                            setState(() {
+                              isVibePressed =!isVibePressed;
+                            });
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 212,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              gradient: LinearGradient(
+                                colors: [
+                                  color1,
+                                  color2,
+                                  // Color.fromRGBO(18, 41, 71, 1),
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 5,
+                                  blurRadius: 15,
+                                )
                               ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 5,
-                                blurRadius: 15,
-                              )
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SvgPicture.asset('assets/music/h11.svg'),
-                                SizedBox(height: 10),
-                                Text(
-                                  'MY VIBE',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  isVibePressed ? 
+                                  SvgPicture.asset('assets/music/h11.svg',width: 20,) : SvgPicture.asset('assets/icons/pause-1006-svgrepo-com.svg',color: Colors.white.withOpacity(0.25),width: 20,),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'MY VIBE',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 30),
-                                CustomSlidingSegmentedControl<int>(
-                                  padding: 4,
-                                  initialValue: value,
-                                  children: {
-                                    1: Container(
-                                      width: 80,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
-                                        color: Colors.white.withOpacity(0.05),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'SOUL',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13,
-                                            color:
-                                                value == 1
-                                                    ? Colors.white
-                                                    : Colors.white.withOpacity(.5),
+                                  SizedBox(height: 30),
+                                  CustomSlidingSegmentedControl<int>(
+                                    padding: 4,
+                                    initialValue: value,
+                                    children: {
+                                      1: Container(
+                                        width: 80,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.white.withOpacity(0.05),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'SOUL',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 13,
+                                              color:
+                                                  value == 1
+                                                      ? Colors.white
+                                                      : Colors.white.withOpacity(.5),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    2: Container(
-                                      width: 80,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
-                                        color: Colors.white.withOpacity(0.05),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'SLOW',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13,
-                                            color:
-                                                value == 2
-                                                    ? Colors.white
-                                                    : Colors.white.withOpacity(.5),
+                                      2: Container(
+                                        width: 80,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.white.withOpacity(0.05),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'SLOW',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 13,
+                                              color:
+                                                  value == 2
+                                                      ? Colors.white
+                                                      : Colors.white.withOpacity(.5),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    3: Container(
-                                      width: 80,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
-                                        color: Colors.white.withOpacity(0.05),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'FAST',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13,
-                                            color:
-                                                value == 3
-                                                    ? Colors.white
-                                                    : Colors.white.withOpacity(.5),
+                                      3: Container(
+                                        width: 80,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.white.withOpacity(0.05),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'FAST',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 13,
+                                              color:
+                                                  value == 3
+                                                      ? Colors.white
+                                                      : Colors.white.withOpacity(.5),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    4: Container(
-                                      width: 80,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
-                                        color: Colors.white.withOpacity(0.05),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'AI',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13,
-                                            color:
-                                                value == 4
-                                                    ? Colors.white
-                                                    : Colors.white.withOpacity(.5),
+                                      4: Container(
+                                        width: 80,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.white.withOpacity(0.05),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'AI',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 13,
+                                              color:
+                                                  value == 4
+                                                      ? Colors.white
+                                                      : Colors.white.withOpacity(.5),
+                                            ),
                                           ),
                                         ),
                                       ),
+                                    },
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(100),
                                     ),
-                                  },
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(100),
+                                    thumbDecoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.00),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    duration: Duration(milliseconds: 100),
+                                    curve: Curves.easeInToLinear,
+                                    onValueChanged: (v) {
+                                      setState(() {
+                                        value = v; // Обновляем состояние при изменении значения
+                                      });
+                                    },
                                   ),
-                                  thumbDecoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.00),
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  duration: Duration(milliseconds: 100),
-                                  curve: Curves.easeInToLinear,
-                                  onValueChanged: (v) {
-                                    setState(() {
-                                      value = v; // Обновляем состояние при изменении значения
-                                    });
-                                  },
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
                       }
                     ),
                   ),
-                  Container(
-                    height: 220,
+                  SizedBox(
+                    height: 180,
                     child: PageView(
                       scrollDirection: Axis.horizontal,
-                      children: [
+                      children: const [
                         ColumElement(),
                         ColumElement(),
                         ColumElement()
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 300,
                     child: ListView(
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.horizontal,
-                      children: [
+                      children: const [
                         AlbumElement(
                           imgPath: 'assets/music/Album 1.png',
                           name: 'Awaken, My Love',

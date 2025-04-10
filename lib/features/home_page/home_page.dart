@@ -29,12 +29,20 @@ class _HomePageState extends State<HomePage> {
   int viewsCount = 0;
   bool firstView = true;
 
+
+
   String extractUsername(String author) {
     // Разбиваем строку на части, используя пробел
     List<String> parts = author.split(' ');
 
     // Возвращаем вторую часть (username)
     return parts[1];
+  }
+
+  @override
+  void dispose() {
+    VideoPreloader.disposeAll();
+    super.dispose();
   }
 
   @override
@@ -66,12 +74,25 @@ class _HomePageState extends State<HomePage> {
             child: Text(state.error),
           );
         } else {
+
           return Container(
             color: AppColors.kBlackColor,
             child: PageView.builder(
+              onPageChanged: (index) {
+                setState(() {
+                  firstView = true;
+
+                });
+              },
               scrollDirection: Axis.vertical,
               itemCount: videoResponse.allVideos.length,
               itemBuilder: (context, index) {
+                final nextVideos = <String>[];
+                for (var i = 1; i <= 3; i++) {
+                  if (index + i < videoResponse.allVideos.length) {
+                    nextVideos.add(videoResponse.allVideos[index + i].videoFile);
+                  }
+                }
                 return Stack(
                   children: [
                     SizedBox(
@@ -92,6 +113,7 @@ class _HomePageState extends State<HomePage> {
                             viewsCount++;
                           });
                         },
+                        nextVideoPaths: nextVideos,
                       ),
                     ),
                     Positioned(
@@ -127,8 +149,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   ActivityTapeHorizontal(
                                     likesCount: 2,
-                                    viewsCount: firstView
-                                        ? videoResponse
+                                    viewsCount:
+                                    firstView?
+                                    videoResponse
                                             .allVideos[index].viewsCount
                                         : viewsCount,
                                     onPressMessagesFunc: () {

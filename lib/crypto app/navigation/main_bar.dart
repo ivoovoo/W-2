@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:social_network/crypto%20app/screens/swap_screen.dart';
+import 'package:social_network/crypto%20app/main%20screens/get_crypto.dart';
+import 'package:social_network/crypto%20app/main%20screens/send_cryplo.dart';
+import 'package:social_network/crypto%20app/main%20screens/swap_screen.dart';
 
 
 import '../../core/router/app_router.dart';
-import '../screens/history_screen.dart';
-import '../screens/home.dart';
+import '../main screens/history_screen.dart';
+import '../main screens/home.dart';
 
 class MainScreenExchange extends StatefulWidget {
   @override
@@ -19,17 +21,12 @@ class _MainScreenExchangeState extends State<MainScreenExchange> {
   int _selectedIndex = 0;
 
   // Список виджетов для каждой вкладки
-  final List<Widget> _widgetOptions = <Widget>[
-    //1
-    const HomeScreenCrypto(),
-    //2
-    //3
-    const SwapScreen(),
-    const SwapScreen(),
-    const SwapScreen(),
-    //4
-    //5
-    const HistoryScreen(),
+ static const List<Widget> _widgetOptions = <Widget>[
+    HomeScreenCrypto(),
+    SendCryplo(),
+    SwapScreen(),
+    GetCrypto(),
+    HistoryScreen(),
 
   ];
 
@@ -44,7 +41,6 @@ class _MainScreenExchangeState extends State<MainScreenExchange> {
     return Scaffold(
       body: Stack(
         children: [
-
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -62,7 +58,7 @@ class _MainScreenExchangeState extends State<MainScreenExchange> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
-                  height: 100,
+                  height: 80,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.transparent,
@@ -75,6 +71,7 @@ class _MainScreenExchangeState extends State<MainScreenExchange> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
+                      onLongPress:() => openFullScreenModal(context),
                         onTap: () {
                           HapticFeedback.lightImpact();
                           _onItemTapped(0);
@@ -97,7 +94,6 @@ class _MainScreenExchangeState extends State<MainScreenExchange> {
                             ),
                           ),
                         ),
-                        onLongPress:() => openFullScreenModal(context),
                       ),
                       InkWell(
                         onTap: () {
@@ -201,31 +197,31 @@ class _MainScreenExchangeState extends State<MainScreenExchange> {
               ),
             ),
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 0,
+          //   right: 0,
+          //   left: 0,
+          //   child: ClipRRect(
+          //     borderRadius: const BorderRadius.only(
+          //       bottomRight: Radius.circular(30),
+          //       bottomLeft: Radius.circular(30),
+          //     ),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          //       child: Container(
+          //         height: 30,
+          //         width: double.infinity,
+          //         decoration: const BoxDecoration(
+          //           color: Colors.transparent,
+          //           borderRadius: BorderRadius.only(
+          //             topLeft: Radius.circular(30),
+          //             topRight: Radius.circular(30),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

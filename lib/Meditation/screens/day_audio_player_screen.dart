@@ -171,11 +171,11 @@ class _DayAudioPlayerScreenState extends State<DayAudioPlayerScreen> with Ticker
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 child: Container(
-                                  // or ClipRRect if you need to clip the content
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Color.fromRGBO(182, 184, 191,
-                                        0.8), // inner circle color
+
+                                    color: Color.fromRGBO(201, 202, 205,
+                                        0.5), // inner circle color
                                   ),
                                   child: const Icon(
                                     Icons.favorite_border,
@@ -198,8 +198,8 @@ class _DayAudioPlayerScreenState extends State<DayAudioPlayerScreen> with Ticker
                                   // or ClipRRect if you need to clip the content
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Color.fromRGBO(182, 184, 191,
-                                        0.8), // inner circle color
+                                    color:Color.fromRGBO(201, 202, 205,
+                                        0.5), // inner circle color
                                   ),
                                   child: const Icon(
                                     Icons.save_alt,

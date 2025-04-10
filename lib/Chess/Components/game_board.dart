@@ -28,7 +28,6 @@ class GameBoard extends StatefulWidget {
 
 class _GameBoardState extends State<GameBoard> {
   late ProfileBloc profileBloc;
-  // final ProfileBloc profileBloc = ProfileBloc();
   ApiRequester apiRequester = ApiRequester();
   late UserModel user;
 
@@ -667,7 +666,7 @@ class _GameBoardState extends State<GameBoard> {
                               ),
                             ),
                             const Text(
-                              'Level 2',
+                              'Level 1',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
@@ -749,7 +748,7 @@ class _GameBoardState extends State<GameBoard> {
                               ),
                             ),
                             const Text(
-                              'Level 2',
+                              'Level 1',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,

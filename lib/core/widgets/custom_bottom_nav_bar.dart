@@ -11,7 +11,6 @@ import 'package:social_network/data.dart';
 import 'package:social_network/market/create_advertisement/notifiers/notifier_of_menu.dart';
 import 'package:vibration/vibration.dart';
 
-
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
     super.key,
@@ -113,6 +112,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                           widget.navigationShell.goBranch(0);
                           _updatePage(0);
                         },
+                        onLongPress: () => openFullScreenModal(context),
                         svgPath: _firstIconDefinition(_currentPage)),
                     _CustomButtonNavBar(
                         function: () {
@@ -127,7 +127,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       onDoubleTap: () {
                         appNotifier.secondMenuOfMarket = false;
                         appNotifier.switchingToMarket();
-                        openFullScreenModal(context);
                         widget.navigationShell.goBranch(2);
                         _updatePage(2);
                       },
@@ -188,7 +187,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
     switch (currentPage) {
       case 0:
-        return icon = Assets.icons.activeHome;
+        // return icon = Assets.icons.activeHome;
+        return appNotifier.isMarketPage
+            ? icon = Assets.icons.inactiveHome2
+            : icon = Assets.icons.inactiveHome;
       case 1:
       case 2:
         return appNotifier.isMarketPage
@@ -207,7 +209,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
     switch (currentPage) {
       case 0:
-        return icon = Assets.icons.inactiveSearch;
+        // return icon = Assets.icons.inactiveSearch;
+        return appNotifier.isMarketPage
+            ? icon = Assets.icons.inactiveSearch2
+            : icon = Assets.icons.inactiveSearch;
       case 1:
         return icon = Assets.icons.activeSearch;
       case 2:
@@ -281,11 +286,13 @@ class _CustomButtonNavBar extends StatelessWidget {
   void Function() function;
   String svgPath;
   Color? color;
+  void Function()? onLongPress;
 
   _CustomButtonNavBar({
     required this.function,
     required this.svgPath,
     this.color,
+    this.onLongPress,
   });
 
   @override
@@ -294,6 +301,7 @@ class _CustomButtonNavBar extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: function,
+        onLongPress: onLongPress,
         borderRadius: BorderRadius.circular(16.r),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),

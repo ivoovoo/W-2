@@ -96,26 +96,27 @@ class _SwapScreenState extends State<SwapScreen> {
             height: getHeight(context, 60),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: getWidth(context, 30),
-                ),
-                child: SizedBox(
-                  width: getWidth(context, 16),
-                  height: getHeight(context, 16),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: SvgPicture.asset(
-                      'assets/images/svg/back_button.svg',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-              const Spacer(),
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //     left: getWidth(context, 30),
+              //   ),
+              //   child: SizedBox(
+              //     width: getWidth(context, 16),
+              //     height: getHeight(context, 16),
+              //     child: GestureDetector(
+              //       onTap: () {
+              //         Navigator.pop(context);
+              //       },
+              //       child: SvgPicture.asset(
+              //         'assets/images/svg/back_button.svg',
+              //         fit: BoxFit.contain,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // const Spacer(),
               const Text(
                 'Swap',
                 style: TextStyle(
@@ -126,23 +127,23 @@ class _SwapScreenState extends State<SwapScreen> {
                   fontSize: 16,
                 ),
               ),
-              const Spacer(),
-              Padding(
-                padding: EdgeInsets.only(
-                  right: getWidth(context, 30),
-                ),
-                child: SizedBox(
-                  width: getWidth(context, 16),
-                  height: getHeight(context, 16),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.refresh,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+              // const Spacer(),
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //     right: getWidth(context, 30),
+              //   ),
+              //   child: SizedBox(
+              //     width: getWidth(context, 16),
+              //     height: getHeight(context, 16),
+              //     child: GestureDetector(
+              //       onTap: () {},
+              //       child: const Icon(
+              //         Icons.refresh,
+              //         color: Colors.white,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           SizedBox(
@@ -764,99 +765,102 @@ class _SwapScreenState extends State<SwapScreen> {
             ),
           ),
           const SizedBox(
-            height: 50,
+            height: 5,
           ),
           isBottomPanelVisible
               ? const BottomPanel()
               : isCustomKeyboardVisible
                   ? Align(
                       alignment: Alignment.bottomCenter,
-                      child: Container(
-                        width: getWidth(context, 430),
-                        height: getHeight(context, 355),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            topRight: Radius.circular(50),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 80.0),
+                        child: Container(
+                          width: getWidth(context, 430),
+                          height: getHeight(context, 355),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50),
+                            ),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(20, 23, 34, 1),
+                                Color.fromRGBO(80, 92, 136, 0.01),
+                              ],
+                            ),
                           ),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color.fromRGBO(20, 23, 34, 1),
-                              Color.fromRGBO(80, 92, 136, 0.01),
-                            ],
-                          ),
-                        ),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildKeyboardButton('1'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('2'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('3'),
-                                ],
-                              ),
-                              SizedBox(
-                                height: getHeight(context, 40),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildKeyboardButton('4'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('5'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('6'),
-                                ],
-                              ),
-                              SizedBox(
-                                height: getHeight(context, 40),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildKeyboardButton('7'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('8'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('9'),
-                                ],
-                              ),
-                              SizedBox(
-                                height: getHeight(context, 40),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildKeyboardButton('.'),
-                                  const Spacer(),
-                                  _buildKeyboardButton('0'),
-                                  const Spacer(),
-                                  SizedBox(
-                                    width: getWidth(context, 120),
-                                    height: getHeight(context, 50),
-                                    child: ElevatedButton(
-                                      onPressed: _onDeletePressed,
-                                      style: const ButtonStyle(
-                                        backgroundColor: WidgetStatePropertyAll(
-                                            Colors.transparent),
-                                        shadowColor: WidgetStatePropertyAll(
-                                            Colors.transparent),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildKeyboardButton('1'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('2'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('3'),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: getHeight(context, 40),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildKeyboardButton('4'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('5'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('6'),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: getHeight(context, 40),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildKeyboardButton('7'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('8'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('9'),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: getHeight(context, 40),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildKeyboardButton('.'),
+                                    const Spacer(),
+                                    _buildKeyboardButton('0'),
+                                    const Spacer(),
+                                    SizedBox(
+                                      width: getWidth(context, 120),
+                                      height: getHeight(context, 50),
+                                      child: ElevatedButton(
+                                        onPressed: _onDeletePressed,
+                                        style: const ButtonStyle(
+                                          backgroundColor: WidgetStatePropertyAll(
+                                              Colors.transparent),
+                                          shadowColor: WidgetStatePropertyAll(
+                                              Colors.transparent),
+                                        ),
+                                        child: Image.asset(
+                                            'assets/images/png/backspace.png'),
                                       ),
-                                      child: Image.asset(
-                                          'assets/images/png/backspace.png'),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

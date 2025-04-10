@@ -139,7 +139,7 @@ class _SideMenuState extends State<SideMenu> {
           },
           isEmpty: widget.listBool[7],
         ),
-        MenuItem(
+        MenuItem (
           title: widget.titles[8],
           isSelected: _indexOfCurrentMenu == 8,
           pathToSvgIcon: widget.pathToSvgIcons[8],
@@ -158,6 +158,7 @@ class _SideMenuState extends State<SideMenu> {
                 ? CreateNewButton(
                     onTap: () {
                       appNotifier.switchingToSecondMenu();
+                      // appNotifier.secondMenuOfMarket;
                     },
                   )
                 : InkWell(

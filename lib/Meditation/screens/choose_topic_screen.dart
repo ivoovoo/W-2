@@ -19,9 +19,10 @@ class ChooseTopicScreen extends StatelessWidget {
             padding: EdgeInsets.only(
               left: getWidth(context, 20.5),
               right: getWidth(context, 20.5),
-              top: getHeight(context, 20.5),
+              top: getHeight(context, 50),
             ),
             child: ListView(
+              padding: EdgeInsets.zero,
               children: [
                 const Padding(
                   padding: EdgeInsets.all(20.0),

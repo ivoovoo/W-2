@@ -11,7 +11,7 @@ class MeditateScreen extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(
-          getHeight(context, 282),
+          getHeight(context, 222),
         ),
         child: AppBar(
           backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
@@ -124,7 +124,7 @@ class MeditateScreen extends StatelessWidget {
         padding: EdgeInsets.only(
           left: getWidth(context, 20),
           right: getWidth(context, 20),
-          top: getHeight(context, 10),
+          // top: getHeight(context, 10),
         ),
         child: ListView(
           children: [
@@ -242,7 +242,7 @@ class MeditateScreen extends StatelessWidget {
                                   Text(
                                     '7 Days of Calm',
                                     style: TextStyle(
-                                      color: Color.fromRGBO(63, 65, 78, 1),
+                                      color: Colors.white,
                                       fontSize: 18,
                                       fontFamily: 'HelveticaNeue',
                                       fontWeight: FontWeight.w700,
@@ -349,7 +349,7 @@ class MeditateScreen extends StatelessWidget {
                                   Text(
                                     'Anxiet Release',
                                     style: TextStyle(
-                                      color: Color.fromRGBO(63, 65, 78, 1),
+                                      color: Colors.white,
                                       fontSize: 18,
                                       fontFamily: 'HelveticaNeue',
                                       fontWeight: FontWeight.w700,

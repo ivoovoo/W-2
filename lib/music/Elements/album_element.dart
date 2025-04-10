@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AlbumElement extends StatefulWidget {
   final String imgPath;
@@ -72,11 +73,9 @@ class _AlbumElementState extends State<AlbumElement>
                     ),
                   ),
                   child: Center(
-                    child: Icon(
-                      _isPlaying ? Icons.pause : Icons.play_arrow,
-                      size: 48,
-                      color: Colors.white,
-                    ),
+
+                    child:_isPlaying ? SvgPicture.asset('assets/icons/pause-1006-svgrepo-com.svg',color: Colors.white.withOpacity(0.7), width: 30,) :  SvgPicture.asset('assets/icons/play-1003-svgrepo-com.svg',color: Colors.white.withOpacity(0.7), width: 30,),
+
                   ),
                 );
               },

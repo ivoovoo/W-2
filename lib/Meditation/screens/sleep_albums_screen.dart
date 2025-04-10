@@ -25,8 +25,8 @@ class SleepAlbumScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.bottomLeft,
                       child: SizedBox(
-                        width: getWidth(context, 55),
-                        height: getHeight(context, 55),
+                        width: getWidth(context, 44),
+                        height: getHeight(context, 44),
                         child: InkWell(
                           onTap: () {
                             Navigator.of(context).pop();
@@ -60,7 +60,7 @@ class SleepAlbumScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding:  EdgeInsets.only(top: getHeight(context, 50)),
+                    padding:  EdgeInsets.only(top: getHeight(context, 60)),
                     child: Center(
                       child: Text(
                         'Sleep  Music',

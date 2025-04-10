@@ -64,6 +64,11 @@ class _VideoViewPageState extends State<VideoViewPage> {
             context.read<SharedPreferences>().getInt(LocalStorageKeys.userId)!),
       );
   }
+  @override
+  void dispose() {
+    VideoPreloader.disposeAll();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +98,12 @@ class _VideoViewPageState extends State<VideoViewPage> {
               scrollDirection: Axis.vertical,
               itemCount: videoResponse.allVideos.length,
               itemBuilder: (context, index) {
+                final nextVideos = <String>[];
+                for (var i = 1; i <= 3; i++) {
+                  if (index + i < videoResponse.allVideos.length) {
+                    nextVideos.add(videoResponse.allVideos[index + i].videoFile);
+                  }
+                }
                 return Stack(
                   children: [
                     SizedBox(
@@ -104,14 +115,19 @@ class _VideoViewPageState extends State<VideoViewPage> {
                         thumbnail:
                             videoResponse.allVideos[index].videoPreview ?? "",
                         viewsCountPlus: (oneView) {
-                          if (firstView) {
-                            viewsCount = videoResponse.allVideos[index].viewsCount;
-                          }
+                          // if (firstView) {
+                          //   viewsCount = videoResponse.allVideos[index].viewsCount;
+                          // }
+                          // setState(() {
+                          //   firstView = false;
+                          //   viewsCount++;
+                          // });
+                          viewsCount = videoResponse.allVideos[index].viewsCount;
                           setState(() {
-                            firstView = false;
                             viewsCount++;
                           });
                         },
+                        nextVideoPaths: nextVideos,
                       ),
                     ),
                     Positioned(

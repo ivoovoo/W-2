@@ -66,7 +66,11 @@ class _SendMoneyState extends State<SendMoney> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: Icon(Icons.arrow_back),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+            child: Icon(Icons.arrow_back)),
         titleSpacing: 1,
         title: Row(
           children: [

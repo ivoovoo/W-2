@@ -6,6 +6,7 @@ import 'package:social_network/Chess/app.dart';
 import 'package:social_network/Concert/Screens/map_view.dart';
 import 'package:social_network/Course/OnBoarding/onboarding.dart';
 import 'package:social_network/Cryptology/screen/onboarding.dart';
+import 'package:social_network/crypto%20app/crypto_app.dart';
 import 'package:social_network/crypto%20app/navigation/main_bar.dart';
 import 'package:social_network/Flight/Navigation/nav_bar.dart';
 import 'package:social_network/Island/screens/start_screen.dart';
@@ -51,8 +52,8 @@ import 'package:social_network/features/profile/profile_page.dart';
 import 'package:social_network/features/profile/widgets/page/avatars_page.dart';
 import 'package:social_network/features/site_categories/widget/page/site_categories_page.dart';
 
-import '../../crypto app/screens/home.dart';
-import '../../crypto app/screens/swap_screen.dart';
+import '../../crypto app/main screens/home.dart';
+import '../../crypto app/main screens/swap_screen.dart';
 import '../../features/home_page/home_page.dart';
 import '../../music/NavBar/main_menu.dart';
 import 'app_router_names.dart';
@@ -179,16 +180,14 @@ final GoRouter router = GoRouter(
               name: AppRouterNames.centerTab,
               path: '/centerTab',
               redirect: (BuildContext context, GoRouterState state) {
-                // if (appNotifier.isMarketPage) {
-                  // if (appNotifier.secondMenuOfMarket) {
-                  //   return '/centerTab/secondMenuOfMarket';
-                  // }
-                  // return '/centerTab/marketPage';
-                // }else if
-                // (appNotifier.isCenterPage)
-                // {
-                //   return '/centerTab/addVideo';
-                // }
+                if (appNotifier.isMarketPage) {
+                  if (appNotifier.secondMenuOfMarket) {
+                    return '/centerTab/secondMenuOfMarket';
+                  }
+                  return '/centerTab/marketPage';
+                } else if (appNotifier.isCenterPage) {
+                  return '/centerTab/addVideo';
+                }
                 return '/centerTab/addVideo';
               },
               builder: (BuildContext context, GoRouterState state) {
@@ -219,12 +218,6 @@ final GoRouter router = GoRouter(
                   builder: (BuildContext context, GoRouterState state) =>
                       const CenterPage(),
                 ),
-                // GoRoute(
-                //   path: 'addVideo',
-                //   name: AppRouterNames.addVideo,
-                //   builder: (BuildContext context, GoRouterState state) =>
-                //   const CenterPage(),
-                // ),
               ],
             ),
           ],
@@ -553,13 +546,8 @@ final GoRouter router = GoRouter(
     GoRoute(
       name: AppRouterNames.cryptoHome,
       path: '/cryptoHome',
-      builder: (context, state) =>  MainScreenExchange(),
+      builder: (context, state) =>  CryptoApp(),
     ),
-    // GoRoute(
-    //   name: AppRouterNames.marketPage,
-    //   path: '/marketPage',
-    //   builder: (context, state) =>  HomeScreenOfMarket(),
-    // ),
   ],
 );
 
@@ -609,7 +597,7 @@ final List<String> screensPaths = [
   // '/browser',
   // '/nwapp',
   '/taxi',
-  '/marketPage',
+  '/centerTab/marketPage',
   // '/editor',
   // '/vps',
   // '/wallet',
@@ -638,18 +626,18 @@ final List<String> screensPaths = [
 // ];
 
 final List<List<Color>> gradientColors = [
-  [Colors.red, Colors.orange],
-  [Colors.blue, Colors.green],
+  // [Colors.red, Colors.orange],
+  // [Colors.blue, Colors.green],
   [Colors.purple, Colors.pink],
-  [Colors.teal, Colors.cyan],
+  // [Colors.teal, Colors.cyan],
   [Colors.red, Colors.pink],
   [Colors.amber, Colors.deepOrange],
   // [Colors.indigo, Colors.blueAccent],
-  // [Colors.lightGreen, Colors.lime],
-  // [Colors.deepPurple, Colors.purpleAccent],
+  [Colors.lightGreen, Colors.lime],
+  [Colors.deepPurple, Colors.purpleAccent],
   // [Colors.blueGrey, Colors.grey],
   // [Colors.brown, Colors.orange],
-  // [Colors.green, Colors.lightGreen],
+  [Colors.green, Colors.lightGreen],
   // [Colors.pink, Colors.redAccent],
   // [Colors.cyan, Colors.tealAccent],
   // [Colors.orange, Colors.amber],
@@ -671,6 +659,45 @@ void openFullScreenModal(BuildContext context) {
     backgroundColor: Colors.transparent,
     builder: (context) {
       return StatefulBuilder(builder: (context, setState) {
+
+        final AnimationController _controller = AnimationController(
+          vsync: Navigator.of(context),
+          duration: const Duration(seconds: 5),
+        )..repeat(reverse: true);
+
+        final Animation<Alignment> _gradientAnimation = TweenSequence<Alignment>(
+          [
+            TweenSequenceItem(
+              tween: Tween<Alignment>(
+                begin: Alignment.topLeft,
+                end: Alignment.topRight,
+              ),
+              weight: 1,
+            ),
+            TweenSequenceItem(
+              tween: Tween<Alignment>(
+                begin: Alignment.topRight,
+                end: Alignment.bottomRight,
+              ),
+              weight: 1,
+            ),
+            TweenSequenceItem(
+              tween: Tween<Alignment>(
+                begin: Alignment.bottomRight,
+                end: Alignment.bottomLeft,
+              ),
+              weight: 1,
+            ),
+            TweenSequenceItem(
+              tween: Tween<Alignment>(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topLeft,
+              ),
+              weight: 1,
+            ),
+          ],
+        ).animate(_controller);
+
         return DraggableScrollableSheet(
             initialChildSize: 0.5,
             minChildSize: 0.3,
@@ -678,6 +705,7 @@ void openFullScreenModal(BuildContext context) {
             snap: true,
             snapSizes: const [0.3, 0.5, 0.9],
             builder: (context, scrollController) {
+
               return Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -722,20 +750,26 @@ void openFullScreenModal(BuildContext context) {
                                   //   'title': buttonTitles[index],
                                   // },
                                 );
+                                appNotifier.switchingToMarket();
                                 Navigator.pop(context);
                               },
                               child: Column(
                                 children: [
                                   Expanded(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        gradient: LinearGradient(
-                                          colors: gradientColors[index],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        ),
-                                      ),
+                                    child: AnimatedBuilder(
+                                        animation: _controller,
+                                      builder: (context,child) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            gradient: LinearGradient(
+                                              colors: gradientColors[index],
+                                              begin: _gradientAnimation.value,
+                                              end: _gradientAnimation.value * -1,
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     ),
                                   ),
                                   const SizedBox(height: 8),

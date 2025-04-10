@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_network/core/data/local_storage_keys.dart';
 import 'package:social_network/core/router/app_router.dart';
-
-import 'package:social_network/features/app/initialization/runner.dart';
+import 'package:social_network/crypto%20app/main%20screens/send_cryplo.dart';
+import 'crypto app/main screens/get_crypto.dart';
+import 'crypto app/main screens/swap_screen.dart';
+import 'crypto app/navigation/main_bar.dart';
 import 'data.dart';
+import 'features/app/initialization/runner.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,5 +30,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Runner();
+    // return MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+    //   home: MainScreenExchange(),
+    // );
   }
+
 }

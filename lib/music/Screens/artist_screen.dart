@@ -1,9 +1,12 @@
+import 'package:animated_weight_picker/animated_weight_picker.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../Elements/album_element.dart';
 import '../Elements/col_home.dart';
+import '../Elements/row_column.dart';
 
 class ArtistScreen extends StatefulWidget {
   const ArtistScreen({super.key});
@@ -24,8 +27,7 @@ class _ArtistScreenState extends State<ArtistScreen>
     _controller = AnimationController(
       duration: const Duration(seconds: 4), // Duration for the animation
       vsync: this,
-    )
-      ..repeat(reverse: true); // Repeat the animation in reverse
+    )..repeat(reverse: true); // Repeat the animation in reverse
 
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
@@ -144,47 +146,50 @@ class _ArtistScreenState extends State<ArtistScreen>
                     const AlbumElement(
                       imgPath: 'assets/music/Album 1.png',
                       name: 'Awaken, My Love',
-                      description: 'Song • 2016 ',
+                      description: 'Song • Pop ',
                       color1: Colors.blueAccent,
                       color2: Colors.greenAccent,
                     ),
                     const AlbumElement(
                       imgPath: 'assets/music/Album 2.png',
                       name: 'Awaken, My Love',
-                      description: 'Song • 2016  ',
+                      description: 'Song • Pop  ',
                       color2: Colors.pink,
                       color1: Colors.purple,
                     ),
                     const AlbumElement(
                       imgPath: 'assets/music/Album 3.png',
                       name: 'Feels Like Summer',
-                      description: 'Song • 2016 ',
+                      description: 'Song • Pop ',
                       color1: Colors.yellow,
                       color2: Colors.yellowAccent,
                     ),
                   ],
                 ),
               ),
-              Container(
-                height: 215,
-                child: PageView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    const ColumElement(),
-                    const ColumElement(),
-                    const ColumElement()
-                  ],
+              Expanded(
+                flex: 12,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: 100, // Количество элементов
+                  itemBuilder: (context, index) {
+                    return RowElement(
+                      name: 'Redbone',
+                      svgPath: 'assets/music/m1.png',
+                      time: '6:19',
+                      number: '${index + 1}', // Порядковый номер = индекс + 1
+                    );
+                  },
                 ),
               ),
+
               const Spacer(),
               SizedBox(
-                height:180,
+                height: 180,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-
                     horizontal: 16,
                     vertical: 8,
-
                   ),
                   child: Column(
                     children: [
@@ -198,8 +203,13 @@ class _ArtistScreenState extends State<ArtistScreen>
                                 height: 43,
                                 width: 43,
                                 decoration: BoxDecoration(
-                                  color: Colors.blueGrey,
                                   borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue.shade900,
+                                      Colors.lightBlueAccent
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -234,20 +244,20 @@ class _ArtistScreenState extends State<ArtistScreen>
                               IconButton(
                                 onPressed: loaded
                                     ? () async {
-                                  if (player.position.inSeconds >= 10) {
-                                    await player.seek(
-                                      Duration(
-                                        seconds:
-                                        player.position.inSeconds -
-                                            10,
-                                      ),
-                                    );
-                                  } else {
-                                    await player.seek(
-                                      const Duration(seconds: 0),
-                                    );
-                                  }
-                                }
+                                        if (player.position.inSeconds >= 10) {
+                                          await player.seek(
+                                            Duration(
+                                              seconds:
+                                                  player.position.inSeconds -
+                                                      10,
+                                            ),
+                                          );
+                                        } else {
+                                          await player.seek(
+                                            const Duration(seconds: 0),
+                                          );
+                                        }
+                                      }
                                     : null,
                                 icon: const Icon(
                                   Icons.fast_rewind_rounded,
@@ -257,38 +267,34 @@ class _ArtistScreenState extends State<ArtistScreen>
                               IconButton(
                                 onPressed: loaded
                                     ? () {
-                                  if (playing) {
-                                    pauseMusic();
-                                  } else {
-                                    playMusic();
-                                  }
-                                }
+                                        if (playing) {
+                                          pauseMusic();
+                                        } else {
+                                          playMusic();
+                                        }
+                                      }
                                     : null,
-                                icon: Icon(
-                                  playing ? Icons.pause_circle_outline : Icons.play_arrow_rounded,
-                                  color: playing
-                                      ? const Color.fromRGBO(0, 149, 233, 1)
-                                      : Colors.white,
-                                ),
+                                icon: playing
+                                    ? SvgPicture.asset('assets/icons/pause-1006-svgrepo-com.svg',color: Colors.white,width: 14,) :SvgPicture.asset('assets/icons/play-1003-svgrepo-com.svg',color: Colors.white,width: 14,),
                               ),
                               IconButton(
                                 onPressed: loaded
                                     ? () async {
-                                  if (player.position.inSeconds + 10 <=
-                                      player.duration!.inSeconds) {
-                                    await player.seek(
-                                      Duration(
-                                        seconds:
-                                        player.position.inSeconds +
-                                            10,
-                                      ),
-                                    );
-                                  } else {
-                                    await player.seek(
-                                      const Duration(seconds: 0),
-                                    );
-                                  }
-                                }
+                                        if (player.position.inSeconds + 10 <=
+                                            player.duration!.inSeconds) {
+                                          await player.seek(
+                                            Duration(
+                                              seconds:
+                                                  player.position.inSeconds +
+                                                      10,
+                                            ),
+                                          );
+                                        } else {
+                                          await player.seek(
+                                            const Duration(seconds: 0),
+                                          );
+                                        }
+                                      }
                                     : null,
                                 icon: const Icon(
                                   Icons.fast_forward_rounded,
@@ -318,7 +324,7 @@ class _ArtistScreenState extends State<ArtistScreen>
                                 height: 10,
                                 child: Padding(
                                   padding:
-                                  const EdgeInsets.symmetric(horizontal: 0),
+                                      const EdgeInsets.symmetric(horizontal: 0),
                                   child: ProgressBar(
                                     progress: duration,
                                     total: player.duration ??
@@ -328,24 +334,25 @@ class _ArtistScreenState extends State<ArtistScreen>
                                     barHeight: 4,
                                     thumbRadius: 0.5,
                                     thumbGlowRadius: 8,
-                                    thumbGlowColor: Color.fromRGBO(54, 196, 245, 0.8),
+                                    thumbGlowColor:
+                                        Color.fromRGBO(54, 196, 245, 0.8),
                                     timeLabelTextStyle: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.transparent,
                                     ),
                                     progressBarColor:
-                                    const Color.fromRGBO(54, 196, 245, 1),
+                                        const Color.fromRGBO(54, 196, 245, 1),
                                     baseBarColor:
-                                    const Color.fromRGBO(2, 16, 21, 1.0),
-                                    bufferedBarColor:
-                                    const Color.fromRGBO(197, 208, 213, 1.0),
+                                        const Color.fromRGBO(2, 16, 21, 1.0),
+                                    bufferedBarColor: const Color.fromRGBO(
+                                        197, 208, 213, 1.0),
                                     thumbColor:
-                                    const Color.fromRGBO(37, 98, 119, 1.0),
+                                        const Color.fromRGBO(37, 98, 119, 1.0),
                                     onSeek: loaded
                                         ? (duration) async {
-                                      await player.seek(duration);
-                                    }
+                                            await player.seek(duration);
+                                          }
                                         : null,
                                   ),
                                 ),

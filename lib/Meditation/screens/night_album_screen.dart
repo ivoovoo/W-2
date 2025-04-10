@@ -76,51 +76,51 @@ class NightAlbumScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            SizedBox(
-                              width: getWidth(context, 55),
-                              height: getHeight(context, 55),
-                              child: InkWell(
-                                onTap: () {},
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                child: Container(
-                                  // or ClipRRect if you need to clip the content
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromRGBO(
-                                        3, 23, 76, 0.8), // inner circle color
-                                  ),
-                                  child: const Icon(
-                                    Icons.favorite_border,
-                                    color: Color.fromRGBO(255, 255, 255, 1),
-                                  ), // inner content
-                                ),
-                              ),
-                            ),
+                            // SizedBox(
+                            //   width: getWidth(context, 55),
+                            //   height: getHeight(context, 55),
+                            //   child: InkWell(
+                            //     onTap: () {},
+                            //     highlightColor: Colors.transparent,
+                            //     splashColor: Colors.transparent,
+                            //     child: Container(
+                            //       // or ClipRRect if you need to clip the content
+                            //       decoration: const BoxDecoration(
+                            //         shape: BoxShape.circle,
+                            //         color: Color.fromRGBO(
+                            //             3, 23, 76, 0.8), // inner circle color
+                            //       ),
+                            //       child: const Icon(
+                            //         Icons.favorite_border,
+                            //         color: Color.fromRGBO(255, 255, 255, 1),
+                            //       ), // inner content
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(
                               width: getWidth(context, 15),
                             ),
-                            SizedBox(
-                              width: getWidth(context, 55),
-                              height: getHeight(context, 55),
-                              child: InkWell(
-                                onTap: () {},
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                child: Container(
-                                  // or ClipRRect if you need to clip the content
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromRGBO(
-                                        3, 23, 76, 0.8), // inner circle color
-                                  ),
-                                  child: const Icon(
-                                    Icons.save_alt,
-                                    color: Color.fromRGBO(255, 255, 255, 1),
-                                  ), // inner content
-                                ),
-                              ),
-                            ),
+                            // SizedBox(
+                            //   width: getWidth(context, 55),
+                            //   height: getHeight(context, 55),
+                            //   child: InkWell(
+                            //     onTap: () {},
+                            //     highlightColor: Colors.transparent,
+                            //     splashColor: Colors.transparent,
+                            //     child: Container(
+                            //       // or ClipRRect if you need to clip the content
+                            //       decoration: const BoxDecoration(
+                            //         shape: BoxShape.circle,
+                            //         color: Color.fromRGBO(
+                            //             3, 23, 76, 0.8), // inner circle color
+                            //       ),
+                            //       child: const Icon(
+                            //         Icons.save_alt,
+                            //         color: Color.fromRGBO(255, 255, 255, 1),
+                            //       ), // inner content
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

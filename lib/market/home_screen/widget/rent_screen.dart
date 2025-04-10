@@ -47,6 +47,18 @@ class _RentScreenState extends State<RentScreen> {
   String countryCode = '';
   String currency = '';
   double exchangeRate = 0;
+  final List<String> productNames = [
+    'Dreamsville House',
+    'Ascot House',
+  ];
+  final List<String> productImages = [
+    'assets/images_of_market/Image.png',
+    'assets/images_of_market/Ascot House.png',
+  ];
+  final List<String> productPrices = [
+    '12 USD',
+    '12 USD',
+  ];
 
   /// Примерный маппинг стран в валюты (ISO 4217)
   Map<String, String> countryToCurrency = {
@@ -155,11 +167,11 @@ class _RentScreenState extends State<RentScreen> {
       convertPrice();
       setState(() {
         currentAddress =
-            data['address']['neighbourhood'] ?? 'Не удалось определить адрес';
+            data['address']['neighbourhood'] ?? 'Unidentified address';
       });
     } catch (e) {
       setState(() {
-        currentAddress = 'Ошибка при определении адреса';
+        currentAddress = 'Unidentified address';
       });
     }
   }
@@ -352,112 +364,232 @@ class _RentScreenState extends State<RentScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Near from you',
-                      style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
-                    ),
-                    Text(
-                      'See more',
-                      style: Style.AppBarTxtStyle.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(
-                height: 272,
-                child: ListView.separated(
+                height: 500,
+                child: GridView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: advertisements.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    // childAspectRatio: 157 / 182, // Пропорции (можно убрать, если используем mainAxisExtent)
+                    mainAxisExtent: 182,
+                  ),
+                  itemCount: productNames.length,
+                  // Предполагая, что у вас есть списки
                   itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        context.pushNamed(
-                          AppRouterNames.modelOfHouse,
-                          extra: advertisements[index],
-                          pathParameters: {
-                            "currency": currency,
-                            "exchangeRate": exchangeRate.toString(),
-                          },
-                        );
-                      },
-                      child: HouseCard(
-                        isNetworkImage: true,
-                        pathToImage: advertisements[index].images[0].image,
-                        name: advertisements[index].name,
-                        info: advertisements[index].description,
-                        myLocation: _currentLocation,
-                        address: LatLng(
-                          advertisements[index].latitude,
-                          advertisements[index].longitude,
-                        ),
-                      ),
+                    return GridItemWidget(
+                      imageUrl: productImages[index],
+                      name: productNames[index],
+                      price: productPrices[index],
                     );
                   },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(width: 20);
-                  },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Best for you',
-                      style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
-                    ),
-                    Text(
-                      'See more',
-                      style: Style.AppBarTxtStyle.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 400,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  dragStartBehavior: DragStartBehavior.start,
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return InkWell(
-                      onTap: () {},
-                      child: RowOptionWidget(
-                        name: item['name']!,
-                        cost: item['cost']!,
-                        imgPath: item['imgPath']!,
-                        description1: item['description1']!,
-                        description2: item['description2']!,
-                        svgPath1: item['svgPath1']!,
-                        svgPath2: item['svgPath2']!,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 16);
-                  },
-                ),
-              ),
+
+              // Padding(
+              //   padding: const EdgeInsets.all(20),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         'Near from you',
+              //         style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
+              //       ),
+              //       Text(
+              //         'See more',
+              //         style: Style.AppBarTxtStyle.copyWith(
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.grey,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 272,
+              //   child: ListView.separated(
+              //     padding: const EdgeInsets.symmetric(horizontal: 20),
+              //     scrollDirection: Axis.horizontal,
+              //     itemCount: advertisements.length,
+              //     itemBuilder: (context, index) {
+              //       return InkWell(
+              //         onTap: () {
+              //           context.pushNamed(
+              //             AppRouterNames.modelOfHouse,
+              //             extra: advertisements[index],
+              //             pathParameters: {
+              //               "currency": currency,
+              //               "exchangeRate": exchangeRate.toString(),
+              //             },
+              //           );
+              //         },
+              //         child: HouseCard(
+              //           isNetworkImage: true,
+              //           pathToImage: advertisements[index].images[0].image,
+              //           name: advertisements[index].name,
+              //           info: advertisements[index].description,
+              //           myLocation: _currentLocation,
+              //           address: LatLng(
+              //             advertisements[index].latitude,
+              //             advertisements[index].longitude,
+              //           ),
+              //         ),
+              //       );
+              //     },
+              //     separatorBuilder: (context, index) {
+              //       return const SizedBox(width: 20);
+              //     },
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(20),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         'Best for you',
+              //         style: Style.AppBarTxtStyle.copyWith(fontSize: 16),
+              //       ),
+              //       Text(
+              //         'See more',
+              //         style: Style.AppBarTxtStyle.copyWith(
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.grey,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 400,
+              //   child: ListView.separated(
+              //     padding: const EdgeInsets.symmetric(horizontal: 20),
+              //     dragStartBehavior: DragStartBehavior.start,
+              //     itemCount: items.length,
+              //     itemBuilder: (context, index) {
+              //       final item = items[index];
+              //       return InkWell(
+              //         onTap: () {},
+              //         child: RowOptionWidget(
+              //           name: item['name']!,
+              //           cost: item['cost']!,
+              //           imgPath: item['imgPath']!,
+              //           description1: item['description1']!,
+              //           description2: item['description2']!,
+              //           svgPath1: item['svgPath1']!,
+              //           svgPath2: item['svgPath2']!,
+              //         ),
+              //       );
+              //     },
+              //     separatorBuilder: (context, index) {
+              //       return const SizedBox(height: 16);
+              //     },
+              //   ),
+              // ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class GridItemWidget extends StatelessWidget {
+  final String imageUrl;
+  final String name;
+  final String price;
+
+  const GridItemWidget({
+    required this.imageUrl,
+    required this.name,
+    required this.price,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 157,
+      height: 182,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        // image: DecorationImage(image: AssetImage(imageUrl,),fit: BoxFit.cover)
+      ),
+      child: Stack(
+        children: [
+          // Фоновое изображение
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              imageUrl,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              // errorBuilder: (_, __, ___) => Container(
+              //   color: Colors.grey[200],
+              //   child: const Icon(Icons.broken_image, color: Colors.grey),
+              // ),
+            ),
+          ),
+
+          // Градиент для лучшей читаемости текста
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 70,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.7),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Текстовая информация
+          Positioned(
+            bottom: 12,
+            left: 12,
+            right: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  price,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

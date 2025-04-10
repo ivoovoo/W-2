@@ -43,7 +43,7 @@ class _RowElementState extends State<RowElement> {
                 SizedBox(
                   height: 20,
                     width: 20,
-                    child: Center(child: Icon(Icons.pause,color: Colors.white,size: 20,))) :
+                    child: Center(child: SvgPicture.asset('assets/icons/pause-1006-svgrepo-com.svg',color: Colors.white,width: 15,))) :
                 SizedBox(
                   height: 20,
                   width: 20,
@@ -83,7 +83,7 @@ class _RowElementState extends State<RowElement> {
                   ),
                 ),
                 SizedBox(width: 10,),
-                SvgPicture.asset('assets/music/Icon_Dots.svg'),
+                // SvgPicture.asset('assets/music/Icon_Dots.svg'),
               ],
             ),
           ],
